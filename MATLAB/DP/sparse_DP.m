@@ -32,7 +32,7 @@ for i = 1:V    %letter
         i_vals(end+1) = i; %add node to diagonal right
         j_vals(end+1) = i+1+V - s;
        end
-
+       
        if (mod(i, s) ~=1) %if node isn't on the left edge of grid
         i_vals(end+1) = i; %add node to diagonal left
         j_vals(end+1) = i-1 +V -s;
@@ -51,28 +51,26 @@ for i = 1:V    %letter
         i_vals(end+1) = i; %add node to diagonal left
         j_vals(end+1) = i-1 +V +s;
        end
-    
    end
-
-      
+  
 end
 
 minimum = 0.9;
 maximum = 1.0;
 vals = ones(length(i_vals),1);
 % vals = 10*abs(randn(length(i_vals), 1));  %generate random costs
-% adj = sparse(i_vals, j_vals, vals, V^2, V^2);
-a= sparse(i_vals, j_vals, vals);
-z= sparse(V,V);
+a= sparse(i_vals, j_vals, vals); %create small sparse matrix
+z= sparse(V,V); %blank sparse matrix
 
-adj = [a z z; z a z; z z a; z z z z]; %
+adj = [a z z; z a z; z z a; z z z z]; %full adjacency matrix
 spy(adj)
 
-% d{V*V, 1} = []; %d{i}(1) is minimum cost, d{i}(2) is total P_tr, d{i}(3) is parent node
+
 P_tr = (maximum - minimum)*rand(V, 1) + minimum;%Prob. of traverse associated with each node. sqrt is to bias towards higher values.
 costs = 10*abs(randn(V,1));
 % Coordinates aren't created now because size(adj) is V^2 x V^2, but plot
 % should only be sxs.
+
 % %create coordinates
 % % coords = [1 V];
 % % for i = 1:V-1
@@ -81,36 +79,34 @@ costs = 10*abs(randn(V,1));
 % % % gplot(adj, coords, '*-')
 
 
-ind_last = V^4 - V - 1;
-col_last = N;
-row_last = N-V-1;
+ind_last = V^4 - V - 1; %index of the end node
+col_last = N;   %column of last node
+row_last = N-V-1;   %row of last node
 V_last = [row_last, col_last ];
-num = nnz(adj);
+num = nnz(adj); %total number of non-zero values in adjacency matrix
 [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
-% adj_i = flipud(adj_i);
-% adj_j = flipud(adj_j);
-% adj_v = flipud(adj_v);
 
 P_tr(end) = 1;
-% d{ind_last}(2) = 1; %P_tr for last node is 1.
-% d{ind_last}(1) = 0; %cost for last node is 0.
-% d{ind_last}(3) = ind_last;
-% d((num-(V-1)):num,:) = repmat([0 1 num], V, 1); %set cost, P_tr, parent for end node.
+%d{i}(1) is minimum cost, d{i}(2) is total P_tr, d{i}(3) is parent node
+d{N,1} = [];
 for i=(N-V+1):(N) %create d vector to store cost, P_tr, parents for each entry in adj.
    d{i,1} = [0 1 num];
 end
 
-for i=N:-1:1 %counting back from last populated row in adjacency matrix,
-    col = adj_j(i);
+%calculate costs, P_tr for current vertex
+% for i=N:-1:1 %counting back from last populated column in adjacency matrix,
+list_of_nodes_to_visit = V;
+while (~isempty(list_of_nodes_to_visit) { %While the list of nodes to try is not empty
+    col = i;         %column of current vertex
         V_col = mod(col, V);
         if (V_col==0) V_col = V; end
     conns = find(adj(:,col)~=0);    %find entries in column col
     options = [];
     for j=1:length(conns)   %for each connection,
-        row = conns(j);
+        row = conns(j);             %row of current connection
         V_row = mod(row, V);
         if (V_row==0) V_row = V; end 
-        
+
         l = size(d{i}(:,1),1);
         p = size(options, 1);
         if p>0
