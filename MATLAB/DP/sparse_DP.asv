@@ -7,7 +7,7 @@ P_tr_thresh = 0.4;
 
 %build adjacency matrix
 %square grid, connected right and down
-s =2;
+s =3;
 V = s^2;
 N = V^2;
 i_vals = [];
@@ -93,10 +93,10 @@ for i = 1:N
    block_no = ceil(i/V);
    V_no = i - (block_no-1)*V;
 
-   row = mod(V_no,s);
-   col = ceil(V_no/s);
-      if (row==0) row = s; end
-   coords(end+1,:) = [row, col]
+   row = mod(V_no,s)
+   col = 
+      if (row==0) row = V; end
+   coords(end+1,:) = [  ,]
 end
 gplot(adj, coords, '*-')
 
