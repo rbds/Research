@@ -7,7 +7,7 @@ P_tr_thresh = 0.4;
 
 %build adjacency matrix
 %square grid, connected right and down
-s =2;
+s =3;
 V = s^2;
 N = V^2;
 i_vals = [];
@@ -96,7 +96,7 @@ for i = 1:N
    row = mod(V_no,s);
    col = ceil(V_no/s);
       if (row==0) row = s; end
-   coords(end+1,:) = [row, col]
+   coords(end+1,:) = [row, col];
 end
 gplot(adj, coords, '*-')
 
@@ -132,10 +132,7 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
         l = size(d{i}(:,1),1);
         p = size(options, 1);
         options(end+1:end+l,1) = d{i}(:,1) + adj(row,col); %cost of each one of d{i} = adj(row,col)
-        
-%         l = size(d{i}(:,1),1);
-%         p = size(options, 1);
-%         options((end+1):(end+l), 1) = d{conns(j)}(:,1) + adj(i, conns(j));%list all options, find cost        
+               
         if p>0
            options((p+1):end, 2) = d{i}(:,2)*P_tr(V_row); %calculate P_tr for options
            options((p+1):end, 3) = i; %list parent node for each option.
