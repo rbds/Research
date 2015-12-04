@@ -1,8 +1,8 @@
 clf
 clear all
 
-direction = 'outer';
-% direction = 'inner';
+% direction = 'outer';
+direction = 'inner';
 
 a = 10*abs(randn(100,2));
 % a = [1 10; 2 8; 2 7; 3 6; 4 8; 6 3; 1 11; 2 2; 6 1];
