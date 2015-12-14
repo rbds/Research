@@ -60,13 +60,13 @@ maximum = 1.0;
 vals = 10*abs(randn(length(i_vals), 1));  %generate random costs
 % adj = sparse(i_vals, j_vals, vals, V^2, V^2);
 a= sparse(i_vals, j_vals, vals);
-adj = sparse(V^2, V^2);
-for i=1:V-1
-   adj((i-1)*V+1:(i-1)*V+V, i*V+1:i*V+V) = a;
+z= sparse(V,V);
+adj = sparse(V^2, v^2)
+for i=1:V
+    
 end
 
 
-%adj = [z a  z z; z z a z; z z z a; z z z z]; %
-
+adj = [z a  z z; z z a z; z z z a; z z z z]; %
 % adj = adj*10*abs(randn(size(adj)));
 spy(adj)
