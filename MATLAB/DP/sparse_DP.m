@@ -71,7 +71,7 @@ adj = sparse(V^2, V^2);
 for i=1:V-1
    adj((i-1)*V+1:(i-1)*V+V, i*V+1:i*V+V) = a;
 end
- spy(adj)
+%  spy(adj)
 
 % %create coordinates
 coords = [];
@@ -211,29 +211,31 @@ for i=1:3
         end
     end 
 end
-best_path = zeros(3,1);
-t = 1;
-l=1;
-for i=1:3
-   while mod(t,V)
-%      [~, ind] = min(d{t}(:,1));    %find minimum cost path at node t
-        best_path(i, l+1) = d{t}(ind,3);
-        t = best_path(i, l+1);
-        l = l+1;
-    end
-    n= n-V;
-    t = 1;
-    l=1;
-end
-   
-   %
-% [~, ind] = min(d{1}(:,1));
-% cost = d{1}(ind,1)
-% Prob_traverse = d{1}(ind,2)
-% hold on
-% for i=1:size((best_path),1)-1  %plot path 
-%     plot(coords(best_path(i),1), coords(best_path(i),2), 'r*')
-%     plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-')    
+
+% best_path = [1 1 1];
+% t = 1;
+% l=1;
+% for i=1:3
+%    ind = best_ind(i);
+%    while mod(t,V)
+%         best_path(l+1,i) = d{t}(ind,3);
+%         t = best_path(l+1,i);
+%         l = l+1;
+%         [~, ind] = min(d{t}(:,1));    %find minimum cost path at node t
+%    end
+%     t = 1;
+%     l=1;
 % end
-% axis off
-% axis equal
+%    
+   
+[~, ind] = min(d{1}(:,1));
+cost = d{1}(ind,1)
+Prob_traverse = d{1}(ind,2)
+hold on
+bp = best_path(:,end); %%%% THIS IS ARBITRARY.
+for i=1:size((bp),1)-1  %plot path 
+    plot(coords(bp(i),1), coords(bp(i),2), 'r*')
+    plot([coords(bp(i),1), coords(bp(i+1),1)],[coords(bp(i),2), coords(bp(i+1),2)], 'r-')    
+end
+axis off
+axis equal
