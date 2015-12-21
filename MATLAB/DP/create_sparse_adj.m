@@ -5,7 +5,7 @@ P_tr_thresh = 0.4;
 
 %build adjacency matrix
 %square grid, connected right and down
-s =3;
+s =2;
 V = s^2;
 i_vals = [];
 j_vals = [];

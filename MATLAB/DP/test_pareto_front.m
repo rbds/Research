@@ -58,7 +58,7 @@ for i=2:length(a)
     end
 end
 
-plot(a(:,1), a(:,2), 'o')
+plot(a(:,1), a(:,2), 'x')
 hold on
 [~, order] = sort(front(:,1));
 front = front(order,:)
