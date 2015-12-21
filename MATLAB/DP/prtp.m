@@ -75,6 +75,6 @@ if jj
   A=c(1:jj,:);
   varargout{1}=kk(1:jj);
 else
-  warning('Points:Pareto',...
-    'There are no Pareto points. The result is an empty matrix.')
+%   warning('Points:Pareto',...
+%     'There are no Pareto points. The result is an empty matrix.')
 end
