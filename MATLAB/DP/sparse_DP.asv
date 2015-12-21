@@ -9,7 +9,7 @@ P_tr_thresh = 0.4;
 
 %build adjacency matrix
 %square grid, connected right and down
-s =4;
+s =2;
 V = s^2;
 N = V^2;
 i_vals = [];
@@ -133,14 +133,10 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
     front = options(1,:);
  %populate cost, P_tr, parent.
    
-% inner front -- Check that this is working
-    for k = 2:size(options,1)
-       list1 = find(front(:,1) > options(k,1));       %find list of points with greater cost
-       list2 = find(front(:,2) > options(k,2));       %find list of points with greater P_tr
-    end
+% inner front -- This isn't working properly.
     for k=2:size(options,1)
-        list1 = find(front(:,1) > options(k,1));       %find list of points with greater cost
-        list2 = find(front(:,2) > options(k,2));       %find list of points with greater P_tr
+        list1 = find(front(:,1) >= options(k,1));       %find list of points with greater cost
+        list2 = find(front(:,2) >= options(k,2));       %find list of points with greater P_tr
         to_remove = [];
         ind = [];
 
@@ -153,29 +149,32 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
         front(list2(to_remove),:) = [];
 
         if (length(list1) + length(list2) >0)
-            t1 = front(:,1) <= options(k,1);
+            t1 = front(:,1) < options(k,1);
             t2 = front(:,2) < options(k,2);
-            if (isempty(find(t1==t2)))
-                front(end+1,:) = options(k,:);
+            if (isempty(find(t1==t2, 1)))
+                front = [front; options(k,1:)];
             end
         end
     end
-    len = size(front, 1);
-    d{conns(j),1}(end+1:end+len,:) = front;
+%     len = size(front, 1);
+    d{conns(j),1} = [d{conns(j),1};front(:,1:2)];
     end
 end
 
 
 time = toc
-   
-[~, ind] = min(d{1}(:,1));
-cost = d{1}(ind,1)
-Prob_traverse = d{1}(ind,2)
-hold on
-bp = best_path(:,end); %%%% THIS IS ARBITRARY.
-for i=1:size((bp),1)-1  %plot path 
-    plot(coords(bp(i),1), coords(bp(i),2), 'r*')
-    plot([coords(bp(i),1), coords(bp(i+1),1)],[coords(bp(i),2), coords(bp(i+1),2)], 'r-')    
-end
-axis off
-axis equal
+
+sortrows(d{1})
+
+% [~, ind] = min(d{1}(:,1));
+% cost = d{1}(ind,1)
+% Prob_traverse = d{1}(ind,2)
+
+% hold on
+% bp = best_path(:,end); %%%% THIS IS ARBITRARY.
+% for i=1:size((bp),1)-1  %plot path 
+%     plot(coords(bp(i),1), coords(bp(i),2), 'r*')
+%     plot([coords(bp(i),1), coords(bp(i+1),1)],[coords(bp(i),2), coords(bp(i+1),2)], 'r-')    
+% end
+% axis off
+% axis equal

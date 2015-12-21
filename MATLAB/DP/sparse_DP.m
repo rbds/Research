@@ -130,13 +130,13 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
             options(k,1) = options(k,1) + 1000;         
            end
         end
-    front = options(1,:);
+    front = options(1,1:2);
  %populate cost, P_tr, parent.
    
 % inner front -- This isn't working properly.
     for k=2:size(options,1)
-        list1 = find(front(:,1) > options(k,1));       %find list of points with greater cost
-        list2 = find(front(:,2) > options(k,2));       %find list of points with greater P_tr
+        list1 = find(front(:,1) >= options(k,1));       %find list of points with greater cost
+        list2 = find(front(:,2) >= options(k,2));       %find list of points with greater P_tr
         to_remove = [];
         ind = [];
 
@@ -152,12 +152,12 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
             t1 = front(:,1) < options(k,1);
             t2 = front(:,2) < options(k,2);
             if (isempty(find(t1==t2, 1)))
-                front = [front; options(k,:)];
+                front = [front; options(k,1:2)];
             end
         end
     end
-    len = size(front, 1);
-    d{conns(j),1}(end+1:end+len,:) = front;
+%     len = size(front, 1);
+    d{conns(j),1} = [d{conns(j),1};front(:,1:2)];
     end
 end
 
