@@ -9,7 +9,7 @@ P_tr_thresh = 0.4;
 
 %build adjacency matrix
 %square grid, connected right and down
-s =4;
+s =3;
 V = s^2;
 N = V^2;
 i_vals = [];
@@ -102,24 +102,17 @@ end
 for i=N:-1:1 %counting back from last populated column in adjacency matrix,
     col = i;  
         V_col = mod(col, V);
-        if (V_col==0) V_col = V; end
+        if (V_col==0) V_col = V; end 
     conns = find(adj(:,col)~=0);    %find entries in column col
     options = [];
     for j=1:length(conns)   %for each connection,
         row = conns(j);             %row of current connection
         V_row = mod(row, V);
         if (V_row==0) V_row = V; end 
-        l = size(d{i,1}(:,1),1);
-        p = size(options, 1);
-        options(end+1:end+l,1) = d{i,1}(:,1) + adj(row,col); %cost of each one of d{i} = adj(row,col)
-               
-        if p>0
-           options((p+1):end, 2) = d{i,1}(:,2)*P_tr(V_row); %calculate P_tr for options
-           options((p+1):end, 3) = i; %list parent node for each option.
-        else
-           options(:, 2) = d{i,1}(:,2)*P_tr(V_row); %calculate P_tr for options
-           options(:, 3) = i; %list parent node for each option.
-        end 
+
+        new_options = [d{i,1}(:,1) + adj(row,col), d{i,1}(:,2)*P_tr(V_row), repmat(i, size(d{i,1}(:,1)))]; 
+        options = [options; new_options];
+
         
         for k=1:size(options,1) %if option violates P_tr, set penalty cost
            if options(k,2) < P_tr_thresh
@@ -127,33 +120,39 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
            end
         end
     front = options(1,1:2);
- %populate cost, P_tr, parent.
+
    
 % inner front -- This isn't working properly.
-    for k=2:size(options,1)
-        list1 = find(front(:,1) >= options(k,1));       %find list of points with greater cost
-        list2 = find(front(:,2) >= options(k,2));       %find list of points with greater P_tr
-        to_remove = [];
-        ind = [];
+%     for k=2:size(options,1)
+%         list1 = find(front(:,1) >= options(k,1));       %find list of points with greater cost
+%         list2 = find(front(:,2) >= options(k,2));       %find list of points with greater P_tr
+%         to_remove = [];
+%         ind = [];
+% 
+%         for l=1:length(list1)
+%             ind = find(list1(l) == list2);
+%            if ~isempty(ind)
+%             to_remove(end+1) = ind;
+%            end
+%         end
+%         front(list2(to_remove),:) = [];
+% 
+%         if (length(list1) + length(list2) >0)
+%             t1 = front(:,1) < options(k,1);
+%             t2 = front(:,2) < options(k,2);
+%             if (isempty(find(t1==t2, 1)))
+%                 front = [front; options(k,:)];
+%             end
+%         end
+%     end
 
-        for l=1:length(list1)
-            ind = find(list1(l) == list2);
-           if ~isempty(ind)
-            to_remove(end+1) = ind;
-           end
-        end
-        front(list2(to_remove),:) = [];
-
-        if (length(list1) + length(list2) >0)
-            t1 = front(:,1) < options(k,1);
-            t2 = front(:,2) < options(k,2);
-            if (isempty(find(t1==t2, 1)))
-                front = [front; options(k,1:2)];
-            end
-        end
+    [f1, inds]= prtp(front); %% still incorrect
+    if isempty(f1)
+       f1 = front; 
     end
-%     len = size(front, 1);
-    d{conns(j),1} = [d{conns(j),1};front(:,1:2)];
+
+    d{conns(j),1} = [d{conns(j),1}; f1];
+    d{conns(j),2} = [d{conns(j),2}; options(inds,3)];
     end
 end
 
