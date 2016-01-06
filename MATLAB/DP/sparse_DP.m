@@ -15,7 +15,6 @@ N = V^2;
 i_vals = [];
 j_vals = [];
 vals = [];
-% k_vals = [];
 
 minimum = 0.9;
 maximum = 1.0;
@@ -68,18 +67,15 @@ end
 minimum = 0.9;
 maximum = 1.0;
 vals = 10*abs(randn(length(i_vals), 1));  %generate random costs
-a= sparse(i_vals, j_vals, vals);
+a= sparse(i_vals, j_vals, vals); %one section of the adjacency matrix
 adj = sparse(V^2, V^2);
-for i=1:V-1
+for i=1:V-1 %assemble adjacency matrix from sections
    adj((i-1)*V+1:(i-1)*V+V, i*V+1:i*V+V) = a;
 end
  spy(adj)
 
 % %create coordinates
 coords = [];
-
-
-% coords = [1,V];
 for i = 1:N
    block_no = ceil(i/V);
    V_no = i - (block_no-1)*V;

@@ -5,11 +5,10 @@ P_tr_thresh = 0.4;
 
 %build adjacency matrix
 %square grid, connected right and down
-s =2;
+s =6;
 V = s^2;
 i_vals = [];
 j_vals = [];
-% k_vals = [];
 
 for i = 1:V    %letter
    if (mod(i,s) >0) %if it isn't on the right edge of grid 
@@ -65,8 +64,6 @@ for i=1:V-1
    adj((i-1)*V+1:(i-1)*V+V, i*V+1:i*V+V) = a;
 end
 
-
-%adj = [z a  z z; z z a z; z z z a; z z z z]; %
 
 % adj = adj*10*abs(randn(size(adj)));
 spy(adj)
