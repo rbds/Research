@@ -5,11 +5,11 @@ close all
 
 tic
 
-P_tr_thresh = 0.4;
+P_tr_thresh = 0.2;
 
 %build adjacency matrix
 %square grid, connected right and down
-s =3;
+s =6;
 V = s^2;
 N = V^2;
 i_vals = [];
