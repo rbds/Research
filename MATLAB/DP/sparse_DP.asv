@@ -8,12 +8,12 @@ tic
 P_tr_thresh = 0.4;
 
 %build adjacency matrix
-s =2;
+s =3;
 V = s^2;
 N = V^2;
 i_vals = [];
 j_vals = [];
-vals = [];
+% vals = [];
 
 minimum = 0.9;
 maximum = 1.0;
@@ -82,14 +82,14 @@ for i = 1:N
       if (row==0) row = s; end
    coords(end+1,:) = [row, col];
 end
-% gplot(adj, coords, '*-')
+gplot(adj, coords, '*-')
 
 [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
 
 P_tr(end) = 1;
 %d{i,1}(1) is minimum cost, d{i,1}(2) is total P_tr, d{i,2}(j,:) is path
 %represented by that node.
-d{N,2} = [Inf];
+d{N,2} = [];
 for i=(N-V+1):(N) %create d vector to store cost, P_tr, parents for each entry in adj.
    d{i,1} = [0 1];
    d{i,2} = [i];
@@ -113,20 +113,18 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
         V_row = mod(row, V);
         if (V_row==0) V_row = V; end 
 
-%         new_options = [d{i,1}(:,1) + adj(row,col), d{i,1}(:,2)*P_tr(V_row), repmat(i, size(d{i,1}(:,1)))]; 
-        new_options = [d{i,1}(:,1) + adj(row,col), d{i,1}(:,2)*P_tr(V_row)];
-        
-        
-        for k=1:size(options,1) %if option violates P_tr, set penalty cost
-           if options(k,2) < P_tr_thresh
-            options(k,1) = options(k,1) + 1000;         
+        new_options = [d{i,1}(:,1) + adj(row,col), d{i,1}(:,2)*P_tr(V_row)];        
+        new_pars = [d{i,2}, i];
+        for k=1:size(new_options,1) %if option violates P_tr, set penalty cost
+           if new_options(k,2) < P_tr_thresh
+            new_options(k,1) = new_options(k,1) + 1000;
            end
         end
     options = [options; new_options];
+    pars =  [d{conns(j),2}; new_pars];
 %     front = options(1,1:2);
 
-   
-% inner front -- This isn't working properly.
+% inner front 
     inds = [];
     [front, inds] = prtp(options);
 %     for k=2:size(options,1)
@@ -139,19 +137,30 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
 %     end
 %     
     %put pareto front into list for connected node
-    d{conns(j),1} = [front];
-    %add current node to path for connected node.
-    
-%     d{conns(j),2} = [d{conns(j),2}, repmat(i, size(front,1), 1)];%add in path 
-%     d{conns(j),2} = [d{conns(j),2}; options(inds,3)];
+    if isempty(front) 
+        d{conns(j),1} = options;
+        d{conns(j),2} = repmat(i, size(options,1),1);
+    else
+        d{conns(j),1} = [front];
+        d{conns(j),2} = pars(inds,:);
+%         for k=1:size(front,1)
+%            if inds(k) > (size(options,1) - size(new_options,1))
+%                 d{conns(j),2}(k, end+1) = i;
+%                      
+%            end
+%         end
+    end
+  
     end
 end
 
 
 time = toc
+% d{1}(1,:)
 % 
 % %extract best path
-% [sorted, order] = sortrows(d{1,1});
+[sorted, order] = sortrows(d{1,1});
+par = d{1,2}(order(1))
 % t = 1;
 % path = [1];
 % while (mod(t,V)>0) %while on a node that isn't the last node
