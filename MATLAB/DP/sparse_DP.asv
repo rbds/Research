@@ -89,7 +89,7 @@ end
 P_tr(end) = 1;
 %d{i,1}(1) is minimum cost, d{i,1}(2) is total P_tr, d{i,2}(j,:) is path
 %represented by that node.
-d{N,2} = [];
+d{N,2} = [Inf];
 for i=(N-V+1):(N) %create d vector to store cost, P_tr, parents for each entry in adj.
    d{i,1} = [0 1];
    d{i,2} = [i];
