@@ -114,8 +114,8 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
         if (V_row==0) V_row = V; end 
 
         new_options = [d{i,1}(:,1) + adj(row,col), d{i,1}(:,2)*P_tr(V_row)];   
-        for k=row
-            d{k,2} = [d{i,2}, i];
+        for k=conns
+            d{
         end
         for k=1:size(new_options,1) %if option violates P_tr, set penalty cost
            if new_options(k,2) < P_tr_thresh
