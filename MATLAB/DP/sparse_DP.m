@@ -114,10 +114,10 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
         if (V_row==0) V_row = V; end 
 
         new_options = [d{i,1}(:,1) + adj(row,col), d{i,1}(:,2)*P_tr(V_row)];   
-        for k=row
-            d{k,2} = [d{i,2}, i];
-        end
+%         d{k,2} = [d{i,2}, i];
+        
         for k=1:size(new_options,1) %if option violates P_tr, set penalty cost
+           d{row, 2} = {d{row,2}, [d{i,2}, i]}; %set parent pointer
            if new_options(k,2) < P_tr_thresh
             new_options(k,1) = new_options(k,1) + 1000;
            end
