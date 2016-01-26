@@ -1,5 +1,8 @@
 clear all
 
+% direction = 'outer';
+direction = 'inner';
+
 rng(1);
 a = abs(randn(100,2));
 
@@ -46,12 +49,8 @@ for i=2:length(a)
                 front = [front; a(i,:)];
             end
         elseif spot ==1
-         if a(i,1) < front(spot,1) %check if it fits at the top of the front
-          if a(i,2) < front(spot,2)   
-            front = [a(i,:); front]; 
-          elseif a(i,2) > front(spot,2)
-            front(spot,:) = a(i,:); 
-          end
+         if a(i,1) < front(spot,1)
+          front = [a(i,:); front]; 
           flag = 0;
          end 
         end
