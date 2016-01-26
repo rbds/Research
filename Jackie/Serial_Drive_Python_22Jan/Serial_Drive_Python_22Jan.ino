@@ -5,6 +5,8 @@
 // Raspberry Pi (Python) sends commands to Arduino of where to drive. 
 // Arduino has (NEEDS) checks to brake if an obstacle is discovered while driving.
 
+// This file has been added to GitHub
+
 #include "DualVNH5019MotorShield.h" // Motorshield library
 #include "Encoder.h" // Encoder library
 #include <Wire.h> 
