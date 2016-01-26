@@ -32,27 +32,26 @@ brake90 = '$00013' #brake and turn 90 degrees
 brake120 = '$00014' #brake and turn 120 degrees
 brake180 = '$00016'
 brake = '$00000' #brake only
-drive = '$11000' #drive 10 inches
+drive = '$14000' #drive 20 inches
 
-
-def read_robot():
+'''Need to clean up function'''
+def read_robot(): 
     charToRead = 39
     time.sleep(0.2)
-    total_current = 0
-    total_time = 0
+    total_charge = 0
     while robot.inWaiting():
         b = robot.inWaiting()
         time.sleep(0.1)
         #print 'b1 ' + str(b)
         if b >= charToRead:
-            while b < charToRead:
-                b = robot.inWaiting()
+#            while b < charToRead:
+#                b = robot.inWaiting()
             if b > charToRead:
                 b = charToRead
             
-            print 'b2 ' + str(b)
+            #print 'b2 ' + str(b)
             msg = robot.read(b)
-            print 'msg ' + str(msg)
+            #print 'msg ' + str(msg)
             index = float(msg[0])
             encoder1 = float(msg[2:9])
             encoder2 = float(msg[10:17])
@@ -62,24 +61,22 @@ def read_robot():
             
             writer.writerow((index, encoder1, encoder2, turnAngle, milliseconds, millicurrent))
             
-            current = millicurrent / 1000
-            seconds = milliseconds / 1000
-            total_time += seconds
-            total_current += current
+            if index == 1:
+                current = millicurrent / 1000
+                seconds = milliseconds / 1000
+                charge = current * seconds
+                total_charge += charge
             
         elif b < charToRead:
             robot.flushInput()
             robot.flushOutput()
             
-    charge = total_time * total_current
-    total_time = 0
-    total_current = 0
-    return charge
+    return total_charge
     
 def brake_robot():
     robot.flushInput()
     robot.flushOutput()
-    time.sleep(0.5)
+    time.sleep(0.2)
     robot.write(brake)
     time.sleep(0.2)
     read_robot()
@@ -88,7 +85,7 @@ def brake_robot():
 def drive_robot():
     robot.flushInput()
     robot.flushOutput()
-    time.sleep(0.5)
+    time.sleep(0.2)
     robot.write(drive)
     time.sleep(0.2)
     charge = read_robot()
@@ -98,7 +95,7 @@ def drive_robot():
 def brake_robot180():
     robot.flushInput()
     robot.flushOutput()
-    time.sleep(0.5)
+    time.sleep(0.2)
     robot.write(brake180)
     time.sleep(0.2)
     read_robot()
@@ -122,22 +119,30 @@ robot.flushInput()
 robot.flushOutput()
 
 '''Drive and read'''
+charge1 = []
+charge2 = []
+charge3 = []
+
 charge1 = drive_robot()
-print "The charge for 10 in of drive is: " + str(charge1)
-time.sleep(0.5)
+#while not(charge1):
+#    #don't do anything
+#    time.sleep(0.01)
+print "The charge for 20 in of drive is: " + str(charge1)
+#time.sleep(0.5)
 charge2 = drive_robot()
-print "The charge for 10 in of drive is: " + str(charge2)
-time.sleep(0.5)
+print "The charge for 20 in of drive is: " + str(charge2)
+#time.sleep(0.5)
 charge3 = drive_robot()
-print "The charge for 10 in of drive is: " + str(charge3)
-time.sleep(0.5)
+print "The charge for 20 in of drive is: " + str(charge3)
+#time.sleep(0.5)
 brake_robot()
-time.sleep(0.5)
+#time.sleep(0.5)
 
 averageCharge = (charge1 + charge2 + charge3) / 3
 writer.writerow(('Charge1', 'Charge2', 'Charge3', 'Average Charge'))
 writer.writerow((charge1, charge2, charge3, averageCharge))
 
+print "The average charge for 20 in of drive is: " + str(averageCharge)
 
 robot.close()
 data_file.close()

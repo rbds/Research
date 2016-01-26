@@ -130,6 +130,7 @@ void drive() {
 //        Serial3.println(startTime);
 //        Serial3.print("End time: ");
 //        Serial3.println(endTime);
+        msg(1); // Send data only every 5th reading
       }
       else {
         endTime = "0";
@@ -138,7 +139,7 @@ void drive() {
 //        Serial3.print("End time; 0: ");
 //        Serial3.println(endTime);
       }
-      msg(1); // Send data; index 1 indicates driving
+      //msg(1); // Send data; index 1 indicates driving
     }
     encDrive = 0;
     encCount1 = 0;
