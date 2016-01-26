@@ -3,18 +3,58 @@ clear all
 % direction = 'outer';
 direction = 'inner';
 
-a = 10*abs(randn(100,2));
+a = abs(randn(100,2));
 % a = [1 10; 2 8; 2 7; 3 6; 4 8; 6 3; 1 11; 2 2; 6 1];
 
 front = a(1,:);
 
+for i=2:length(a)
+    flag = 0;
+    spot = find(front(:,1) > a(i,1), 1);
+    z = spot;
+    to_remove = [];
+    while z <= size(front,1)
+        if a(i,2) > front(z,2)
+           to_remove = [to_remove, z];  
+        end
+        z = z+1;
+    end
+    front(to_remove, :) = [];
+    if isempty(front)
+       front = a(i,:); 
+    end
+    
+    if size(front,1) > spot
+        front = cat(1, front(1:spot,:), a(i,:), front(spot+1:end, :));
+        flag = 1;
+    else 
+        front = cat(1, front(1:spot,:), a(i,:));
+    end
+    
+    if flag < 1
+        spot = find(front(:,2) < a(i,2), 1);
+        z = spot;
+        to_remove = [];
+        while z <= size(front,2)
+            if a(i,1) < front(z,1)
+               to_remove = [to_remove, z];  
+            end
+            z = z+1;
+        end
+        front(to_remove, :) = [];
+        if isempty(front)
+           front = a(i,:); 
+        end
 
-spot = find(front(:,1) > a(2,1));
-front = cat(1, front(1:spot,:), a(2,:), front(spot+1:end, :));
+        if size(front,1) > spot
+            front = cat(1, front(1:spot,:), a(i,:), front(spot+1:end, :));
+        else 
+            front = cat(1, front(1:spot,:), a(i,:));
+        end
+    end
+end
 
-
-
-
+front
 
 
 

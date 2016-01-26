@@ -68,7 +68,7 @@ adj = sparse(V^2, V^2);
 for i=1:V-1 %assemble adjacency matrix from sections
    adj((i-1)*V+1:(i-1)*V+V, i*V+1:i*V+V) = a;
 end
- spy(adj)
+%  spy(adj)
 
 % %create coordinates
 coords = [];

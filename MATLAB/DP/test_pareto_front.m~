@@ -8,11 +8,21 @@ a = 10*abs(randn(100,2));
 
 front = a(1,:);
 
+for i=2:length(a)
 
-spot = find(front(:,1) > a(2,1));
-front = cat(1, front(1:spot,:), a(2,:), front(spot+1:end, :));
+    spot = find(front(:,1) > a(2,1), 1);
+    flag = 0;
+    z = spot;
+    to_remove = [];
+    while z <= size(front,1)
+        if a(2,2) < front(z,2)
+           to_remove = [to_remove, z];  
+        end       
+    end
+    front(to_remove, :) = [];
+    front = cat(1, front(1:spot,:), a(2,:), front(spot+1:end, :));
 
-
+end
 
 
 

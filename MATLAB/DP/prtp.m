@@ -62,10 +62,10 @@ for k=1:sz1
   for i=1:sz1
     if i~=k
       j=j+1;
-      bb(j,:)=-ak+B(i,:);
+      bb(j,:)=ak-B(i,:);
     end
   end
-  if any(bb(1:j,:)'>0)
+  if any(bb(1:j,:)'<0)
     jj=jj+1;
     c(jj,:)=ak;
     kk(jj)=k;
