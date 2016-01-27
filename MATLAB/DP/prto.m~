@@ -1,13 +1,18 @@
-clear all
+function [ front, inds ] = prto( front, a )
+%prto Returns the Pareto front for EAPP.
+%   First column of front should be cost, second column should be P_tr. The
+%   front consists of the non-dominated entries with low cost and high
+%   Probability of Traverse.
+if isempty(front)
+   front = a(1,:);
+   ind = 2;
+else
+   ind = 1;
+end
 
-% rng(1);
-a = abs(randn(100,2));
+a(:,3) = [1:size(front,1)]'
 
-% a = [1 10; 2 8; 2 7; 3 6; 4 8; 6 3; 1 11; 2 2; 6 1];
-
-front = a(1,:);
-
-for i=2:length(a)
+for i=ind:size(a,1)
     flag = 0;
     spot = find(front(:,1) > a(i,1), 1);
     if (spot > 1) spot = spot - 1; end
@@ -68,4 +73,7 @@ for i=2:length(a)
 
 end
 
-front
+
+
+end
+

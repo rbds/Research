@@ -1,14 +1,13 @@
-function [ front ] = prto( front, a )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
-if isempty(front)
-   front = a(1,:);
-   ind = 2;
-else
-   ind = 1;
-end
+function [ front, inds ] = prto( a )
+%prto Returns the Pareto front for EAPP.
+%   First column of front should be cost, second column should be P_tr. The
+%   front consists of the non-dominated entries with low cost and high
+%   Probability of Traverse.
 
-for i=ind:size(a,1)
+a(:,3) = [1:size(a,1)]';
+front = a(1,:);
+
+for i=2:size(a,1)
     flag = 0;
     spot = find(front(:,1) > a(i,1), 1);
     if (spot > 1) spot = spot - 1; end
@@ -17,9 +16,6 @@ for i=ind:size(a,1)
     while z <= size(front,1) %check to see if any further entries should be removed
         if a(i,2) > front(z,2)
            to_remove = [to_remove, z];  
-%            if not(flag)
-%             spot = spot -1;
-%            end
            flag = 1; %set flag to indicate that the new node fits into the front
         end
         z = z+1;
@@ -69,6 +65,8 @@ for i=ind:size(a,1)
 
 end
 
+inds = front(:,3);
+front = front(:,1:2);
 
 
 end

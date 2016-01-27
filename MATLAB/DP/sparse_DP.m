@@ -10,7 +10,7 @@ P_tr_thresh = 0.2;
 
 % for z = 2:10
 %build adjacency matrix
-s =3;
+s =5;
 V = s^2;
 N = V^2;
 i_vals = [];
@@ -127,7 +127,8 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
 
 % build front 
 %     inds = [];
-    [front, inds] = prtp(options);
+    [front, inds] = prto(options);
+%     front = prto(options);
    
     %put pareto front into list for connected node
     if isempty(front) 
