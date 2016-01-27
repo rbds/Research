@@ -10,12 +10,11 @@ P_tr_thresh = 0.2;
 
 % for z = 2:10
 %build adjacency matrix
-s =5;
+s =3;
 V = s^2;
 N = V^2;
 i_vals = [];
 j_vals = [];
-% vals = [];
 
 minimum = 0.9;
 maximum = 1.0;
