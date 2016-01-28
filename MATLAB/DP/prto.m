@@ -4,7 +4,7 @@ function [ front, inds ] = prto( a )
 %   front consists of the non-dominated entries with low cost and high
 %   Probability of Traverse.
 
-a(:,3) = [1:size(a,1)]';
+a(:,4) = [1:size(a,1)]';
 front = a(1,:);
 
 for i=2:size(a,1)
@@ -65,8 +65,8 @@ for i=2:size(a,1)
 
 end
 
-inds = front(:,3);
-front = front(:,1:2);
+inds = front(:,4);
+front = front(:,1:3);
 
 
 end
