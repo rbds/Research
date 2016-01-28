@@ -2,7 +2,7 @@
 """
 Robot Drive Serial Script
 Created Conor Lyman 4 November 2015
-Last update: 26 January 2016
+Last update: 28 January 2016
 
 Function sends commands to Arduino to drive robot. Recieves driving data 
 from Arduino
@@ -12,7 +12,7 @@ import serial
 import time
 import csv
 
-data_file = open('data.csv', 'wb') #CSV file to store data sent by robot
+data_file = open('data_20in4.csv', 'wb') #CSV file to store data sent by robot
 writer = csv.writer(data_file)
 writer.writerow(('index', 'encoder1', 'encoder2', 'turn angle degrees', 'ms', 'mA'))
 
@@ -32,12 +32,12 @@ brake90 = '$00013' #brake and turn 90 degrees
 brake120 = '$00014' #brake and turn 120 degrees
 brake180 = '$00016'
 brake = '$00000' #brake only
-drive = '$14000' #drive 20 inches
+drive = '$12000' #drive 20 inches
 
 '''Need to clean up function'''
 def read_robot(): 
     charToRead = 39
-    time.sleep(0.2)
+#    time.sleep(0.05)
     total_charge = 0
     while robot.inWaiting():
         b = robot.inWaiting()
@@ -51,7 +51,7 @@ def read_robot():
             
             #print 'b2 ' + str(b)
             msg = robot.read(b)
-            #print 'msg ' + str(msg)
+            print 'msg ' + str(msg)
             index = float(msg[0])
             encoder1 = float(msg[2:9])
             encoder2 = float(msg[10:17])
@@ -87,9 +87,8 @@ def drive_robot():
     robot.flushOutput()
     time.sleep(0.2)
     robot.write(drive)
-    time.sleep(0.2)
+    time.sleep(0.3)
     charge = read_robot()
-    time.sleep(0.2)
     return charge
     
 def brake_robot180():
@@ -101,6 +100,9 @@ def brake_robot180():
     read_robot()
     time.sleep(0.2)    
     
+
+''' Script begins here'''
+
 
 '''!!!!!CHANGE THESE BASED ON WHAT IS PLUGGED IN!!!!!'''
 PORT = '/dev/tty.usbserial-DA011NKM' #.usbserial-DA00VSB5 for XBee
@@ -122,25 +124,24 @@ robot.flushOutput()
 charge1 = []
 charge2 = []
 charge3 = []
+charge4 = []
+charge5 = []
 
 charge1 = drive_robot()
-#while not(charge1):
-#    #don't do anything
-#    time.sleep(0.01)
 print "The charge for 20 in of drive is: " + str(charge1)
-#time.sleep(0.5)
 charge2 = drive_robot()
 print "The charge for 20 in of drive is: " + str(charge2)
-#time.sleep(0.5)
 charge3 = drive_robot()
 print "The charge for 20 in of drive is: " + str(charge3)
-#time.sleep(0.5)
+charge4 = drive_robot()
+print "The charge for 20 in of drive is: " + str(charge4)
+charge5 = drive_robot()
+print "The charge for 20 in of drive is: " + str(charge5)
 brake_robot()
-#time.sleep(0.5)
 
-averageCharge = (charge1 + charge2 + charge3) / 3
-writer.writerow(('Charge1', 'Charge2', 'Charge3', 'Average Charge'))
-writer.writerow((charge1, charge2, charge3, averageCharge))
+averageCharge = (charge1 + charge2 + charge3 + charge4 + charge5) / 5
+writer.writerow(('Charge1', 'Charge2', 'Charge3', 'Charge4', 'Charge5', 'Average Charge'))
+writer.writerow((charge1, charge2, charge3, charge4, charge5, averageCharge))
 
 print "The average charge for 20 in of drive is: " + str(averageCharge)
 

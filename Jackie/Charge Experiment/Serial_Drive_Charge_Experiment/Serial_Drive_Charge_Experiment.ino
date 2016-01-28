@@ -114,8 +114,6 @@ void drive() {
                                           // driveMult = 1*10+0 = 10
     driveCounts = driveMult * straightGain; // Determine how many encoder counts for desired distance  
     startTime = millis();
-//    Serial3.print("Start time: ");
-//    Serial3.println(startTime);
     k = 0;                      
     while (encDrive < driveCounts) { // Run the loop until distance reached
       md.setM1Speed(-vel);
@@ -126,20 +124,11 @@ void drive() {
       k++;
       if (k % 5 == 0) {
         endTime = String(millis() - startTime);
-//        Serial3.print("Start time (in loop): ");
-//        Serial3.println(startTime);
-//        Serial3.print("End time: ");
-//        Serial3.println(endTime);
         msg(1); // Send data only every 5th reading
       }
       else {
         endTime = "0";
-//        Serial3.print("Start time (in loop; 0): ");
-//        Serial3.println(startTime);
-//        Serial3.print("End time; 0: ");
-//        Serial3.println(endTime);
       }
-      //msg(1); // Send data; index 1 indicates driving
     }
     encDrive = 0;
     encCount1 = 0;
@@ -148,8 +137,6 @@ void drive() {
     enc2.write(0);
     driveCounts = 0;
     endTime = String(millis() - startTime);
-//    Serial3.print("End END time: ");
-//    Serial3.println(endTime);
     brake();
   }
  else if (data[0] == 0) { brake(); } // Move on to brake function if the first data is 0
