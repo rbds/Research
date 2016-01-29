@@ -10,7 +10,7 @@ P_tr_thresh = 0.2;
 
 % for z = 2:10
 %build adjacency matrix
-s =10;
+s =3;
 V = s^2;
 N = V^2;
 i_vals = [];
@@ -89,18 +89,16 @@ P_tr(V^2-V:V^2) = 1;
 %d{i,1}(:,1) is minimum cost, d{i,1}(:,2) is total P_tr, d{i,1}(:,3) is path
 %represented by that node.
 d{N,2} = []; % array to list parent paths
-% for i=1:N
-%    d{i,2} = zeros(V);
-% end
 for i=(N-V+1):(N) %create d vector to store cost, P_tr, parents for each entry in adj.
    d{i,1} = [0 1 i];
-%     d{i,1} = [0 1];
-%     d{i,2}(1) = i;
+%    d{i,2} = [i];
 end
-
-for i=1:V
-   d{i*V} = [0 1 i*V]; 
+for i=1:N
+   d{i,2} = zeros(V);
 end
+% for i=1:V
+%    d{i*V} = [0 1 i*V]; 
+% end
 
 
 % d{N} = [0 1 N];
@@ -133,7 +131,6 @@ for i=N:-1:1 %counting back from last populated column in adjacency matrix,
         if (V_row==0) V_row = V; end 
 
         new_options = [d{i,1}(:,1) + adj(row,col), d{i,1}(:,2)*P_tr(V_row), repmat(i, size(d{i,1}(:,1)))];   %list possible new paths
-%           new_options = [d{i,1}(:,1) + adj(row,col), d{i,1}(:,2)*P_tr(V_row)];      
                 %these possibilities come from a path through the current
                 %node, i.
         
