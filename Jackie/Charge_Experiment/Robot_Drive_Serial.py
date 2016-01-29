@@ -5,7 +5,26 @@ Created Conor Lyman 4 November 2015
 Last update: 28 January 2016
 
 Function sends commands to Arduino to drive robot. Recieves driving data 
-from Arduino
+from Arduino.
+
+The purpose of this program is to drive the robot a specific distance
+and record time and current information in order to find the charge used for
+each distance driven.
+
+To operate the program, begin by naming the data_file as necessary.
+The standard for this program is to use the format:
+'data_"distance"in"experiment number".csv
+For example, the title 'data_30in5.csv' specifies that the robot is driving
+30 inches and that it is the 5th such experiment.
+
+The next step is to check that the "drive" string is correct. See the notes for
+the command string below to understand how this string works. The string is currently
+set to drive the robot 30 inches.
+
+The program is designed to drive the robot 5 separate times, one after the other.
+Driving in 30 inch spurts means that the robot will travel a total of 
+30 inches * 5 = 150 inches total. Ensure there is enough space to complete the 
+program.
 """
 
 import serial
@@ -32,7 +51,7 @@ brake90 = '$00013' #brake and turn 90 degrees
 brake120 = '$00014' #brake and turn 120 degrees
 brake180 = '$00016'
 brake = '$00000' #brake only
-drive = '$13000' #drive 20 inches
+drive = '$13000' #drive 30 inches
 
 '''Need to clean up function'''
 def read_robot(): 
@@ -128,22 +147,22 @@ charge4 = []
 charge5 = []
 
 charge1 = drive_robot()
-print "The charge for 20 in of drive is: " + str(charge1)
+print "The charge for 30 in of drive is: " + str(charge1)
 charge2 = drive_robot()
-print "The charge for 20 in of drive is: " + str(charge2)
+print "The charge for 30 in of drive is: " + str(charge2)
 charge3 = drive_robot()
-print "The charge for 20 in of drive is: " + str(charge3)
+print "The charge for 30 in of drive is: " + str(charge3)
 charge4 = drive_robot()
-print "The charge for 20 in of drive is: " + str(charge4)
+print "The charge for 30 in of drive is: " + str(charge4)
 charge5 = drive_robot()
-print "The charge for 20 in of drive is: " + str(charge5)
+print "The charge for 30 in of drive is: " + str(charge5)
 brake_robot()
 
 averageCharge = (charge1 + charge2 + charge3 + charge4 + charge5) / 5
 writer.writerow(('Charge1', 'Charge2', 'Charge3', 'Charge4', 'Charge5', 'Average Charge'))
 writer.writerow((charge1, charge2, charge3, charge4, charge5, averageCharge))
 
-print "The average charge for 20 in of drive is: " + str(averageCharge)
+print "The average charge for 30 in of drive is: " + str(averageCharge)
 
 robot.close()
 data_file.close()
