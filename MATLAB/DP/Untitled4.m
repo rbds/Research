@@ -10,7 +10,7 @@ P_tr_thresh = 0.2;
 
 % for z = 2:10
 %build adjacency matrix
-s =10;
+s =8;
 V = s^2;
 N = V^2;
 i_vals = [];
@@ -20,18 +20,7 @@ minimum = 0.9;
 maximum = 1.0;
 P_tr = (maximum - minimum)*rand(V, 1) + minimum; %Prob. of traverse associated with each node. sqrt is to bias towards higher values.
 P_tr = repmat(P_tr, V, 1);
-% costs = 10*abs(randn(V,1));
-costs=[.1 .7 .8 .7 .6 .2 .2 .3 .2 .1
-       .5 .9 .7 .7 .3 .4 .5 .3 .1 .1
-       .7 .6 .3 .2 .7 .5 .3 .1 .1 .1
-       .2 .4 .9 .8 .5 .2 .2 .2 .1 .1
-       .8 .9 .7 .4 .2 .1 .2 .3 .1 .8
-       .2 .1 .1 .2 .8 .5 .4 .4 .1 .8
-       .1 .6 .5 .6 .5 .4 .4 .2 .1 .1
-       .3 .2 .1 .1 .1 .1 .2 .3 .1 .1
-       .2 .2 .1 .1 .1 .2 .1 .1 .1 .1
-       .1 .2 .2 .2 .4 .2 .1 .1 .1 .1];
-costs = reshape(costs, 1, 100);
+costs = 10*abs(randn(V,1));
 
 for i = 1:V    %for each row in adjacency matrix
    if (mod(i,s) >0) %if it isn't on the right edge of grid 
@@ -73,7 +62,13 @@ for i = 1:V    %for each row in adjacency matrix
    end   
 end
 
-
+vals = 10*abs(randn(length(i_vals), 1));  %generate random costs
+a= sparse(i_vals, j_vals, vals); %one section of the adjacency matrix
+adj = sparse(V^2, V^2);
+for i=1:V-1 %assemble adjacency matrix from sections
+   adj((i-1)*V+1:(i-1)*V+V, i*V+1:i*V+V) = a;
+end
+%  spy(adj)
 
 % %create coordinates
 coords = [];
@@ -83,22 +78,9 @@ for i = 1:N
 
    row = mod(V_no,s);
    col = ceil(V_no/s);
-      if (row==0) row = s; end 
+      if (row==0) row = s; end
    coords(end+1,:) = [row, col]; 
 end
-
-%create adjacency matrix
-% vals = 10*abs(randn(length(i_vals), 1));  %generate random costs
-vals = zeros(size(i_vals));
-for i=1:length(i_vals)
-    vals(i) = mean([costs(i_vals(i)), costs(j_vals(i))]);
-end
-a= sparse(i_vals, j_vals, vals); %one section of the adjacency matrix
-adj = sparse(V^2, V^2);
-for i=1:V-1 %assemble adjacency matrix from sections
-   adj((i-1)*V+1:(i-1)*V+V, i*V+1:i*V+V) = a;
-end
-%  spy(adj)
 gplot(adj, coords, '*-') %plot graph
 
 [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.

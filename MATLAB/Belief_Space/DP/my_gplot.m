@@ -1,4 +1,3 @@
-
 figure
 %create coordinates
 coords = [1 sqrt(V)];
@@ -8,8 +7,8 @@ end
 
 m = max(max(adj));
 hold on
-for i=1:V^2
-    for j=1:V^2
+for i=1:V
+    for j=1:V
         if adj(i, j)>0
             red = adj(i,j)/m;
             blue = (P_tr(i) + P_tr(j))/2;

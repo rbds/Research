@@ -1,5 +1,5 @@
 %Testing multi-objective optimization
-% clear
+clear
 figure(1)
 clf
 
@@ -61,7 +61,7 @@ d = zeros(V,2); %d(1) is minimum cost, d(2) is total P_tr
 
 % adj = abs(10*randn(V)).*adj;
 P_tr_thresh = 0.25;
-% P_tr = sqrt(rand(V,1)); %Prob. of traverse associated with each node. sqrt is to bias towards higher values.
+P_tr = sqrt(rand(V,1)); %Prob. of traverse associated with each node. sqrt is to bias towards higher values.
 costs = [.1 .7 .8 .7 .6 .2 .2 .3 .2 .1
        .5 .9 .7 .7 .3 .4 .5 .3 .1 .1
        .7 .6 .3 .2 .7 .5 .3 .1 .1 .1

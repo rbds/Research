@@ -1,5 +1,5 @@
 %Testing multi-objective optimization
-% clear
+clear
 figure(1)
 clf
 
@@ -61,8 +61,8 @@ d = zeros(V,2); %d(1) is minimum cost, d(2) is total P_tr
 
 % adj = abs(10*randn(V)).*adj;
 P_tr_thresh = 0.25;
-% P_tr = sqrt(rand(V,1)); %Prob. of traverse associated with each node. sqrt is to bias towards higher values.
-costs = [.1 .7 .8 .7 .6 .2 .2 .3 .2 .1
+P_tr = sqrt(rand(V,1)); %Prob. of traverse associated with each node. sqrt is to bias towards higher values.
+costs = [.2 .7 .8 .7 .6 .2 .2 .3 .2 .1
        .5 .9 .7 .7 .3 .4 .5 .3 .1 .1
        .7 .6 .3 .2 .7 .5 .3 .1 .1 .1
        .2 .4 .9 .8 .5 .2 .2 .2 .1 .1
@@ -115,7 +115,7 @@ d;
 hold on
 for i=1:length(path)-1
     plot(coords(path(i),1), coords(path(i),2), 'r*')
-    plot([coords(path(i),1), coords(path(i+1),1)],[coords(path(i),2), coords(path(i+1),2)], 'r-', 'LineWidth', 3)    
+    plot([coords(path(i),1), coords(path(i+1),1)],[coords(path(i),2), coords(path(i+1),2)], 'r-')    
 end
 axis off
 axis equal
@@ -149,7 +149,7 @@ clf
 subplot(1,2,1)
 for i = 1:V
     v = [ coords(i,2)-0.5 coords(i,1)-0.5; coords(i,2)-0.5 coords(i,1)+0.5; coords(i,2)+0.5 coords(i,1)+0.5; coords(i,2)+0.5  coords(i,1)-0.5 ];
-    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [0 0 1 ], 'FaceAlpha', costs(i))
+    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [0 0 1 ], 'FaceAlpha', 1 - costs(i))
     
 end
 

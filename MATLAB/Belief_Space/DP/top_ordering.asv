@@ -1,0 +1,13 @@
+V = 4;
+rows_to_do = zeros(V,1);
+
+[row, col] = find(adj);
+
+p = abs(pascal(V,1)');
+p_pr = p';
+
+for i=2:V^2
+   rows_to_do(i) = V^2 - p(i+1) - p(i;
+end
+
+rows_to_do'
