@@ -1,0 +1,531 @@
+%Randy Schur
+
+%format based on:
+%% bare_jrnl.tex
+%% V1.4b
+%% 2015/08/26
+%% by Michael Shell
+%% see http://www.michaelshell.org/
+%% for current contact information.
+%%
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.8b or later) with an IEEE
+%% journal paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/pkg/ieeetran
+%% and
+%% http://www.ieee.org/
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% User assumes all risk.
+%% In no event shall the IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%*************************************************************************
+
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. The IEEE's font choices and paper sizes can   ***
+% *** trigger bugs that do not appear when using other class files.       ***                          ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+
+\documentclass[journal]{IEEEtran}
+% *** CITATION PACKAGES ***
+%
+\usepackage{cite}
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of the IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off
+% such as if a citation ever needs to be enclosed in parenthesis.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 5.0 (2009-03-20) and later if using hyperref.sty.
+% The latest version can be obtained at:
+% http://www.ctan.org/pkg/cite
+% The documentation is contained in the cite.sty file itself.
+
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+
+\usepackage[pdftex]{graphicx}
+\usepackage{amsmath}
+\interdisplaylinepenalty=2500
+
+
+\usepackage{algorithmic}
+\usepackage{array}
+
+
+
+% *** SUBFIGURE PACKAGES ***
+%\ifCLASSOPTIONcompsoc
+%  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+%\else
+%  \usepackage[caption=false,font=footnotesize]{subfig}
+%\fi
+% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
+% for subfigure.sty, the latter of which is no longer maintained and is
+% incompatible with some LaTeX packages including fixltx2e. However,
+% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
+% which will override IEEEtran.cls' handling of captions and this will result
+% in non-IEEE style figure/table captions. To prevent this problem, be sure
+% and invoke subfig.sty's "caption=false" package option (available since
+% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
+% handling of captions.
+% Note that the Computer Society format requires a larger sans serif font
+% than the serif footnote size font used in traditional IEEE formatting
+% and thus the need to invoke different subfig.sty package options depending
+% on whether compsoc mode has been enabled.
+%
+% The latest version and documentation of subfig.sty can be obtained at:
+% http://www.ctan.org/pkg/subfig
+
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/stfloats
+% Do not use the stfloats baselinefloat ability as the IEEE does not allow
+% \baselineskip to stretch. Authors submitting work to the IEEE should note
+% that the IEEE rarely uses double column equations and that authors should try
+% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
+% packages (also by Sigitas Tolusis) as the IEEE does not format its papers in
+% such ways.
+% Do not attempt to use stfloats with fixltx2e as they are incompatible.
+% Instead, use Morten Hogholm'a dblfloatfix which combines the features
+% of both fixltx2e and stfloats:
+%
+% \usepackage{dblfloatfix}
+% The latest version can be found at:
+% http://www.ctan.org/pkg/dblfloatfix
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+
+\title{Dynamic Programming Method for Energy-Aware Path Planning}
+
+% author names and IEEE memberships
+% note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
+% a structure at a ~ so this keeps an author's name from being broken across
+% two lines.
+% use \thanks{} to gain access to the first footnote area
+% a separate \thanks must be used for each paragraph as LaTeX2e's \thanks
+% was not built to handle multiple paragraphs
+%
+
+\author{Randall~Schur
+        and~Adam~Wickenheiser
+\thanks{M. Shell was with the Department
+of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta,
+GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this % stops a space
+%\thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
+%\thanks{Manuscript received April 19, 2005; revised August 26, 2015.}
+}
+
+% The paper headers
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2015}%
+{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for IEEE Journals}
+
+% make the title area
+\maketitle
+
+\begin{abstract}
+This paper presents Energy Aware Path Planning (EAPP), a path planning algorithm for mobile robots deployed in extended missions. Battery constraints are often the limiting factor for the range and length of deployment in ground vehicles. In order to extend the lifetime of a mobile robot, solar panels or other energy transducers can be attached to the robot to harvest energy from the environment. The environment may not be well defined; this approach assumes the availability of satellite images which can be segmented into grids, but requires no additional information about obstacles. Our approach defines a novel description of the environment consisting of two costs associated with each grid cell: an energy-based cost of traverse and a collision-based probability of traverse based on the model of the robot and the environment. The proposed algorithm takes a dynamic programming approach to finding the least cost path through the environment without violating a constraint on probability of traverse. Simulations and experiments show more efficient paths for robots in target environments.
+\end{abstract}
+
+% Note that keywords are not normally used for peerreview papers.
+%\begin{IEEEkeywords}
+%IEEE, IEEEtran, journal, \LaTeX, paper, template.
+%\end{IEEEkeywords}
+
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+
+
+\section{Introduction}
+\IEEEPARstart{N}{avigation} algorithms for mobile robots in a realistic scenario present a multi-objective optimization problem. The goal is to minimize some cost function while maximizing the chances of success. 
+In a real-world problem, this means synthesizing incomplete and potentially incorrect information about the environment, while minimizing the cost of executing the final path. 
+The cost function may have competing goals; decreasing probability of collision (defined for this paper as any obstacle that can damage the robot or stop it from driving), optimizing distance travelled or information gained, minimizing energy usage, or minimizing the time to a goal are all potential goals of the algorithm.
+As these are often competing interests, the cost function must weight each goal according to the application, along with the uncertainty associated with each piece of information. 
+
+The approach in this paper (EAPP) presents a novel context for characterizing uncertainty in the environment by introducing a metric called probability of traverse ($P_{tr}(x)$), which is a function of position. 
+The environment is first segmented into grid cells.
+ Rather than attempting to define a cell by its coverage of obstacles or by its uncertainty as in cell decomposition methods \cite{mobile robotics textbook}, probability of traverse is defined as the estimate of the likelihood that the robot will be able to traverse through the grid square. 
+Any obstacle that the robot can’t drive through means that there is some probability the robot will fail to traverse the cell. The probability of traverse reflects the dispersion of obstacles throughout a segment cite{LaValle dispersion equation}. 
+This probability can be multiplied among sequential map segments to calculate the probability that the robot will get stuck while moving from one segment to another. 
+A segment covered entirely by a known obstacle, for example a river if the vehicle is a wheeled robot, would have Ptr(x) = 0. 
+Probability of traverse is a pre-calculated metric related to chance constraints (see Blackmore - Robust Path Planning and Feedback Design under stochastic uncertainty) \cite{Blackmore}, although it is not an exact parallel.
+
+In addition an obstacle density is estimated for each map segment, which is defined as the ratio of area covered by obstacles in a map segment to the total area of that segment. 
+This metric is used to calculate the cost function, and reflects the likelihood that the actual path will need to deviate from a straight line through the map segment. 
+The obstacle density can be used to estimate actual path length through a segment. 
+
+EAPP considers the case of extended deployment in a partially unknown environment. 
+The scenario targeted by this approach is a robot that is deployed on a continuous, extended, and autonomous basis. 
+Applications such as inspection of infrastructure such as pipelines or bridges, environmental monitoring and data collection in remote areas, and surveillance (\cite{citations}) all require this type of long-term autonomy. 
+First and foremost for these applications the robot must continue running and must approach a goal location, and any other goal is secondary. 
+This means that two objectives must be considered: minimizing collisions and minimizing energy usage. 
+Energy minimization here is important for extended duration missions, as on-board battery storage is often the limiting factor for mobile robots. 
+More energy-dense solutions such as fuel cells or radioactive power sources are often impractical due to safety and cost concerns. 
+This approach assumes a battery powered vehicle with the addition of energy-harvesting equipment such as a solar panel. 
+EAPP evaluates the competing objectives using both a cost function based on estimated energy usage and a penalty function based on estimated probability of a successful traverse, allowing the most efficient path which does not violate the defined threshold on the likelihood of collision.
+
+\section{Related Work}
+
+In this paper we focus on go-to-goal behavior for navigation, in particular moving a wheeled robot through an environment from its present location to some target. 
+The many approaches to this problem are typically categorized as either probabilistic or deterministic. 
+
+Probabilistic navigation algorithms, such as Rapidly Exploring Random Trees (RRT) \cite{RRT}, Probabilistic Roadmaps (PRM) \cite{PRM}, and their extensions depend on randomly chosen points in the environment. 
+They deal well with high dimensional configuration spaces, do not require an explicit map of the environment, and are probabilistically complete \cite{Planning Algorithms - LaValle}. 
+Both RRT and PRM are easily extendible, meaning it is often possible to adapt the navigation method to a particular type of situation by adjusting the steps.
+RRT* and PRM* are asymptotically optimal \cite{RRT*}, meaning they converge to the optimal solution given an infinite number of iterations.
+Other extensions \cite{double trees}, \cite{heuristic bias} decrease running time, to the point that probabilistic navigation can be used in real time for mobile robots. 
+Authors in (\cite{ Lavalle, Branicky, Lindemann}) show that a predetermined choice of points in the environment such that the points minimize some metric can in some cases outperform the typically used randomly generated points. 
+
+Deterministic Methods such as A* (\cite{A*}) and D* (\cite{D*}) are also successfully implemented as motion planning algorithms for mobile robots. 
+One advantage of these is that as deterministic methods, they will give the same answer for the same input, which may be a desirable property for an autonomous system.
+These methods are resolution complete \cite{ A* paper}, meaning that they are guaranteed to find a solution if the grid resolution is fine enough. 
+The method presented in this paper shares this property. 
+Many related algorithms, as well as EAPP, give the optimal path down to the grid resolution.
+
+An important consideration for an algorithm interacting in the physical world is how it deals with uncertainty (\cite {Probabilistic Robotics}). 
+Uncertainty in mobile robots can originate from motion uncertainty, sensing uncertainty, or environmental uncertainty (\cite{LQG-MP paper}). 
+Each of these can be addressed in the motion planning phase, and extensive work exists addressing one or more types of uncertainty. 
+Among many examples, work by Bry and Roy \cite{belief space} considers motion uncertainty during path planning. 
+Sensing uncertainty is addressed by work such as \cite{(Luders et al. - Bounds on Tracking Error Using Closed Loop RRTs)} or \cite{(LQG-MP)}. 
+Environmental uncertainty is addressed by \cite{(Roughness based RRT,} \cite{ particle filter RRT)} in the context of probabilistic navigation algorithms. 
+This work addresses environmental uncertainty using a novel metric, and then uses a deterministic path planning algorithm. 
+One further source of uncertainty arises from a dynamic environment, which is not addressed in this paper. 
+For methods dealing with a dynamic environment, see for example \cite{(Frazzoli- Motion Planning with Moving Obstacles)} or \cite{(Likhachev and Koenig - Fast Replanning for navigation in unknown environment)}.
+
+Recent work examines navigation algorithms which consider energy usage of the robot. 
+For mobile robots, \cite{(Mei et al., Deployment of mobile robots with energy and timing constraints)} addresses the deployment of multiple robots which collectively accomplish some exploration task in the most energy efficient manner \cite{(Mei et al. Energy-Efficient Mobile Robot Exploration)}. 
+Work in \cite{(Wang et al. - Staying Alive …)} presents a navigation strategy which estimates when a robot must return to some ‘charging base’.
+Authors in \cite{(Liu and Sun - Minimizing Energy Consumption of Wheeled Mobile Robots via Optimal Motion Planning)} use optimal motion planning to minimize energy consumption. 
+Each of these papers consider energy usage of mobile robots in the path planning stage, but are not targeted towards extending the duration of a deployment using energy-harvesting, or are focused on exploration rather than go-to-goal behavior. 
+Work in \cite{(Continuous-Field Path Planning with Constrained Path-Dependent State Variables)} examines recharging capabilities of a robot, but completely ignores the issue of uncertainty and uses a grid-based approach that characterizes each cell as a binary ‘obstacle’ or ‘not obstacle’.
+The following work aims to address a realistic scenario while incorporating energy usage and recharging into the planning stage.
+
+
+\section{Problem Definition}
+The problem statement can be defined as finding the path which minimizes the cost function according to the constraint on probability of traverse.
+
+\begin{equation}
+\displaystyle{\min_{x\in W} J(x, SOC)} \mid P_{tr}(x)_{total}<\epsilon_c
+\end{equation} 
+
+where $W$ is the workspace, $J$ is the cost function, $x$ is position, $SOC$ is the battery state of charge, $P_{tr}(x)$ is the probability of traverse over the entire path, and $\epsilon_c$ is the threshold on probability of traverse.
+
+In any real scenario, each of these quantities is an estimate, as robot environments are unpredictable and models are imprecise \cite{(Probabilistic Robotics)}. 
+Thus the constraint means that the \textit{estimate} of $P_{tr}(x)$ must not violate the user-defined threshold, $\epsilon_c$. 
+Both the method of estimation and the level of threshold depend on the scenario involved and more importantly on the mobile robot used. 
+In this paper a simple robotic platform demonstrates the navigation algorithm, but any parameters used will vary with a different platform. 
+Specifically, the cost function must take into account how much energy the robot uses, how much energy it can pull from the environment, and the ability of the robot to traverse different types of terrain in order to accurately evaluate the constraint.
+
+Parameter estimates for the robot and the environment are generated  before the algorithm runs. 
+In order to increase the usability of the algorithm, the input beyond robot parameters is limited to information which is realistically available in the targeted scenario. 
+The only required input is the estimate of $P_tr(x)$ and $\mu(x)$, which can be generated strictly from a satellite image and information about the robot. 
+The focus of this paper is on the navigation, and we leave the identification and classification of the environment from the satellite images for future work.
+
+\subsection{Global vs. Local Algorithm}
+This work focuses on the global navigation algorithm, and assumes the availability of a local navigation strategy which takes inputs from onboard sensors and avoids obstacles. 
+It must attempt drive the robot to each successive waypoint, and it must use sensors to avoid obstacles. 
+Extensive work (\cite{examples}) has been done on this topic. 
+The implementation of this local algorithm is interchangeable as long as it meets these requirements. The method used in the results section relies on potential fields. 
+Other options are an optimal tracking controller such as an LQR for a system with a linear model, or a real time extension of a separate navigation algorithm \cite{(see Bruce- Real time RPP for Robot Navigation)}.
+
+EAPP is a global navigation algorithm, meaning it generates waypoints through an environment from a current position to a target position in the workspace. 
+Workspace is defined as the position of the robot on the surface of the ground, as opposed to Configuration space, curly C, which frequently describes the full state of the robot (cite some configuration space paper). 
+Velocity is not considered by the global algorithm, as this is something best handled by the local algorithm. For estimation of energy usage, this work assumes that the robot travels at a constant velocity which is the optimally efficient rate. 
+See [\cite{(Mei et al., Deployment of mobile robots with energy and timing constraints)}] for a discussion of how velocity affects energy efficiency in mobile robots.
+
+\subsection{Energy Harvesting}
+The simplest way to extend the range of a vehicle is to carry additional energy storage on board. 
+In any mobile robot, the storage capacity is limited by the size of the platform used. 
+Often this size is limited by external factors such as transportation of the platform or size of passages in the environment, or is limited so that that the robot will be unobtrusive or undetected. 
+The next obvious choice to extend range of a mobile robot is refueling, either by swapping batteries or using a refueling station that can recharge a battery or dispense additional fuel. 
+This approach makes sense when navigating within a predefined network such as a system of roads, but may be infeasible in an unstructured environment. 
+Our approach is to collect energy from the environment using renewable or man-made sources of energy. 
+Transducers for vibration energy (generated by machinery or movement of the vehicle) (cite Wickenheiser), solar energy, and thermal energy exist and are commercially available. 
+The choice and sizing of these methods of energy collection should be entirely dependent on the availability of energy sources within the environment that the robot will be navigating. 
+While the energy density of these sources is low \cite{ Layton}, the availability of these resources in natural environments still makes them an attractive choice for small mobile robots. 
+
+The effectiveness of these methods for energy collection is expected to improve as the technology continues to develop. 
+The most widespread are solar panels, which when deployed over a larger area are used to generate a significant amount of power (DoE citation here). 
+There are some commercial products that take advantage of other energy sources. 
+These products are mainly focused on personal electronics, gathering energy from sources such as the kinetic energy of the user (vibration energy) using inductors or harvesting RF energy in the form of excess wireless signals. 
+EAPP does not specify what sources of energy to use, but the implementation in this work uses a solar panel attached to the robot.
+
+\section{Navigation Algorithm}
+\subsection{Algorithm Description (EAPP)}
+
+The algorithm is a dynamic programming strategy which takes as input a graph describing the connections between grid cells and outputs the optimal path from each grid cell to some target. Each vertex in the graph represents the averaged cost over one grid cell, and the graph is formed in an eight-connected pattern. 
+In practice, the constraint on Probability of Traverse is implemented as a penalty function. 
+This allows the algorithm to save a path even if the constraint is violated; the only case in which a path like this is returned is when all possible paths from one node to the goal violate this constraint. 
+The penalty function allows the algorithm to return this option, and it is up to the user (or some pre-determination by the user) to reject this path if desired. 
+Separate from this constraint, the cost of a path provides an estimate of energy usage. 
+If this estimate is larger than the state of charge (SOC) on the battery, the robot should not move, and instead should report failure and request a new target destination. 
+This behavior may be different from that enforced on the violation of the Ptr threshold.
+
+The algorithm begins by sorting the nodes in topological order. 
+This order is critical for dynamic programming, and it needs to be in the reverse of the eventual path taken. 
+In the case of the examples in this paper, the target node is the bottom right corner, and the current position is at the node in the upper left corner. 
+So, the ordering of nodes begins with the target in the lower right, then moves radially out from this corner. 
+This scheme will be affected by the connections between grid cells. 
+Choosing an eight-connected grid allows for a relatively simple ordering scheme. 
+The order needs to be such that as the algorithm progresses from target node to start node, the cost at each successive node depends only on nodes that have already been completely considered. 
+See \cite{(Dynamic Programming book)} for details.
+
+Once the nodes are sorted, the next step is to build an adjacency matrix defining the connections present in the input graph.
+The adjacency matrix is of size n x n, where n is the number of nodes in the graph (equivalently the number of grid cells in the map). 
+In order to transform the eight-connected grid into a directionally acyclic graph (DAG), the adjacency matrix is 'unwrapped'. 
+Each node is listed in the first row, representing a path starting at any given node. 
+Successive rows in the matrix also list each node, so that the $nth$ row represents the $nth$ step in a given path. 
+If a graph can be topologically ordered, then it can be transformed into a DAG \cite{vazirani algorithms ch. 6}.
+
+(create diagram using Tikz).
+  
+The number of rows in the adjacency matrix is thus the maximum length of a path produced by the algorithm.
+Based on the assumption that there are no negative weight cycles in the graph, the optimal path will visit each node at most one time.
+Therefore, the optimal path will have at most $n$ steps, which is the number of rows in the adjacency matrix. 
+This scheme has the advantage of creating a square adjacency matrix.
+
+There is a separate entry in the matrix for each possibility of traveling from one cell to another.
+Therefore, there can be a separate cost assigned (if necessary) for moving in different directions between  two adjacent points. 
+This allows the algorithm to account for hills or other asymmetrical obstacles, an advantage over many existing algorithms.
+If the robot can move from cell A to cell B, the entry in column B row A is the estimated cost for this move. 
+This scheme stores both the connections in the graph and the memoization of costs in the adjacency matrix. 
+Sparse matrix storage and operations can be used, which drastically reduces running time.
+The non-zero entries should always be in the same pattern, depicted for a 2x2 grid and a 6x6 grid below. 
+
+Insert speye diagrams.  
+
+\subsection{Cost Function}
+
+\subsection{Pseudocode}
+
+\subsection{Assumptions}
+
+\subsection{Advantages of EAPP}
+
+%\begin{figure}[!t]
+%\centering
+%\includegraphics[width=2.5in]{myfigure}
+% where an .eps filename suffix will be assumed under latex, 
+% and a .pdf suffix will be assumed for pdflatex; or what has been declared
+% via \DeclareGraphicsExtensions.
+%\caption{Simulation results for the network.}
+%\label{fig_sim}
+%\end{figure}
+
+% An example of a double column floating figure using two subfigures.
+% (The subfig.sty package must be loaded for this to work.)
+%\begin{figure*}[!t]
+%\centering
+%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
+%\label{fig_first_case}}
+%\hfil
+%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
+%\label{fig_second_case}}
+%\caption{Simulation results for the network.}
+%\label{fig_sim}
+%\end{figure*}
+%
+% Note that often IEEE papers with subfigures do not employ subfigure
+% captions (using the optional argument to \subfloat[]), but instead will
+% reference/describe all of them (a), (b), etc., within the main caption.
+% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
+% labels, the optional argument to \subfloat must be present. If a
+% subcaption is not desired, just leave its contents blank,
+% e.g., \subfloat[].
+
+
+% An example of a floating table.
+%\begin{table}[!t]
+%% increase table row spacing, adjust to taste
+%\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+%\caption{An Example of a Table}
+%\label{table_example}
+%\centering
+%% Some packages, such as MDW tools, offer better commands for making tables
+%% than the plain LaTeX2e tabular which is used here.
+%\begin{tabular}{|c||c|}
+%\hline
+%One & Two\\
+%\hline
+%Three & Four\\
+%\hline
+%\end{tabular}
+%\end{table}
+
+
+\section{Conclusion}
+The conclusion goes here.
+
+
+
+
+
+% if have a single appendix:
+%\appendix[Proof of the Zonklar Equations]
+% or
+%\appendix  % for no appendix heading
+% do not use \section anymore after \appendix, only \section*
+% is possibly needed
+
+% use appendices with more than one appendix
+% then use \section to start each appendix
+% you must declare a \section before using any
+% \subsection or using \label (\appendices by itself
+% starts a section numbered zero.)
+%
+
+
+\appendices
+\section{Proof of the First Zonklar Equation}
+Appendix one text goes here.
+
+% you can choose not to have a title for an appendix
+% if you want by leaving the argument blank
+\section{}
+Appendix two text goes here.
+
+
+% use section* for acknowledgment
+\section*{Acknowledgment}
+
+
+The authors would like to thank...
+
+
+% Can use something like this to put references on a page
+% by themselves when using endfloat and the captionsoff option.
+\ifCLASSOPTIONcaptionsoff
+  \newpage
+\fi
+
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://mirror.ctan.org/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+\begin{thebibliography}{1}
+
+\bibitem{IEEEhowto:kopka}
+H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+
+\end{thebibliography}
+
+% biography section
+% 
+% If you have an EPS/PDF photo (graphicx package needed) extra braces are
+% needed around the contents of the optional argument to biography to prevent
+% the LaTeX parser from getting confused when it sees the complicated
+% \includegraphics command within an optional argument. (You could create
+% your own custom macro containing the \includegraphics command to make things
+% simpler here.)
+%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
+% or if you just want to reserve a space for a photo:
+
+\begin{IEEEbiography}{Michael Shell}
+Biography text here.
+\end{IEEEbiography}
+
+% if you will not have a photo at all:
+\begin{IEEEbiographynophoto}{John Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% insert where needed to balance the two columns on the last page with
+% biographies
+%\newpage
+
+\begin{IEEEbiographynophoto}{Jane Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% You can push biographies down or up by placing
+% a \vfill before or after them. The appropriate
+% use of \vfill depends on what kind of text is
+% on the last page and whether or not the columns
+% are being equalized.
+
+%\vfill
+
+% Can be used to pull up biographies so that the bottom of the last one
+% is flush with the other column.
+%\enlargethispage{-5in}
+
+
+
+% that's all folks
+\end{document}
+
+
