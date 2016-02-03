@@ -337,19 +337,32 @@ Separate from this constraint, the cost of a path provides an estimate of energy
 If this estimate is larger than the state of charge (SOC) on the battery, the robot should not move, and instead should report failure and request a new target destination. 
 This behavior may be different from that enforced on the violation of the Ptr threshold.
 
-The algorithm begins by sorting the nodes in topological order (see \ref{DAG}). 
-This order is critical for dynamic programming \cite{(Dynamic Programming book)}, and it needs to be in the reverse of the eventual path taken. 
-So, the ordering of nodes begins with the target in the lower right, then moves radially out from this corner. 
-This scheme will be affected by the connections between grid cells. 
-Choosing an eight-connected grid allows for a relatively simple ordering scheme. 
-The order needs to be such that as the algorithm progresses from target node to start node, the cost at each successive node depends only on nodes that have already been completely considered. 
-
-Once the nodes are sorted, the next step is to build an adjacency matrix defining the connections present in the input graph.
-The adjacency matrix is of size $n \times n$, where $n$ is the number of nodes in the graph (equivalently the number of grid cells in the map). 
-In order to transform the eight-connected grid into a directionally acyclic graph (DAG), the adjacency matrix is 'unwrapped'. 
+The algorithm begins by sorting the nodes in topological order . 
+In order to transform the eight-connected grid into a directionally acyclic graph (DAG), the graph is 'unwrapped' (see \ref{DAG}).
 Each node is listed in the first row, representing a path starting at any given node. 
 Successive rows in the matrix also list each node, so that the $nth$ row represents the $nth$ step in a given path. 
 If a graph can be topologically ordered, then it can be transformed into a DAG \cite{vazirani algorithms ch. 6}. For example, the cyclic graph in \ref{DAG} is turned into a DAG.
+
+
+Once the nodes are sorted, the next step is to build an adjacency matrix describing the connections present in the input graph.
+The adjacency matrix, $adj$ is of size $n \times n$, where $n$ is the number of nodes in the graph (equivalently the number of grid cells in the map). 
+The number of rows in the adjacency matrix is thus the maximum length of a path produced by the algorithm.
+Based on the assumption that there are no negative weight cycles in the graph, the optimal path will visit each node at most one time.
+Therefore, the optimal path will have at most $n$ steps, which is the number of rows in the adjacency matrix. 
+
+There is a separate entry in the matrix for each possibility of traveling from one cell to another.
+A separate cost may be assigned for moving in different directions between  two adjacent points. 
+This allows the algorithm to account for hills or other asymmetrical obstacles, an advantage over many existing algorithms.
+If the robot can move from cell $i$ to cell $j$, the entry in column $j$ row $i$ is the estimated cost for this move. 
+\begin{align}
+adj(i,j) &= cost(i \rightarrow j) \\
+		 &= \frac{1}{2}(H_i + H_j)
+\end{align}
+where $H_i$ is the cost function evaluated at node $i$. If $i$ and $j$ are diagonally connected, the cost should be additionally be scaled by $sqrt(2)$.
+The cost is a function of the incremental energy required to drive over the surface, which accounts for coefficent of friction and incline.
+This scheme stores both the connections in the graph and the memoization of costs in the adjacency matrix. 
+Sparse matrix storage and operations are used to drastically reduces running time.
+The non-zero entries should always be in the same pattern, depicted for a 2x2 grid and a 4x4 grid in \ref{speye}. 
 
 \begin{figure}[h]
 \label{DAG}
@@ -396,18 +409,6 @@ squarednode/.style={rectangle, draw=red!60, fill=red!5, very thick, minimum size
 \caption{Conversion of a cyclic graph into a DAG. A similar process will convert the eight-connected grid into a DAG.}
 \end{figure}
   
-The number of rows in the adjacency matrix is thus the maximum length of a path produced by the algorithm.
-Based on the assumption that there are no negative weight cycles in the graph, the optimal path will visit each node at most one time.
-Therefore, the optimal path will have at most $n$ steps, which is the number of rows in the adjacency matrix. 
-
-There is a separate entry in the matrix for each possibility of traveling from one cell to another.
-A separate cost assigned for moving in different directions between  two adjacent points. 
-This allows the algorithm to account for hills or other asymmetrical obstacles, an advantage over many existing algorithms.
-If the robot can move from cell $i$ to cell $j$, the entry in column $j$ row $i$ is the estimated cost for this move. 
-The cost is a function of the incremental driving cost over the surface, which accounts for coefficent of friction and incline.
-This scheme stores both the connections in the graph and the memoization of costs in the adjacency matrix. 
-Sparse matrix storage and operations can be used, which drastically reduces running time.
-The non-zero entries should always be in the same pattern, depicted for a 2x2 grid and a 4x4 grid in \ref{speye}. 
 
 \begin{figure}[!h]
 \label{speye}
@@ -417,8 +418,20 @@ The non-zero entries should always be in the same pattern, depicted for a 2x2 gr
 \label{fig_sim}
 \end{figure}
 
+Topological order of the nodes is critical for dynamic programming \cite{(Dynamic Programming book)}, and it needs to be in the reverse of the eventual path taken. 
+So, the ordering of nodes begins with the target in the lower right, then moves radially out from this corner. 
+This scheme will be affected by the connections between grid cells. 
+Choosing an eight-connected grid allows for a relatively simple ordering scheme. 
+The order needs to be such that as the algorithm progresses from target node to start node, the cost at each successive node depends only on nodes that have already been completely considered. 
+
+\textbf{Insert diagram of ordering for 5x5 grid?}
+
+talk about developing pareto front as algorithm moves through grid.
+
 The output of the algorithm is a list of paths from each node to the target node. This list is the Pareto front of non-dominated paths from each node. 
 The front consists of the paths with the lowest cost and highest $P_{tr}(x)$. 
+
+each path is a set of waypoints located at the center of map regions. A local algorithm is required to take in sensor data and move the robot through the waypoints. 
 
 \subsection{Environmental Metrics}
 Each grid segment has several metrics associated with it. These metrics are averaged over an entire grid cell, so they are each a function of position in the map and area covered by a cell.
