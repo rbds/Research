@@ -99,7 +99,8 @@
 \usetikzlibrary{positioning}
 
 \renewcommand{\algorithmiccomment}[1]{// #1}
-
+\newcounter{row}
+\newcounter{col}
 
 % *** SUBFIGURE PACKAGES ***
 %\ifCLASSOPTIONcompsoc
@@ -409,7 +410,6 @@ squarednode/.style={rectangle, draw=red!60, fill=red!5, very thick, minimum size
 \caption{Conversion of a cyclic graph into a DAG. A similar process will convert the eight-connected grid into a DAG.}
 \end{figure}
   
-
 \begin{figure}[!h]
 \label{speye}
 \centering
@@ -424,14 +424,48 @@ This scheme will be affected by the connections between grid cells.
 Choosing an eight-connected grid allows for a relatively simple ordering scheme. 
 The order needs to be such that as the algorithm progresses from target node to start node, the cost at each successive node depends only on nodes that have already been completely considered. 
 
-\textbf{Insert diagram of ordering for 5x5 grid?}
+\begin{figure}[h]
+\begin{center}
+
+\newcommand\setrow[5]{
+\setcounter{col}{1}
+\foreach \n in {#1, #2, #3, #4, #5} {
+
+	\edef\x{\value{col} - 0.5}
+	\edef\y{5.5 - \value{row}}
+	\node[anchor=center] at (\x, \y) {\n};
+	\stepcounter{col}
+	}
+	\stepcounter{row}
+}
+
+\begin{tikzpicture}%[scale=0.5]
+\label{node-ordering}
+\begin{scope}[font=\sffamily\slshape]
+\draw (0,0) grid (5,5);
+
+\setcounter{row}{1}
+\setrow {25}{24}{22}{19}{15}
+\setrow {23}{21}{18}{14}{10}
+\setrow {20}{17}{13}{9}{6}
+\setrow {16}{12}{8}{5}{3}
+\setrow {11}{7}{4}{2}{1}
+\end{scope}
+
+\end{tikzpicture}
+
+\end{center}
+\caption{Ordering of nodes for an adjacency matrix with the starting node in the upper left and ending node in the lower right. The topological order of nodes should expand outward starting with the target node. }
+\end{figure}  
 
 talk about developing pareto front as algorithm moves through grid.
 
-The output of the algorithm is a list of paths from each node to the target node. This list is the Pareto front of non-dominated paths from each node. 
+The algorithm moves through the adjacency matrix one column at a time, in topological order. At each column, cost and probability of traverse for all connections are calculated. These values are concatenated with the previous list of paths at that node (if any) and the Pareto front of non-dominated paths is saved. 
 The front consists of the paths with the lowest cost and highest $P_{tr}(x)$. 
-
-each path is a set of waypoints located at the center of map regions. A local algorithm is required to take in sensor data and move the robot through the waypoints. 
+Once the algorithm has completed, there is a saved list of paths on the Pareto front from each node to the target node.
+Some heuristic or metric is then used to select a single path from this front at each node.
+The output of the algorithm is a list of paths from each node to the target node. 
+Each path is a set of waypoints located at the center of map regions. 
 
 \subsection{Environmental Metrics}
 Each grid segment has several metrics associated with it. These metrics are averaged over an entire grid cell, so they are each a function of position in the map and area covered by a cell.
