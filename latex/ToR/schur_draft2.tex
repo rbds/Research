@@ -183,7 +183,7 @@
 %\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2015}%
 %{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for IEEE Journals}
 
-\markboth{IEEE Transactions on Robotics}%
+\markboth{IEEE Transactions on Robotics Full Paper Submission}%
 {Schur \MakeLowercase{\textit{et al.}}: Dynamic Programming Method for Energy-Aware Path Planning}
 
 % make the title area
@@ -334,7 +334,7 @@ Separate from this constraint, the cost of a path provides an estimate of energy
 If this estimate is larger than the state of charge (SOC) on the battery, the robot should not move, and instead should report failure and request a new target destination. 
 This behavior may be different from that enforced on the violation of the Ptr threshold.
 
-The algorithm begins by sorting the nodes in topological order . 
+The algorithm begins by sorting the nodes in topological order. 
 In order to transform the eight-connected grid into a directionally acyclic graph (DAG), the graph is 'unwrapped' (see \ref{DAG}).
 Each node is listed in the first row, representing a path starting at any given node. 
 Successive rows in the matrix also list each node, so that the $nth$ row represents the $nth$ step in a given path. 
@@ -342,7 +342,7 @@ If a graph can be topologically ordered, then it can be transformed into a DAG \
 
 
 Once the nodes are sorted, the next step is to build an adjacency matrix describing the connections present in the input graph.
-The adjacency matrix, $adj$ is of size $n \times n$, where $n$ is the number of nodes in the graph (equivalently the number of grid cells in the map). 
+The adjacency matrix, $adj$, is of size $n \times n$, where $n$ is the number of nodes in the graph (equivalently the number of regions in the map). 
 The number of rows in the adjacency matrix is thus the maximum length of a path produced by the algorithm.
 Based on the assumption that there are no negative weight cycles in the graph, the optimal path will visit each node at most one time.
 Therefore, the optimal path will have at most $n$ steps, which is the number of rows in the adjacency matrix. 
@@ -350,12 +350,12 @@ Therefore, the optimal path will have at most $n$ steps, which is the number of 
 There is a separate entry in the matrix for each possibility of traveling from one cell to another.
 A separate cost may be assigned for moving in different directions between  two adjacent points. 
 This allows the algorithm to account for hills or other asymmetrical obstacles, an advantage over many existing algorithms.
-If the robot can move from cell $i$ to cell $j$, the entry in column $j$ row $i$ is the estimated cost for this move. 
+If the robot can move from cell $i$ to cell $j$, the entry in column $j$ row $i$ is the estimated cost for this move:
 \begin{align}
 adj(i,j) &= cost(i \rightarrow j) \\
 		 &= \frac{1}{2}(H_i + H_j)
 \end{align}
-where $H_i$ is the cost function evaluated at node $i$. If $i$ and $j$ are diagonally connected, the cost should be additionally be scaled by $sqrt(2)$.
+where $H_i$ is the cost function evaluated at node $i$. If $i$ and $j$ are diagonally connected, the cost should be additionally be scaled by $\sqrt{2}$.
 The cost is a function of the incremental energy required to drive over the surface, which accounts for coefficent of friction and incline.
 This scheme stores both the connections in the graph and the memoization of costs in the adjacency matrix. 
 Sparse matrix storage and operations are used to drastically reduces running time.
@@ -471,7 +471,7 @@ Each path is a set of waypoints located at the center of map regions.
 Each grid segment has several metrics associated with it. These metrics are averaged over an entire grid cell, so they are each a function of position in the map and area covered by a cell.
 
 These are probability of traverse ($P_{tr}$), obstacle density ($\mu$), and harvested energy ($E_h$). Probability of traverse reflects the dispersion of obstacles throughout a segment. 
-Dispersion is defined as in the Euclidean dispersion discussed in \cite{LaValle Branicky Lindeman}, which is the radius of the largest ball that fits into the segment without touching an obstacle. 
+Dispersion is defined as in the Euclidean dispersion discussed in \cite{lavalle2004relationship}, which is the radius of the largest ball that fits into the segment without touching an obstacle. 
 A larger value of dispersion indicates that the robot is more likely to successfully navigate through a grid segment.
 This probability of traverse can be multiplied among sequential map segments to calculate the probability that the robot will get stuck while moving from one segment to another, as in equation \ref{Ptr}. 
 A segment covered entirely by a known obstacle, for example a river if the vehicle is a wheeled robot, would have $P_{tr} = 0$. 
@@ -581,13 +581,13 @@ If this check is not present, then any nodes in a path which come after $v_{targ
 \subsubsection{BEST($paths$)} returns the single best path from the pareto front for each node. 'Best' is a user-defined metric, and may be some combination of cost and probability of traverse. For this paper it is simply the lowest-cost path in each Pareto front.
 
 \subsection{Dynamic programming:}
-The primary contribution of this work is in the problem definition; the use of $P_{tr}(x)$ and $\mu$ to define the environment is novel, and it is possible to design many types of navigation algorithm which use these measures. 
+The primary contribution of this work is in the problem definition; the use of $P_{tr}(x)$ and $\mu(x)$ to separate energy costs from probability of traverse is novel, and it is possible to design many types of navigation algorithm which use these measures. 
 The proposed dynamic programming algorithm presents several advantages over competing approaches.
 The primary advantage is that the proposed algorithm considers every possible path of length $n$ or less, meaning that the results are globally optimal according to the cost function and within the constraint. 
 Additionally, the results of the algorithm are a choice of paths from each node to the target node, greatly reducing the burden on the local navigation algorithm.
 The segmented grid approach is flexible, and estimates of environmental parameters can be improved by refining individual sections of the grid. There is no need for square or homogenously sized grid sections, it is merely a convenience.
 The algorithm is deterministic, so the same results are returned regardless of whether the algorithm is run on-board a robot or remotely with the resulting waypoints transmitted to the robot.
-Conversely, the proposed algorithm must be re-run if the threshold on $P_tr$ or the environmental costs change. 
+Conversely, the proposed algorithm must be re-run if the threshold on $P_{tr}$ or the environmental costs change. 
 The algorithm is also not anytime \cite{definition of anytime}, and its running time may preclude it from use with fast-moving vehicles such as Unmanned Arial Vehicles.
 
 %\section{Theoretical Results}
