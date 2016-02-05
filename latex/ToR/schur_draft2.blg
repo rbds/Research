@@ -1,0 +1,84 @@
+This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: schur_draft2.aux
+The style file: IEEEtran.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: mybib.bib
+Warning--I didn't find a database entry for "mobileroboticstextbook"
+Warning--I didn't find a database entry for "Blackmore-Robustpathplanning"
+Warning--I didn't find a database entry for "doubletrees"
+Warning--I didn't find a database entry for "heuristicbias"
+Warning--I didn't find a database entry for "beliefspace"
+Warning--I didn't find a database entry for "(Ludersetal.-BoundsonTrackingErrorUsingClosedLoopRRTs)"
+Warning--I didn't find a database entry for "(LQG-MP)"
+Warning--I didn't find a database entry for "(RoughnessbasedRRT"
+Warning--I didn't find a database entry for ""
+Warning--I didn't find a database entry for "particlefilterRRT)"
+Warning--I didn't find a database entry for "(Frazzoli-MotionPlanningwithMovingObstacles)"
+Warning--I didn't find a database entry for "(LikhachevandKoenig-FastReplanningfornavigationinunknownenvironment)"
+Warning--I didn't find a database entry for "(Meietal."
+Warning--I didn't find a database entry for "Deploymentofmobilerobotswithenergyandtimingconstraints)"
+Warning--I didn't find a database entry for "(Meietal.Energy-EfficientMobileRobotExploration)"
+Warning--I didn't find a database entry for "(Wangetal.-StayingAlive…)"
+Warning--I didn't find a database entry for "(LiuandSun-MinimizingEnergyConsumptionofWheeledMobileRobotsviaOptimalMotionPlanning)"
+Warning--I didn't find a database entry for "(Continuous-FieldPathPlanningwithConstrainedPath-DependentStateVariables)"
+Warning--I didn't find a database entry for "LaValle-MotionPlanning"
+Warning--I didn't find a database entry for "DoEcitationhere"
+Warning--I didn't find a database entry for "vaziranialgorithmsch.6"
+Warning--I didn't find a database entry for "(DynamicProgrammingbook)"
+Warning--I didn't find a database entry for "LaValleBranickyLindeman"
+Warning--I didn't find a database entry for "minimizingenergyconsumptionofwheeledmobilerobots..."
+Warning--I didn't find a database entry for "Mei-deployment"
+Warning--I didn't find a database entry for "definitionofanytime"
+-- IEEEtran.bst version 1.13 (2008/09/30) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--empty journal in lavalle1998rapidly
+
+Done.
+You've used 13 entries,
+            4039 wiz_defined-function locations,
+            927 strings with 10925 characters,
+and the built_in function-call counts, 10259 in all, are:
+= -- 831
+> -- 217
+< -- 102
++ -- 128
+- -- 38
+* -- 495
+:= -- 1509
+add.period$ -- 28
+call.type$ -- 13
+change.case$ -- 10
+chr.to.int$ -- 240
+cite$ -- 14
+duplicate$ -- 708
+empty$ -- 828
+format.name$ -- 42
+if$ -- 2365
+int.to.chr$ -- 0
+int.to.str$ -- 13
+missing$ -- 112
+newline$ -- 62
+num.names$ -- 13
+pop$ -- 253
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 2
+skip$ -- 797
+stack$ -- 0
+substring$ -- 586
+swap$ -- 603
+text.length$ -- 22
+text.prefix$ -- 0
+top$ -- 5
+type$ -- 13
+warning$ -- 1
+while$ -- 49
+width$ -- 15
+write$ -- 144
+(There were 27 warnings)
