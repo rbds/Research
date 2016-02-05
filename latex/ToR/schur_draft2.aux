@@ -1,14 +1,14 @@
 \relax 
 \citation{wickenheiser2010design}
-\citation{mobileroboticstextbook}
-\citation{Blackmore-Robustpathplanning}
+\citation{mobile robotics textbook}
+\citation{blackmore2006probabilistic}
 \citation{lavalle2006planning}
 \citation{lavalle1998rapidly}
 \citation{hsu1998finding}
 \citation{lavalle2006planning}
 \citation{karaman2011sampling}
-\citation{doubletrees}
-\citation{heuristicbias}
+\citation{kuffner2000rrt,urmson2003approaches}
+\citation{bruce2002real}
 \citation{lavalle2004relationship}
 \@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}}
 \@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{1}}
@@ -16,51 +16,50 @@
 \citation{koenig2005fast}
 \citation{thrun2005probabilistic}
 \citation{van2011lqg}
-\citation{beliefspace}
-\citation{(Ludersetal.-BoundsonTrackingErrorUsingClosedLoopRRTs)}
-\citation{(LQG-MP)}
-\citation{(RoughnessbasedRRT,}
-\citation{particlefilterRRT)}
-\citation{(Frazzoli-MotionPlanningwithMovingObstacles)}
-\citation{(LikhachevandKoenig-FastReplanningfornavigationinunknownenvironment)}
-\citation{(Meietal.,Deploymentofmobilerobotswithenergyandtimingconstraints)}
-\citation{(Meietal.Energy-EfficientMobileRobotExploration)}
-\citation{(Wangetal.-StayingAlive…)}
-\citation{(LiuandSun-MinimizingEnergyConsumptionofWheeledMobileRobotsviaOptimalMotionPlanning)}
-\citation{(Continuous-FieldPathPlanningwithConstrainedPath-DependentStateVariables)}
-\citation{LaValle-MotionPlanning}
+\citation{bry2011rapidly}
+\citation{luders2010bounds}
+\citation{van2011lqg}
+\citation{lee2008cost,tahirovic2011roughness,melchior2007particle}
+\citation{(Frazzoli- Motion Planning with Moving Obstacles)}
+\citation{(Likhachev and Koenig - Fast Replanning for navigation in unknown environment)}
+\citation{mei2006deployment}
+\citation{mei2006energy}
+\citation{wang2008staying}
+\citation{liu2014minimizing}
+\citation{mills2008continuous}
+\citation{lavalle2006planning}
 \citation{thrun2005probabilistic}
 \citation{siegwart2011introduction}
 \citation{bruce2002real}
-\citation{(Meietal.,Deploymentofmobilerobotswithenergyandtimingconstraints)}
+\citation{mei2006deployment}
 \@writefile{toc}{\contentsline {section}{\numberline {III}Problem Definition}{2}}
 \newlabel{prob_def}{{1}{2}}
 \newlabel{Ptr}{{3}{2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-A}}Global vs. Local Algorithm}{2}}
 \citation{wickenheiser2010design}
 \citation{layton2008comparison}
-\citation{DoEcitationhere}
-\citation{vaziranialgorithmsch.6}
-\citation{(DynamicProgrammingbook)}
+\citation{DoE citation here}
+\citation{vazirani algorithms ch. 6}
+\citation{(Dynamic Programming book)}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-B}}Energy Harvesting}{3}}
 \@writefile{toc}{\contentsline {section}{\numberline {IV}Navigation Algorithm}{3}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-A}}Algorithm Description (EAPP)}{3}}
-\citation{LaValleBranickyLindeman}
+\citation{LaValle Branicky Lindeman}
 \newlabel{DAG}{{\unhbox \voidb@x \hbox {IV-A}}{4}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Conversion of a cyclic graph into a DAG. A similar process will convert the eight-connected grid into a DAG.}}{4}}
 \newlabel{speye}{{\unhbox \voidb@x \hbox {IV-A}}{4}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Placement of non-zero entries for a 2x2 and a 4x4 adjacency matrix. NZ is the number of non-zero entries in the adjacency matrix}}{4}}
 \newlabel{fig_sim}{{2}{4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-B}}Environmental Metrics}{4}}
-\citation{minimizingenergyconsumptionofwheeledmobilerobots...}
-\citation{Mei-deployment}
+\citation{minimizing energy consumption of wheeled mobile robots ...}
+\citation{Mei - deployment}
 \newlabel{node-ordering}{{\unhbox \voidb@x \hbox {IV-A}}{5}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Ordering of nodes for an adjacency matrix with the starting node in the upper left and ending node in the lower right. The topological order of nodes should expand outward starting with the target node. }}{5}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-C}}Cost Function}{5}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-D}}Assumptions}{5}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {IV-D}1}Availability of local navigation algorithm:}{5}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {IV-D}2}No negative weight cycles are present in graph:}{5}}
-\citation{definitionofanytime}
+\citation{definition of anytime}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {IV-D}3}Availability of map data:}{6}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {IV-E}}Pseudocode}{6}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\unhbox \voidb@x \hbox {IV-E}1}BUILD\_ADJACENCY($\mathcal  {G}$)}{6}}
@@ -73,23 +72,42 @@
 \@writefile{toc}{\contentsline {section}{\numberline {V}Simulation Results}{6}}
 \bibstyle{IEEEtran}
 \bibdata{mybib}
-\bibcite{wickenheiser2010design}{1}
-\bibcite{lavalle2006planning}{2}
-\bibcite{lavalle1998rapidly}{3}
-\bibcite{hsu1998finding}{4}
-\bibcite{karaman2011sampling}{5}
-\bibcite{lavalle2004relationship}{6}
-\bibcite{hart1968formal}{7}
-\bibcite{koenig2005fast}{8}
-\bibcite{thrun2005probabilistic}{9}
-\bibcite{van2011lqg}{10}
-\bibcite{siegwart2011introduction}{11}
-\bibcite{bruce2002real}{12}
-\bibcite{layton2008comparison}{13}
+\newlabel{cost_map}{{V}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Cost function evaluated for each map region. A darker value indicates a higher cost.}}{7}}
+\newlabel{Ptr_map}{{V}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Values of $P_{tr}$ associated with each map region. A darker value indicates a lower probability of traverse.}}{7}}
 \@writefile{toc}{\contentsline {section}{\numberline {VI}Experimental Results}{7}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {VI-A}}Robot Parameters}{7}}
+\newlabel{best_path}{{V}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The best path through the environment. All possible connections are shown in blue, nodes are shown as stars, and the path chosen by EAPP is shown in red.}}{7}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {VI-B}}Implementation}{7}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {VI-C}}Experimental Environment}{7}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {VI-D}}Results}{7}}
 \@writefile{toc}{\contentsline {section}{\numberline {VII}Conclusion}{7}}
-\@writefile{toc}{\contentsline {section}{References}{7}}
+\bibcite{wickenheiser2010design}{1}
+\bibcite{blackmore2006probabilistic}{2}
+\bibcite{lavalle2006planning}{3}
+\bibcite{lavalle1998rapidly}{4}
+\bibcite{hsu1998finding}{5}
+\bibcite{karaman2011sampling}{6}
+\bibcite{kuffner2000rrt}{7}
+\bibcite{urmson2003approaches}{8}
+\bibcite{bruce2002real}{9}
+\bibcite{lavalle2004relationship}{10}
+\bibcite{hart1968formal}{11}
+\bibcite{koenig2005fast}{12}
+\bibcite{thrun2005probabilistic}{13}
+\bibcite{van2011lqg}{14}
+\bibcite{bry2011rapidly}{15}
+\bibcite{luders2010bounds}{16}
+\bibcite{lee2008cost}{17}
+\bibcite{tahirovic2011roughness}{18}
+\bibcite{melchior2007particle}{19}
+\bibcite{mei2006deployment}{20}
+\bibcite{mei2006energy}{21}
+\bibcite{wang2008staying}{22}
+\bibcite{liu2014minimizing}{23}
+\bibcite{mills2008continuous}{24}
+\bibcite{siegwart2011introduction}{25}
+\bibcite{layton2008comparison}{26}
+\@writefile{toc}{\contentsline {section}{References}{8}}
