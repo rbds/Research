@@ -31,7 +31,7 @@ import serial
 import time
 import csv
 
-data_file = open('data_30in5.csv', 'wb') #CSV file to store data sent by robot
+data_file = open('data_50in1.csv', 'wb') #CSV file to store data sent by robot
 writer = csv.writer(data_file)
 writer.writerow(('index', 'encoder1', 'encoder2', 'turn angle degrees', 'ms', 'mA'))
 
@@ -51,7 +51,7 @@ brake90 = '$00013' #brake and turn 90 degrees
 brake120 = '$00014' #brake and turn 120 degrees
 brake180 = '$00016'
 brake = '$00000' #brake only
-drive = '$13000' #drive 30 inches
+drive = '$15000' #drive 30 inches
 
 '''Need to clean up function'''
 def read_robot(): 
