@@ -457,13 +457,17 @@ The order needs to be such that as the algorithm progresses from target node to 
 \end{center}
 \caption{Ordering of nodes for an adjacency matrix with the starting node in the upper left and ending node in the lower right. The topological order of nodes should expand outward starting with the target node. }
 \end{figure}  
-
-talk about developing pareto front as algorithm moves through grid.
-
-The algorithm moves through the adjacency matrix one column at a time, in topological order. At each column, cost and probability of traverse for all connections are calculated. These values are concatenated with the previous list of paths at that node (if any) and the Pareto front of non-dominated paths is saved. 
+The algorithm moves through the adjacency matrix one column at a time, in topological order. 
+Each column represents a map region and a path step number. 
+The unwrapping procedure means that the first $N$ columns represent each node at the first entry in any path, the next $N$ columns represent the nodes at step two in any path, etc. where $N$ is the number of map regions.
+At each column, cost and probability of traverse for all connections going to that column are calculated. 
+These values are concatenated with the existing list of paths at that node (if any) and the Pareto front of non-dominated paths is saved. 
 The front consists of the paths with the lowest cost and highest $P_{tr}(x)$. 
 Once the algorithm has completed, there is a saved list of paths on the Pareto front from each node to the target node.
-Some heuristic or metric is then used to select a single path from this front at each node.
+After the algorithm completes, the output will need to be 're-wrapped.' 
+This process will take each path in the adjacency matrix and associate it with a specific map region.
+This is the opposite of the un-wrapping procedure shown in figure \ref{DAG}. 
+Some heuristic or metric is then used to select a single best path from this front at each node.
 The output of the algorithm is a list of paths from each node to the target node. 
 Each path is a set of waypoints located at the center of map regions. 
 
@@ -472,13 +476,12 @@ Each grid segment has several metrics associated with it. These metrics are aver
 
 These are probability of traverse ($P_{tr}$), obstacle density ($\mu$), and harvested energy ($E_h$). Probability of traverse reflects the dispersion of obstacles throughout a segment. 
 Dispersion is defined as in the Euclidean dispersion discussed in \cite{LaValle Branicky Lindeman}, which is the radius of the largest ball that fits into the segment without touching an obstacle. 
-A larger dispersion indicates that the robot is more likely to successfully navigate through a grid segment.
+A larger value of dispersion indicates that the robot is more likely to successfully navigate through a grid segment.
 This probability of traverse can be multiplied among sequential map segments to calculate the probability that the robot will get stuck while moving from one segment to another, as in equation \ref{Ptr}. 
 A segment covered entirely by a known obstacle, for example a river if the vehicle is a wheeled robot, would have $P_{tr} = 0$. 
 
 Obstacle density is defined as the ratio of area covered by obstacles in a map segment to the total area of that segment. 
 This metric is used to calculate the cost function, and reflects the likelihood that the actual path will need to deviate from a straight line through the map segment. 
-The obstacle density can be used to estimate actual path length through a segment.
 
 Harvested energy is a function of the available energy in a grid segment. Both the intensity and the type of energy are reflected in this measure; the availability of geothermal energy is not factored into the cost function for a robot which does not carry a transducer to harvest that energy.
  
@@ -492,6 +495,10 @@ where $\mu$ denotes the frictional coefficent, $i$ is the node index, $m$ is mas
 Additionally, they use a penalty function which affects the cost function as the path moves near an obstacle.
 Mei et al. \cite{Mei - deployment} note that in addition to motion there are energy costs associated with sensing and computing power, which are relatively constant over time (provided that the usage rate is constant).
 They also build the energy model for each vehicle empirically.
+
+To account for the possibility that the ground path of the robot (the actual path taken) may not be a straight line from the center of one map region to the next, we introduce an obstacle density $\mu(x_i)$. 
+A higher density of obstacles within a region increases the likelihood that the robot will need to deviate from a straight line path. 
+In building the cost function we assume that the length ground path increases proportionally to the obstacle density.
 
 For a generic wheeled vehicle, the cost function used to evaluate each cell in EAPP is:
 
@@ -517,13 +524,13 @@ However, in the case that the robot's actual path deviates from the waypoints du
 In fact, the algorithm returns the Pareto front of non-dominated paths from each node to the target node, and these are easily stored in a lookup table. 
 
 \subsubsection{No negative weight cycles are present in graph:}
-There must not be any negative weight cycles present in the original graph, although zero-weight cycles are allowed.
+There must not be any negative weight cycles present in the original graph, although zero-weight cycles are allowed. A cycle is defined as any path segment containing more than one node which begins and ends in the same location.  So for all path segments describing a cycle, 
 \begin{equation}
 \sum_{i=1}^n J_i(x) > 0,\ n>1
 \end{equation}
-for any path segment that starts and ends at the same node
+for any path segment that starts and ends at the same node.
 
-Any on-board battery has a set capacity, and once SOC reaches 100\% no additional energy can be harvested until some is expended. 
+We assert that this is a realistic assumption for any map. Any on-board battery has a set capacity, and once SOC reaches 100\% no additional energy can be harvested until some is expended. 
 As harvested energy ($E_h$) is the only negative term in the cost function, this means that there can be no infinite negative weight cycles. 
 The assumption of no negative weight cycles is then reasonable. 
 The case of a zero weight cycle can be handled by adding a small penalty each time a path returns to a grid segment that it has already visited.
@@ -532,7 +539,7 @@ In our test environment, there are no zero-weight cycles and therefore no penalt
 \subsubsection{Availability of map data:}
 Map data must be available as input to the algorithm. 
 This means both a satellite image and the image processing capability to estimate environmental parameters. 
-While the design of the algorithm attempts to limit the required information to that which is typically available, there is no guarantee that this information is always available or that the image processing is always accurate. The lack of representative data may affect the performance of the algorithm.
+While the design of the algorithm attempts to limit the required information to that which is typically available, there is no guarantee that this information is always available or that the image processing is always accurate. The lack of representative data will affect the performance of the algorithm.
 
 \subsection{Pseudocode}
 The pseudocode for the algorithm is given in this section. The subfunctions used in the algorithm are described below. 
@@ -587,16 +594,52 @@ The algorithm is deterministic, so the same results are returned regardless of w
 Conversely, the proposed algorithm must be re-run if the threshold on $P_tr$ or the environmental costs change. 
 The algorithm is also not anytime \cite{definition of anytime}, and its running time may preclude it from use with fast-moving vehicles such as Unmanned Arial Vehicles.
 
-\section{Simulation}
+%\section{Theoretical Results}
 
-\subsection{Simulation Results}
-\subsection{Theoretical Results}
 
+\section{Simulation Results}
+In this section we test the algorithm on a sample environment and discuss the results. The environment used is a section of Rock Creek Park in Washington, D.C. at coordinates: \textbf{coords}
+A satellite image is pulled from (cite google maps?), and the map is broken up into equal area regions.
+Each region is assigned a cost and a probability of traverse.
+
+figure of costs and probabilities of traverse.
+%\begin{figure}[h!]
+%\centering
+%\includegraphics[scale=0.5]{RCP_soln}
+% where an .eps filename suffix will be assumed under latex, 
+% and a .pdf suffix will be assumed for pdflatex; or what has been declared
+% via \DeclareGraphicsExtensions.
+%\caption{Simulation results for the network.}
+%\label{fig_sim}
+%\end{figure}
+
+The algorithm is programmed into a MATLAB script file. 
+The robot begins in the bottom left corner of the map and the target node is the top right corner.
+The resulting best path is shown in figure [fig no].
+
+figure of best path through environment.
 
 \section{Experimental Results}
+In this section we present results using a mobile robotic platform in a simple environment. 
+The environment consists of three different surfaces, each of which has an experimentally deternmined incremental cost.
+
 \subsection{Robot Parameters}
+\textbf{Conor's section}
+
+\subsection{Implementation}
+\textbf{Conor's section}
+
 \subsection{Experimental Environment}
+The test environment is represented in figure [fig no] by the cost and probability of traverse for each map region. 
+The three different surfaces have different coefficients of friction, and are made of variously squishy? material which changes the cost associated with each region. 
+In order to simulate a probability of traverse, obstacles placed in the environment were shifted slightly between runs. 
+The probability of traverse is an estimate, as it would be for an environment only observed through satellite images.
+
 \subsection{Results}
+Using an identical map, we tested various starting and target positions. 
+For each set of start and goal positions we tested a straight line path, a path which operates only in the lowest-cost region, and EAPP.
+The paths are shown here, along with the normalized energy usage for each path. 
+
 
 %\begin{figure}[!t]
 %\centering
@@ -652,7 +695,12 @@ The algorithm is also not anytime \cite{definition of anytime}, and its running 
 
 
 \section{Conclusion}
-The conclusion goes here.
+This paper presents a global navigation algorithm that can extend the duration of deployment for wheeled mobile robots.
+Our approach targets applications which require long-term autonomy and repetitive tasks, and it uses only information which may realistically be available in those scenarios.
+We consider energy constraints on the robot, and account for harvesting energy from the environment in order to increase battery life. 
+By introducing a recharging behavior where the robot seeks out a high-energy region and sits until its battery is full, it may be possible to extend the duration of deployment indefinitely.
+Our method is tested in simulated and experimental environments, with results showing a significant improvement over more naive path choices.
+EAPP separates probability of traverse from the energy-based cost function, allowing the algorithm to throw out paths which may be efficient but risk the loss of the robot.  
 
 
 
