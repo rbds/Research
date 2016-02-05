@@ -49,7 +49,7 @@ int turnMult = 0; // Command sent to tell robot how many degrees to turn
 int driveMult = 0; // Command sent to tell robot how many inches to drive forward
 float encTotalTurn = 0; // Total encoder count from turning
 float encDriveTotal = 0; // Total encoder count from driving 
-int driveCounts = 0;
+unsigned int driveCounts = 0; // Unsigned int handles larger range - should go up to 82 inches
 
 // Strings sent by Arduino to command computer
 String index; // Specifies if robot is braking, driving, or turning
