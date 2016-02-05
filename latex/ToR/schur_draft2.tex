@@ -541,13 +541,13 @@ While the design of the algorithm attempts to limit the required information to 
 The pseudocode for the algorithm is given in this section. The subfunctions used in the algorithm are described below. 
 Note that the loop beginning in line 3 must run in reverse, beginning with the column containing the goal node.
 
-Inputs to the algorithm are: $\mathcal{G}$, the graph of connections between grid cells; $v_{target}$, the index of the target cell; and $\epsilon_c$, the minimum acceptable value of $P_{tr}$ for a path. The variable definitions are: $v$, $b$, and $path$ refer to a single path; $D$ is a list storing the pareto front of best paths leading to each node (including the path $v$ and the values for cost and $P_{tr}$ associated with it), and the pareto front for a single node is referred to as $D_{col}$.
+Inputs to the algorithm are: $\mathcal{G}$, the graph of connections between grid cells; $v_{target}$, the index of the target cell; and $\epsilon_c$, the minimum acceptable value of $P_{tr}$ for a path. The variable definitions are: $v$, $b$, and $path$ refer to a single path; $D$ is a list storing the Pareto front of best paths leading to each 'unwrapped' node in the adjacency matrix (including the path $v$ and the values for cost and $P_{tr}$ associated with it), $F$ stores the Pareto front of best paths for each 'rewrapped' node, and the pareto front for a single node is referred to as $D_{col}$.
 \bigskip
 
 \textsc{EAPP}($\mathcal{G}, v_{target}, \epsilon_c$)
 \begin{algorithmic}[1]
 \STATE $D:=\{\}$ \COMMENT{the pareto front of paths leading to each node}
-\STATE \textbf{A} $\leftarrow$ \textbf{BUILD\_ADJACENCY}($\mathcal{G}$)
+\STATE \textbf{adj} $\leftarrow$ \textbf{BUILD\_ADJACENCY}($\mathcal{G}$)
 \FORALL {$col$ in adj}
 \STATE $C =$ \textbf{FIND\_CONNECTIONS($col$)}
 \FORALL {$v$ in $C$}
@@ -560,13 +560,14 @@ Inputs to the algorithm are: $\mathcal{G}$, the graph of connections between gri
 \STATE $D_{col} = $\textbf{PARETO($C)$}
 \ENDFOR
 \ENDFOR
-\STATE $paths \leftarrow \textbf{EXTRACT}(D, v_{target})$
+\STATE $F \leftarrow \textbf{RE\_WRAP}(D)$
+\STATE $paths \leftarrow \textbf{EXTRACT\_PATHS\_TO\_GOAL}(F, v_{target})$
 \FORALL {paths}
 \IF {$path.SOC \leq 0$}
 \STATE $path = \emptyset$
 \ENDIF
 \ENDFOR
-\STATE $b \leftarrow \textbf{BEST}(paths)$
+\STATE $b \leftarrow \textbf{CHOOSE\_BEST\_PATHS}(paths)$
 \RETURN $b$
 \end{algorithmic}
 
@@ -574,11 +575,13 @@ Inputs to the algorithm are: $\mathcal{G}$, the graph of connections between gri
 \subsubsection{FIND\_CONNECTIONS($col$)} returns the list of nodes that connect to $col$. This means any non-zero entry in the column of the adjacency matrix corresponding to the current node, $col$.
 \subsubsection{COST($v$)} calculates and returns the total cost, $P_{tr}(x)$, and estimated remaining SOC for the node $v$. The cost here relates the ending node of a given path and the current node $v$. As it is built in reverse, the estimate of SOC is only valid once the path reaches the first node of the adjacency matrix (meaning it contains one possible starting node).
 \subsubsection{PARETO($C$)} builds the pareto front of non-dominated paths from all of the paths passed to it. If the nodes are in the front they are returned, otherwise they are removed.
-\subsubsection{EXTRACT($D, v_{target}$)} returns all viable paths from the list $D$ for the given node $v_{target}$
+\subsubsection{RE\_WRAP($D$)} reverses the 'unwrapping' procedure which happens when the adjacency matrix is created. 
+The function finds and returns the Pareto front of best paths for each map region, regardless of the number of steps in each path. 
+\subsubsection{EXTRACT\_PATHS\_TO\_GOAL($D, v_{target}$)} returns all viable paths from the list $D$ for the given node $v_{target}$
 These consist of any path which begins with a node in the first row of the adjacency matrix and also contains $v_{target}$. 
 To speed execution, an additional check can be added in the main algorithm which removes a node from the list $C$ once it contains the target node. 
 If this check is not present, then any nodes in a path which come after $v_{target}$ are ignored in this function.
-\subsubsection{BEST($paths$)} returns the single best path from the pareto front for each node. 'Best' is a user-defined metric, and may be some combination of cost and probability of traverse. For this paper it is simply the lowest-cost path in each Pareto front.
+\subsubsection{CHOOSE\_BEST\_PATH($paths$)} returns the single best path from the pareto front for each node. 'Best' is a user-defined metric, and may be some combination of cost and probability of traverse. For this paper it is simply the lowest-cost path in each Pareto front.
 
 \subsection{Dynamic programming:}
 The primary contribution of this work is in the problem definition; the use of $P_{tr}(x)$ and $\mu$ to define the environment is novel, and it is possible to design many types of navigation algorithm which use these measures. 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.9.9)  5 FEB 2016 02:37
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.9.9)  5 FEB 2016 02:56
 entering extended mode
 **schur_draft2.tex
 (C:\Users\Randy\Documents\GitHub\Research\latex\ToR\schur_draft2.tex
@@ -647,41 +647,40 @@ LaTeX Warning: Citation `Mei - deployment' on page 5 undefined on input line 49
 2.
 
 [5]
+Underfull \hbox (badness 2103) in paragraph at lines 578--580
+ \OT1/ptm/m/it/10 5) RE[]WRAP($\OML/cmm/m/it/10 D$\OT1/ptm/m/it/10 ) [][] \OT1/
+ptm/m/n/10 re-verses the 'un-wrap-ping' pro-ce-dure
+ []
+
 
 LaTeX Warning: Citation `definition of anytime' on page 6 undefined on input li
-ne 591.
+ne 594.
 
-<cost_map.png, id=34, 130.98938pt x 136.51pt>
+[6] <cost_map.png, id=37, 130.98938pt x 136.51pt>
 File: cost_map.png Graphic file (type png)
  <use cost_map.png>
-Package pdftex.def Info: cost_map.png used on input line 604.
+Package pdftex.def Info: cost_map.png used on input line 607.
 (pdftex.def)             Requested size: 196.48357pt x 204.76448pt.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<P_tr_map.png, id=36, 197.23688pt x 209.28188pt>
+<P_tr_map.png, id=39, 197.23688pt x 209.28188pt>
 File: P_tr_map.png Graphic file (type png)
  <use P_tr_map.png>
-Package pdftex.def Info: P_tr_map.png used on input line 611.
+Package pdftex.def Info: P_tr_map.png used on input line 614.
 (pdftex.def)             Requested size: 197.23637pt x 209.28134pt.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[6] <RCP_soln.png, id=40, 183.68625pt x 181.17688pt>
+<RCP_soln.png, id=40, 183.68625pt x 181.17688pt>
 File: RCP_soln.png Graphic file (type png)
  <use RCP_soln.png>
-Package pdftex.def Info: RCP_soln.png used on input line 624.
+Package pdftex.def Info: RCP_soln.png used on input line 627.
 (pdftex.def)             Requested size: 183.68578pt x 181.17642pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-(C:\Users\Randy\Documents\GitHub\Research\latex\ToR\schur_draft2.bbl [7 <C:/Use
-rs/Randy/Documents/GitHub/Research/latex/ToR/cost_map.png> <C:/Users/Randy/Docu
-ments/GitHub/Research/latex/ToR/P_tr_map.png> <C:/Users/Randy/Documents/GitHub/
-Research/latex/ToR/RCP_soln.png>]) [8]
+[7 <C:/Users/Randy/Documents/GitHub/Research/latex/ToR/cost_map.png> <C:/Users/
+Randy/Documents/GitHub/Research/latex/ToR/P_tr_map.png> <C:/Users/Randy/Documen
+ts/GitHub/Research/latex/ToR/RCP_soln.png>]
+(C:\Users\Randy\Documents\GitHub\Research\latex\ToR\schur_draft2.bbl) [8]
 (C:\Users\Randy\Documents\GitHub\Research\latex\ToR\schur_draft2.aux)
 
 LaTeX Warning: There were undefined references.
@@ -710,7 +709,7 @@ ts/type1/urw/helvetic/uhvro8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
 1/urw/times/utmb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times
 /utmbi8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pf
 b><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on schur_draft2.pdf (8 pages, 510242 bytes).
+Output written on schur_draft2.pdf (8 pages, 511827 bytes).
 PDF statistics:
  101 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
