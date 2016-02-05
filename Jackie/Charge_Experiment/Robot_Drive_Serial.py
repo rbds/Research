@@ -31,7 +31,7 @@ import serial
 import time
 import csv
 
-data_file = open('data_50in1.csv', 'wb') #CSV file to store data sent by robot
+data_file = open('data_50in5.csv', 'wb') #CSV file to store data sent by robot
 writer = csv.writer(data_file)
 writer.writerow(('index', 'encoder1', 'encoder2', 'turn angle degrees', 'ms', 'mA'))
 
