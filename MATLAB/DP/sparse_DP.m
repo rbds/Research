@@ -10,7 +10,7 @@ P_tr_thresh = 0.2;
 
 % for z = 2:10
 %build adjacency matrix
-s =10;
+s =5;
 V = s^2;
 N = V^2;
 i_vals = [];
@@ -20,18 +20,18 @@ minimum = 0.9;
 maximum = 1.0;
 P_tr = (maximum - minimum)*rand(V, 1) + minimum; %Prob. of traverse associated with each node. sqrt is to bias towards higher values.
 P_tr = repmat(P_tr, V, 1);
-% costs = 10*abs(randn(V,1));
-costs = [.1 .7 .8 .7 .6 .2 .2 .3 .2 .1
-       .5 .9 .7 .7 .3 .4 .5 .3 .1 .1
-       .7 .6 .3 .2 .7 .5 .3 .1 .1 .1
-       .2 .4 .9 .8 .5 .2 .2 .2 .1 .1
-       .8 .9 .7 .4 .2 .1 .2 .3 .1 .8
-       .2 .1 .1 .2 .8 .5 .4 .4 .1 .8
-       .1 .6 .5 .6 .5 .4 .4 .2 .1 .1
-       .3 .2 .1 .1 .1 .1 .2 .3 .1 .1
-       .2 .2 .1 .1 .1 .2 .1 .1 .1 .1
-       .1 .2 .2 .2 .4 .2 .1 .1 .1 .1];
-costs = reshape(costs, 1, 100);
+costs = 10*abs(randn(V,1));
+%  costs = [.1 .7 .8 .7 .6 .2 .2 .3 .2 .1
+%        .5 .9 .7 .7 .3 .4 .5 .3 .1 .1
+%        .7 .6 .3 .2 .7 .5 .3 .1 .1 .1
+%        .2 .4 .9 .8 .5 .2 .2 .2 .1 .1
+%        .8 .9 .7 .4 .2 .1 .2 .3 .1 .8
+%        .2 .1 .1 .2 .8 .5 .4 .4 .1 .8
+%        .1 .6 .5 .6 .5 .4 .4 .2 .1 .1
+%        .3 .2 .1 .1 .1 .1 .2 .3 .1 .1
+%        .2 .2 .1 .1 .1 .2 .1 .1 .1 .1
+%        .1 .2 .2 .2 .4 .2 .1 .1 .1 .1];
+% costs = reshape(costs, 1, 100);
 
 for i = 1:V    %for each row in adjacency matrix
    if (mod(i,s) >0) %if it isn't on the right edge of grid 
