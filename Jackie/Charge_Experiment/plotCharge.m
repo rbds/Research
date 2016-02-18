@@ -53,8 +53,8 @@ hold on
 errorbar(10,mean10,stdev10,'rx')
 errorbar(20,mean20,stdev20,'rx')
 errorbar(30,mean30,stdev30,'rx')
-errorbar(40,mean30,stdev40,'rx')
-errorbar(50,mean30,stdev50,'rx')
+errorbar(40,mean40,stdev40,'rx')
+errorbar(50,mean50,stdev50,'rx')
 ymin = min(charge10);
 ymax = max(charge50);
 axis([0 60 ymin ymax])
