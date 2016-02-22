@@ -1,6 +1,6 @@
 // Serial Communication Driving with Raspberry Pi
 // Created Conor Lyman 27 October 2015
-// Last update Conor Lyman 26 January 2016
+// Last update Conor Lyman 22 February 2016
 
 // Raspberry Pi (Python) sends commands to Arduino of where to drive. 
 // Arduino has (NEEDS) checks to brake if an obstacle is discovered while driving.
@@ -54,6 +54,7 @@ unsigned int driveCounts = 0; // Unsigned int handles larger range - should go u
 // Strings sent by Arduino to command computer
 String index; // Specifies if robot is braking, driving, or turning
 String encoder1, encoder2; // Encoder counts
+String encoderAve;
 String turn; // Angle turned
 String current; // Current read by current sensor
 
@@ -122,6 +123,10 @@ void drive() {
       encCount2 = abs(enc2.read());
       encDrive = (encCount1 + encCount2) / 2; // Read and average encoders
       k++;
+//      Serial3.println(k);
+//      Serial3.print(encCount1);
+//      Serial3.print(" ");
+//      Serial3.println(encCount2);
       if (k % 5 == 0) {
         endTime = String(millis() - startTime);
         msg(1); // Send data only every 5th reading
@@ -136,6 +141,9 @@ void drive() {
     enc1.write(0);
     enc2.write(0);
     driveCounts = 0;
+//    Serial3.print(encCount1);
+//    Serial3.print(" ");
+//    Serial3.println(encCount2);
     endTime = String(millis() - startTime);
     brake();
   }
@@ -146,13 +154,26 @@ void drive() {
 void brake() {
   md.setM1Brake(400);
   md.setM2Brake(400);
+//  Serial3.println("Brake.....................!!!!");
+  delay(50);
   encCount1 = abs(enc1.read()); // Should be zero...
   encCount2 = abs(enc2.read());
+  if (encCount1 != 0 || encCount2 != 0) {
+    enc1.write(0);
+    enc2.write(0);
+    delay(50);
+    encCount1 = abs(enc1.read());
+    encCount2 = abs(enc2.read());
+  }
+//  Serial3.print(encCount1);
+//  Serial3.print(" ");
+//  Serial3.println(encCount2);
+  
   msg(0); // Send data; index 0 indicates robot is stationary
-  enc1.write(0); // Reset encoders 
-  enc2.write(0);
-  encCount1 = 0;
-  encCount2 = 0;
+//  enc1.write(0); // Reset encoders 
+//  enc2.write(0);
+//  encCount1 = 0;
+//  encCount2 = 0;
   delay(200);
   if (data[3] == 1) { Turn(); } // Execture turn function if prompted
                                 // Turn function is only executed in brake function to ensure
@@ -217,28 +238,37 @@ void distanceSense() {
 void msg(int motionParam) {
   index = String(int(motionParam)); // 0 = Brake; 1 = Forward; 3 = Turn;
 
-  // Distance traveled linearly 
-  encoder1 = String(abs(int(encCount1)));
-  encoder2 = String(abs(int(encCount2)));
-  if (encoder1.length() == 1) { encoder1 = 000000 + encoder1; }
-  if (encoder1.length() == 2) { encoder1 = 00000 + encoder1; }
-  if (encoder1.length() == 3) { encoder1 = 0000 + encoder1; }
-  if (encoder1.length() == 4) { encoder1 = 000 + encoder1; }
-  if (encoder1.length() == 5) { encoder1 = 00 + encoder1; }
-  if (encoder1.length() == 6) { encoder1 = 0 + encoder1; }
-  if (encoder2.length() == 1) { encoder2 = 000000 + encoder2; }
-  if (encoder2.length() == 2) { encoder2 = 00000 + encoder2; }
-  if (encoder2.length() == 3) { encoder2 = 0000 + encoder2; }
-  if (encoder2.length() == 4) { encoder2 = 000 + encoder2; }
-  if (encoder2.length() == 5) { encoder2 = 00 + encoder2; }
-  if (encoder2.length() == 6) { encoder2 = 0 + encoder2; }
+//  // Distance traveled linearly 
+//  encoder1 = String(abs(int(encCount1)));
+//  encoder2 = String(abs(int(encCount2)));
+//  if (encoder1.length() == 1) { encoder1 = 000000 + encoder1; }
+//  if (encoder1.length() == 2) { encoder1 = 00000 + encoder1; }
+//  if (encoder1.length() == 3) { encoder1 = 0000 + encoder1; }
+//  if (encoder1.length() == 4) { encoder1 = 000 + encoder1; }
+//  if (encoder1.length() == 5) { encoder1 = 00 + encoder1; }
+//  if (encoder1.length() == 6) { encoder1 = 0 + encoder1; }
+//  if (encoder2.length() == 1) { encoder2 = 000000 + encoder2; }
+//  if (encoder2.length() == 2) { encoder2 = 00000 + encoder2; }
+//  if (encoder2.length() == 3) { encoder2 = 0000 + encoder2; }
+//  if (encoder2.length() == 4) { encoder2 = 000 + encoder2; }
+//  if (encoder2.length() == 5) { encoder2 = 00 + encoder2; }
+//  if (encoder2.length() == 6) { encoder2 = 0 + encoder2; }
 
-  // Degrees turned
-  angleTurned = encTotalTurn / countsDegree;
-  turn = String(int(abs(angleTurned)));
-  if (turn.length() == 1) { turn = 000 + turn; }
-  if (turn.length() == 2) { turn = 00 + turn; }
-  if (turn.length() == 3) { turn = 0 + turn; }
+// Send one encoder value - attempting to send less data in order to reduce amount of data in buffer
+encoderAve = String(abs(float(encDrive)));
+  if (encoderAve.length() == 1) { encoderAve = 000000 + encoderAve; }
+  if (encoderAve.length() == 2) { encoderAve = 00000 + encoderAve; }
+  if (encoderAve.length() == 3) { encoderAve = 0000 + encoderAve; }
+  if (encoderAve.length() == 4) { encoderAve = 000 + encoderAve; }
+  if (encoderAve.length() == 5) { encoderAve = 00 + encoderAve; }
+  if (encoderAve.length() == 6) { encoderAve = 0 + encoderAve; }
+
+//  // Degrees turned
+//  angleTurned = encTotalTurn / countsDegree;
+//  turn = String(int(abs(angleTurned)));
+//  if (turn.length() == 1) { turn = 000 + turn; }
+//  if (turn.length() == 2) { turn = 00 + turn; }
+//  if (turn.length() == 3) { turn = 0 + turn; }
 
   // Time
   if(endTime.length() == 1) { endTime = 000000 + endTime; }
@@ -264,7 +294,7 @@ void msg(int motionParam) {
   Serial3.print(index + " ");
   Serial3.print(encoder1 + " ");
   Serial3.print(encoder2 + " ");
-  Serial3.print(turn + " ");
+//  Serial3.print(turn + " ");
   Serial3.print(endTime + " ");
   Serial3.print(current);
 }
