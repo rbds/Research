@@ -1,42 +1,68 @@
-%Testing multi-objective optimization
-
 clear
 close all
+ha = axes('units','normalized','position',[0 0 1.1 1]);
 
-tic
+uistack(ha,'bottom');
 
-P_tr_thresh = 0.7;
-% times = zeros(1,10);
+I=imread('sample_map.png');
+hi = imagesc(I);
+colormap gray
 
-% for z = 2:10
-%build adjacency matrix
-s =7;
-V = s^2;
+set(ha,'handlevisibility','off','visible','off')
+
+axes('position',[0 0 .99 .99])
+axis off
+axis equal
+
+costs = [.3 .2 .2 .5 .3 .3 .3 .3 .3 .3 .3 .4 .4 .3 .2;
+        .3 .5 .5 .3 .2 .2 .2 .3 .5 .3 .3 .3 .5 1 .3;
+        .2 .3 .1 .2 .4 .3 .2 .2 .3 .3 .3 .3 .3 .3 .3;
+        .3 .3 .2 .1 .1 .2 .3 .2 .2 .3 .3 .3 .3 .2 .2;
+        .3 .3 .4 .2 .2 .1 .1 .2 .5 .2 .3 .3 .3 .3 .3;
+        .3 .5 .3 .3 .3 .2 .2 .1 .1 .2 .3 .3 .3 .3 .2;
+        .3 .3 .3 .3 .3 .3 .2 .2 .1 .1 .2 .5 .4 .3 .3;
+        .3 .3 .3 .3 .3 .3 .3 .2 .2 .1 .2 .2 .3 .3 .3;
+        .3 .3 .3 .2 .4 .3 .3 .3 .2 .1 .2 .3 .3 .3 .3;
+        .3 .3 .3 .2 .5 .3 .2 .2 .1 .2 .2 .3 .3 .3 .3;
+        .2 .1 .2 .2 .2 .1 .1 .1 .1 .5 .3 .3 .3 .3 .3;
+        .2 .2 .1 .1 .1 .2 .2 .2 .3 .3 .3 .3 .3 .4 .3;
+        .1 .1 .1 .1 .1 .2 .2 .2 .3 .3 .3 .3 .3 .4 .3;
+        .1 1 .1 .1 .1 .2 .2 .2 .3 .3 .3 .3 .3 .4 .3;
+        .2 .3 .3 .3 .3 .3 .3 .3 .3 .3 .3 .3 .3 .4 .3];
+    
+% costs = flipud(costs);
+costs = costs.^2;
+    
+P_tr =sqrt([.90 .50 .50 .75 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99;
+       .90 .50 .50 .99 .99 .99 .99 .90 .75 .99 .99 .99 .99 .75 .90;
+       .90 .80 .45 .75 .99 .99 .99 .90 .99 .99 .99 .99 .99 .70 .90;
+       .99 .99 .90 .50 .50 .75 .99 .99 .99 .99 .99 .99 .99 .99 .99;
+       .99 .99 .99 .99 .75 .50 .60 .80 .75 .99 .99 .99 .99 .99 .99;
+       .99 .75 .90 .99 .99 .95 .75 .50 .60 .99 .99 .99 .99 .99 .99;
+       .99 .99 .99 .99 .99 .99 .99 .90 .50 .65 .99 .75 .99 .99 .99;
+       .99 .99 .99 .99 .99 .99 .99 .99 .90 .50 .60 .99 .75 .99 .99;
+       .99 .99 .99 .99 .99 .99 .99 .99 .90 .50 .90 .99 .99 .99 .99;
+       .99 .99 .99 .99 .75 .99 .99 .99 .60 .60 .90 .99 .99 .99 .99;
+       .50 .50 .60 .60 .60 .60 .50 .50 .65 .75 .99 .99 .99 .99 .99;
+       .60 .60 .40 .50 .50 .50 .60 .50 .99 .99 .99 .99 .99 .80 .99;
+       .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .85 .99;
+       .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .85 .99;
+       .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .85 .99]);
+P_tr = flipud(P_tr);   
+
+V = 15*15;
+s = 15;
 N = V^2;
 i_vals = [];
 j_vals = [];
 
-minimum = 0.9;
-maximum = 1.0;
-P_tr = (maximum - minimum)*rand(V, 1) + minimum; %Prob. of traverse associated with each node. sqrt is to bias towards higher values.
 P_tr = repmat(P_tr, V, 1);
-costs = 10*abs(randn(V,1));
 
-% % Sample env. costs.
+P_tr_thresh = 0.2; 
 
 
-% RCP costs
-% costs=[.1 .7 .8 .7 .6 .2 .2 .3 .2 .1
-%        .5 .9 .7 .7 .3 .4 .5 .3 .1 .1
-%        .7 .6 .3 .2 .7 .5 .3 .1 .1 .1
-%        .2 .4 .9 .8 .5 .2 .2 .2 .1 .1
-%        .8 .9 .7 .4 .2 .1 .2 .3 .1 .8
-%        .2 .1 .1 .2 .8 .5 .4 .4 .1 .8
-%        .1 .6 .5 .6 .5 .4 .4 .2 .1 .1
-%        .3 .2 .1 .1 .1 .1 .2 .3 .1 .1
-%        .2 .2 .1 .1 .1 .2 .1 .1 .1 .1
-%        .1 .2 .2 .2 .4 .2 .1 .1 .1 .1];
-% costs = reshape(costs, 1, 100);
+
+tic
 
 for i = 1:V    %for each row in adjacency matrix
    if (mod(i,s) >0) %if it isn't on the right edge of grid 
@@ -78,8 +104,6 @@ for i = 1:V    %for each row in adjacency matrix
    end   
 end
 
-
-
 % %create coordinates
 coords = [];
 for i = 1:N
@@ -93,7 +117,6 @@ for i = 1:N
 end
 
 %create adjacency matrix
-% vals = 10*abs(randn(length(i_vals), 1));  %generate random costs
 vals = zeros(size(i_vals));
 for i=1:length(i_vals)
     vals(i) = mean([costs(i_vals(i)), costs(j_vals(i))]);
@@ -105,16 +128,13 @@ for i=1:V-1 %assemble adjacency matrix from sections
 end
 %  spy(adj)
 gplot(adj, coords, '*-') %plot graph
+axis off
 
 [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
 
-P_tr(V^2-V:V^2) = 1;
-%d{i,1}(:,1) is minimum cost, d{i,1}(:,2) is total P_tr, d{i,1}(:,3) is path
-%represented by that node.
-d{N,2} = []; % array to list parent paths
-% for i=1:N
-%    d{i,2} = zeros(V);
-% end
+P_tr(N-V:N) = 1;
+d{N,1} = []; % array to list parent paths
+
 for i=(N-V+1):(N) %create d vector to store cost, P_tr, parents for each entry in adj.
    d{i,1} = [0 1 i];
 %     d{i,1} = [0 1];
@@ -124,16 +144,6 @@ end
 for i=1:V
    d{i*V} = [0 1 i*V]; 
 end
-
-
-% d{N} = [0 1 N];
-% d = d'; %make column vector
-
-%For each column in adjacency matrix, find all connections.
-%for each connection:
-    %populate P_tr and cost
-    %add all options to list in connected node
-    %run pareto front for connected code
 
 t = zeros(V, 2*V);
 for i=1:V
@@ -167,9 +177,6 @@ for i=rows_to_do
         if (V_row==0) V_row = V; end 
 
         new_options = [d{i,1}(:,1) + adj(row,col), d{i,1}(:,2)*P_tr(V_row), repmat(i, size(d{i,1}(:,1)))];   %list possible new paths
-%           new_options = [d{i,1}(:,1) + adj(row,col), d{i,1}(:,2)*P_tr(V_row)];      
-                %these possibilities come from a path through the current
-                %node, i.
         
         for k=1:size(new_options,1) %if option violates P_tr, set penalty cost
            if new_options(k,2) < P_tr_thresh
@@ -177,19 +184,13 @@ for i=rows_to_do
            end
         end
     options = [options; new_options];
-
-% build front 
-%     inds = [];
     [front, inds] = prto(options);
-%     front = prto(options);
-   
-    %put pareto front into list for connected node
+    
     if isempty(front) 
         d{conns(j),1} = options;
-%         d{conns(j),2} = repmat(i, size(options,1),1);
+
     else
         d{conns(j),1} = front;
-%         d{conns(j),2} = d{conns(j),2}(inds);
     end
   
     end
@@ -197,10 +198,6 @@ end
 
 
 time = toc;
-% times(z) = time;
-
-% end
-% d{1}
 
 % %extract best path
 best_path = 1;
@@ -216,18 +213,10 @@ cost = d{1}(1)
 Ptr = prod(P_tr(best_path))
 time
 
-% hold on
-% for i=1:size((best_path),1)-1  %plot path 
-%     plot(coordsbest_pathbp(i),1, coords(best_path(i),2), 'r*')
-%     plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-')    
-% end
-% axis off
-% axis equal
-
 hold on
 for i=1:length(best_path)-1  %plot path
     plot(coords(best_path(i),1), coords(best_path(i),2), 'r*')
     plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-', 'LineWidth', 4)    
 end
 axis off
-axis equal
+% axis equal
