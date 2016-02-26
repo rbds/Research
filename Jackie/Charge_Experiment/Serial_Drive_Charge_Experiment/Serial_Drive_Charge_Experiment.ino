@@ -39,8 +39,8 @@ int turnSpeed = 200; // Turning velocity
 float straightGain = 791; // 791 encoder counts per inch 
 
 // Encoders 
-float encCount1, encCount2 = 0; // Position of encoders
-float encDrive, encTurn = 0; // Averages of encoder counts
+unsigned long encCount1 = 0, encCount2 = 0; // Position of encoders
+unsigned long encDrive = 0, encTurn = 0; // Averages of encoder counts
 int countsDegree = 120; // 120 encoder counts per degree of turn
 int turnAngle = 30 * countsDegree; // Turn by factors of 30 degrees
 float angleTurned; // Store angle turned by robot
@@ -127,7 +127,7 @@ void drive() {
 //      Serial3.print(encCount1);
 //      Serial3.print(" ");
 //      Serial3.println(encCount2);
-      if (k % 5 == 0) {
+      if (k % 10 == 0) {
         endTime = String(millis() - startTime);
         msg(1); // Send data only every 5th reading
       }
@@ -146,6 +146,10 @@ void drive() {
 //    Serial3.println(encCount2);
     endTime = String(millis() - startTime);
     brake();
+    brake();
+    brake();
+    brake();
+    brake();
   }
  else if (data[0] == 0) { brake(); } // Move on to brake function if the first data is 0
 }
@@ -155,9 +159,10 @@ void brake() {
   md.setM1Brake(400);
   md.setM2Brake(400);
 //  Serial3.println("Brake.....................!!!!");
-  delay(50);
+  delay(100);
   encCount1 = abs(enc1.read()); // Should be zero...
   encCount2 = abs(enc2.read());
+  delay(100);
   if (encCount1 != 0 || encCount2 != 0) {
     enc1.write(0);
     enc2.write(0);
@@ -168,7 +173,7 @@ void brake() {
 //  Serial3.print(encCount1);
 //  Serial3.print(" ");
 //  Serial3.println(encCount2);
-  
+  encDrive = (encCount1 + encCount2) / 2; 
   msg(0); // Send data; index 0 indicates robot is stationary
 //  enc1.write(0); // Reset encoders 
 //  enc2.write(0);
@@ -255,7 +260,7 @@ void msg(int motionParam) {
 //  if (encoder2.length() == 6) { encoder2 = 0 + encoder2; }
 
 // Send one encoder value - attempting to send less data in order to reduce amount of data in buffer
-encoderAve = String(abs(float(encDrive)));
+  encoderAve = String(encDrive);
   if (encoderAve.length() == 1) { encoderAve = 000000 + encoderAve; }
   if (encoderAve.length() == 2) { encoderAve = 00000 + encoderAve; }
   if (encoderAve.length() == 3) { encoderAve = 0000 + encoderAve; }
@@ -290,13 +295,14 @@ encoderAve = String(abs(float(encDrive)));
   if (current.length() == 7) { current = 0 + current; } 
   
   
-
+  Serial3.print('$');
   Serial3.print(index + " ");
-  Serial3.print(encoder1 + " ");
-  Serial3.print(encoder2 + " ");
+//  Serial3.print(encoder1 + " ");
+//  Serial3.print(encoder2 + " ");
+  Serial3.print(encoderAve + " ");
 //  Serial3.print(turn + " ");
   Serial3.print(endTime + " ");
-  Serial3.print(current);
+  Serial3.println(current);
 }
 
 

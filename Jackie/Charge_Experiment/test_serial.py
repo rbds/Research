@@ -11,19 +11,25 @@ import time
 drive = '$14000' #drive 30 inches
 
 def read_robot(): 
-    charToRead = 39
-    while robot.inWaiting():
-        b = robot.inWaiting()
-        time.sleep(0.3)
-        if b >= charToRead:
-            if b > charToRead:
-                b = charToRead
-            msg = robot.read(b)
-            print msg
-            print "\n"
-        elif b < charToRead:
-            robot.flushInput()
-            robot.flushOutput() 
+    while True:
+        charToRead = 25
+        checkCharacter = '$1'
+        breakCheck = '$0'
+        check = robot.read(2)
+        if check == checkCharacter:
+    #        while robot.inWaiting():
+            b = robot.inWaiting()
+    #            time.sleep(0.05)
+            if b >= charToRead:
+    #                if b > charToRead:
+    #                    b = charToRead
+                msg = robot.readline()
+                print msg
+     #           print "\n"
+        elif check == breakCheck:
+            break
+        #elif check != checkCharacter and check != breakCheck:
+         #   check = robot.read(2)
             
     
     
