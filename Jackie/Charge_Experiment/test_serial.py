@@ -82,13 +82,10 @@ def brake_robot(brake):
 
 '''!!!!!CHANGE PARAMETERS BASED ON WHAT IS PLUGGED IN!!!!!'''
 
-drive = '$13000' #drive 40 inches
+drive = '$14300' #drive 40 inches
 brake = '$00000'
 
-file_name = 'test.csv'
-data_file = open(file_name,'wb')
-writer = csv.writer(data_file)
-writer.writerow(('encoder', 'seconds', 'current (A)', 'charge (C)'))
+
 
 PORT = '/dev/tty.usbserial-DA011NKM' #.usbserial-DA00VSB5 for XBee
 BaudRate = 38400
@@ -102,24 +99,18 @@ time.sleep(1)
 robot.flushInput()
 robot.flushOutput()
 
-charge1 = drive_robot(drive, brake)
-print "The total charge for this test is " + str(charge1)
-time.sleep(3)
-charge2 = drive_robot(drive, brake)
-print "The total charge for this test is " + str(charge2)
-time.sleep(3)
-charge3 = drive_robot(drive, brake)
-print "The total charge for this test is " + str(charge3)
-time.sleep(3)
-charge4 = drive_robot(drive, brake)
-print "The total charge for this test is " + str(charge4)
-time.sleep(3)
-charge5 = drive_robot(drive, brake)
-print "The total charge for this test is " + str(charge5)
-time.sleep(3)
+for i in range(5, 10): # range(0,5), then range(5,10), (10,15) ...
+    file_name = '43inchesFeb26_0' + str(i) + '.csv'
+    data_file = open(file_name,'wb')
+    writer = csv.writer(data_file)
+    writer.writerow(('encoder', 'seconds', 'current (A)', 'charge (C)'))
+    
+    charge = drive_robot(drive, brake)
+    print "The total charge for this test is " + str(charge)
+    time.sleep(3)
+    data_file.close()
 
 robot.close()
-data_file.close()
 
 if robot.isOpen() == False:
     print '\nRobot closed'

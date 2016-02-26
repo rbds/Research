@@ -13,10 +13,10 @@ import csv
 import numpy
 
 
-f = open('test.csv', 'rb')
+f = open('23inchesFeb26_00.csv', 'rb')
 reader = csv.reader(f)
 rownum = 0
-last_row = 95
+last_row = 72
 
 encoder = numpy.zeros(last_row)
 seconds = numpy.zeros(last_row)
