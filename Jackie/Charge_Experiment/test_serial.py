@@ -6,13 +6,21 @@ Created on Sat Feb 20 14:36:33 2016
 """
 
 import serial
+import numpy
 import time
+import csv
 
-drive = '$14000' #drive 30 inches
 
 def read_robot(): 
+    encoder = numpy.zeros(500)
+    seconds = numpy.zeros(500)
+    current = numpy.zeros(500)
+    charge = numpy.zeros(500)
+    counter = 0
+    encoderCheck = 2000
+    total_charge = 0
     while True:
-        charToRead = 25
+        charToRead = 24
         checkCharacter = '$1'
         breakCheck = '$0'
         check = robot.read(2)
@@ -24,36 +32,94 @@ def read_robot():
     #                if b > charToRead:
     #                    b = charToRead
                 msg = robot.readline()
-                print msg
+                if int(msg[0:8]) > encoderCheck:
+                    encoder[counter] = int(msg[0:8])
+                    seconds[counter] = float(msg[9:16]) / 1000.
+                    current[counter] = float(msg[17:]) / 1000.
+                    charge[counter] = current[counter] * seconds[counter]
+                    total_charge += charge[counter]
+                    counter += 1
+                    print msg
      #           print "\n"
         elif check == breakCheck:
             break
         #elif check != checkCharacter and check != breakCheck:
          #   check = robot.read(2)
-            
+    write2csv(encoder, seconds, current, charge, counter)
     
+    return total_charge
+ 
+
+def write2csv(encoder, seconds, current, charge, counter):
+    for i in range(counter):
+        writer.writerow((encoder[i], seconds[i], current[i], charge[i]))
+    writer.writerow([])
     
+
+def drive_robot(drive,brake):
+    robot.flushInput()
+    robot.flushOutput()
+    time.sleep(0.2)
+    robot.write(drive)
+    time.sleep(0.3)
+    charge = read_robot()
+    brake_robot(brake)
+    return charge
+    
+
+def brake_robot(brake):
+    robot.flushInput()
+    robot.flushOutput()
+    time.sleep(0.2)
+    robot.write(brake)
+    time.sleep(0.2)
+
+
+   
 '''.....................................................................................'''
 
 
 
-'''!!!!!CHANGE THESE BASED ON WHAT IS PLUGGED IN!!!!!'''
+'''!!!!!CHANGE PARAMETERS BASED ON WHAT IS PLUGGED IN!!!!!'''
+
+drive = '$13000' #drive 40 inches
+brake = '$00000'
+
+file_name = 'test.csv'
+data_file = open(file_name,'wb')
+writer = csv.writer(data_file)
+writer.writerow(('encoder', 'seconds', 'current (A)', 'charge (C)'))
+
 PORT = '/dev/tty.usbserial-DA011NKM' #.usbserial-DA00VSB5 for XBee
 BaudRate = 38400
-
 robot = serial.Serial(PORT, BaudRate, timeout = 3)
 time.sleep(0.5)
 if robot.isOpen():
     print 'Robot opened\n'
-    
+
+robot.write(brake)
+time.sleep(1)    
 robot.flushInput()
 robot.flushOutput()
-time.sleep(0.3)
-robot.write(drive)
-time.sleep(0.3)
-read_robot()
+
+charge1 = drive_robot(drive, brake)
+print "The total charge for this test is " + str(charge1)
+time.sleep(3)
+charge2 = drive_robot(drive, brake)
+print "The total charge for this test is " + str(charge2)
+time.sleep(3)
+charge3 = drive_robot(drive, brake)
+print "The total charge for this test is " + str(charge3)
+time.sleep(3)
+charge4 = drive_robot(drive, brake)
+print "The total charge for this test is " + str(charge4)
+time.sleep(3)
+charge5 = drive_robot(drive, brake)
+print "The total charge for this test is " + str(charge5)
+time.sleep(3)
 
 robot.close()
+data_file.close()
 
 if robot.isOpen() == False:
     print '\nRobot closed'

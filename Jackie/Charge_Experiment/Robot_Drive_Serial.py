@@ -210,7 +210,7 @@ brake_robot()
 #print "The average charge for 30 in of drive is: " + str(averageCharge)
 
 robot.close()
-data_file.close()
+#data_file.close()
 
 if robot.isOpen() == False:
     print '\nRobot closed'

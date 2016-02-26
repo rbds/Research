@@ -296,7 +296,7 @@ void msg(int motionParam) {
   
   
   Serial3.print('$');
-  Serial3.print(index + " ");
+  Serial3.print(index);
 //  Serial3.print(encoder1 + " ");
 //  Serial3.print(encoder2 + " ");
   Serial3.print(encoderAve + " ");

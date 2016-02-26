@@ -13,35 +13,30 @@ import csv
 import numpy
 
 
-f = open('data_40in1_new.csv', 'rb')
+f = open('test.csv', 'rb')
 reader = csv.reader(f)
 rownum = 0
-last_row = 116
+last_row = 95
 
-encoder1 = numpy.zeros(last_row)
-encoder2 = numpy.zeros(last_row)
-timems = numpy.zeros(last_row)
-currentmA = numpy.zeros(last_row)
+encoder = numpy.zeros(last_row)
+seconds = numpy.zeros(last_row)
+amps = numpy.zeros(last_row)
 
 for r in reader:
     #print( r[1])
     #print(rownum)
     if rownum< last_row and rownum>0:
-        encoder1[rownum] = r[1]
-        encoder2[rownum] = r[2]
-        timems[rownum] = r[4]
-        currentmA[rownum] = r[5]
+        encoder[rownum] = r[0]
+        seconds[rownum] = r[1]
+        amps[rownum] = r[2]
     rownum +=1
 	
-encAve = 0.5*(encoder1+encoder2)
-time = timems/1000.
-current = currentmA/1000.
 
-charge = time*current
+charge = seconds*amps
 tot = numpy.cumsum(charge)
 #tot = numpy.zeros_like(charge)
 
-pyplot.plot(encAve, tot , 'b-');
+pyplot.plot(encoder, tot , 'b-');
 pyplot.xlabel('distance(encoder counts)');
 pyplot.ylabel('charge C' );
 
