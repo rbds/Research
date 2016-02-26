@@ -10,7 +10,7 @@ P_tr_thresh = 0.7;
 
 % for z = 2:10
 %build adjacency matrix
-s =7;
+s =2;
 V = s^2;
 N = V^2;
 i_vals = [];

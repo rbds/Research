@@ -33,19 +33,19 @@ costs = [.3 .2 .3 .5 .3 .3 .3 .3 .5 .4 .3 .4 .4 .3 .2;
 % costs = flipud(costs);
 costs = costs.^2;
     
-P_tr =sqrt([.90 .50 .50 .75 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99;
-       .90 .50 .50 .99 .99 .99 .99 .90 .75 .50 .60 .10 .10 .10 .90;
-       .90 .80 .45 .75 .99 .99 .99 .90 .99 .50 .10 .10 .10 .70 .90;
-       .99 .80 .90 .50 .50 .75 .99 .99 .05 .05 .10 .50 .50 .50 .99;
-       .99 .95 .10 .85 .75 .50 .60 .80 .75 .99 .99 .99 .50 .05 .99;
-       .99 .90 .10 .25 .99 .95 .75 .50 .60 .99 .99 .99 .99 .99 .99;
-       .99 .99 .10 .90 .99 .99 .99 .90 .50 .65 .99 .75 .99 .99 .99;
+P_tr =sqrt([.90 .50 .50 .75 .99 .99 .99 .99 .99 .99 .99 .99 .99 .80 .99;
+       .90 .50 .50 .99 .99 .99 .99 .99 .99 .80 .60 .75 .95 .90 .99;
+       .90 .80 .45 .75 .99 .99 .99 .90 .99 .90 .50 .50 .95 .99 .99;
+       .99 .99 .90 .50 .50 .75 .99 .99 .99 .99 .70 .60 .90 .99 .99;
+       .99 .95 .90 .85 .75 .50 .60 .80 .75 .99 .99 .99 .95 .95 .99;
+       .99 .90 .90 .25 .99 .95 .75 .50 .60 .99 .99 .99 .99 .99 .99;
+       .99 .99 .90 .90 .99 .99 .99 .90 .50 .65 .99 .75 .99 .99 .99;
        .99 .99 .99 .99 .99 .99 .99 .99 .90 .50 .60 .99 .75 .99 .99;
        .99 .99 .99 .99 .99 .99 .99 .99 .90 .50 .90 .99 .99 .99 .99;
        .99 .99 .99 .99 .75 .99 .99 .99 .60 .60 .90 .99 .99 .99 .99;
        .50 .50 .60 .60 .60 .60 .50 .50 .65 .75 .99 .99 .99 .99 .99;
        .60 .60 .40 .50 .50 .50 .60 .50 .99 .99 .99 .99 .99 .80 .99;
-       .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .85 .99;
+       .60 .60 .40 .50 .50 .50 .60 .50 .99 .99 .99 .99 .99 .80 .99;
        .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .85 .99;
        .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .85 .99]);
 P_tr = flipud(P_tr);   
@@ -58,7 +58,7 @@ j_vals = [];
 
 P_tr = repmat(P_tr, V, 1);
 
-P_tr_thresh = 0.3; 
+P_tr_thresh = 0.4; 
 
 
 
@@ -78,29 +78,29 @@ for i = 1:V    %for each row in adjacency matrix
    if (i> s) %if vertex isn't on top of grid
     j_vals(end+1) = i ;   %add next node up
     i_vals(end+1) = i - s;
-       if (mod(i,s) >0) %if it isn't on the right edge of grid 
-        j_vals(end+1) = i; %add node to diagonal right
-        i_vals(end+1) = i+1 - s;
-       end
-
-       if (mod(i, s) ~=1) %if node isn't on the left edge of grid
-        j_vals(end+1) = i; %add node to diagonal left
-        i_vals(end+1) = i-1 -s;
-       end
+%        if (mod(i,s) >0) %if it isn't on the right edge of grid 
+%         j_vals(end+1) = i; %add node to diagonal right
+%         i_vals(end+1) = i+1 - s;
+%        end
+% 
+%        if (mod(i, s) ~=1) %if node isn't on the left edge of grid
+%         j_vals(end+1) = i; %add node to diagonal left
+%         i_vals(end+1) = i-1 -s;
+%        end
    end
    
    if (i<=(V- s))   %if vertex isn't on bottom of grid
     j_vals(end+1) = i ;  %add next node down
     i_vals(end+1) = i+s ;
-       if (mod(i,s) >0) %if it isn't on the right edge of grid 
-        j_vals(end+1) = i; %add node to diagonal right
-        i_vals(end+1) = i+1+ s;
-       end
-
-       if (mod(i, s) ~=1) %if node isn't on the left edge of grid
-        j_vals(end+1) = i; %add node to diagonal left
-        i_vals(end+1) = i-1+s;
-       end
+%        if (mod(i,s) >0) %if it isn't on the right edge of grid 
+%         j_vals(end+1) = i; %add node to diagonal right
+%         i_vals(end+1) = i+1+ s;
+%        end
+% 
+%        if (mod(i, s) ~=1) %if node isn't on the left edge of grid
+%         j_vals(end+1) = i; %add node to diagonal left
+%         i_vals(end+1) = i-1+s;
+%        end
    end   
 end
 
