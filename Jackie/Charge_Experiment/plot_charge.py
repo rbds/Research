@@ -22,13 +22,13 @@ for ind, j  in enumerate(lengths):
     
     for i in range(0,20):
         filename = str(j) + 'inchesFeb26_0' + str(i) + '.csv'
-        with open(filename, 'rb') as f:
+        with open(filename, 'rt') as f:
             mycsv = csv.reader(f)
             mycsv = list(mycsv)
             row_count = len(mycsv) - 2
             start_at = float(mycsv[1][0])
         
-        f = open(filename, 'rb')
+        f = open(filename, 'rt')
         reader = csv.reader(f)
         rownum = 0
         
