@@ -50,7 +50,7 @@ def read_robot():
 def write2csv(encoder, seconds, current, charge, counter):
     for i in range(counter):
         writer.writerow((encoder[i], seconds[i], current[i], charge[i]))
-    writer.writerow([])
+    #writer.writerow([])
     
 
 def drive_robot(drive,brake):
