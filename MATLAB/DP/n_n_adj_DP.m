@@ -1,5 +1,5 @@
 clear
-close all
+clf
 ha = axes('units','normalized','position',[0 0 1.1 1.1]);
 
 uistack(ha,'bottom');
@@ -48,6 +48,7 @@ P_tr=sqrt([.99 .50 .50 .99 .99 .99 .75 .75 .99 .99 .99 .99 .99 .99 .99;
            .50 .60 .40 .50 .50 .50 .60 .50 .99 .99 .99 .99 .75 .75 .99;
            .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .75 .75;
            .99 .29 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .75 .75]);
+
 P_tr = flipud(P_tr);   
 
 s = 15;
@@ -57,6 +58,7 @@ i_vals = [];
 j_vals = [];
 P_tr_thresh = .0;
 
+
 % minimum = 0.9;
 % maximum = 1.0;
 % P_tr = (maximum - minimum)*rand(V, 1) + minimum; %Prob. of traverse associated with each node. sqrt is to bias towards higher values.
@@ -64,7 +66,7 @@ P_tr_thresh = .0;
 % costs = 10*abs(randn(V,1));
 % 
 % P_tr = repmat(P_tr, V, 1);
-% 
+
 
 tic
 
