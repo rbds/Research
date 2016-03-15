@@ -1,5 +1,5 @@
 clear
-clf
+close all
 ha = axes('units','normalized','position',[0 0 1.1 1.1]);
 
 uistack(ha,'bottom');
@@ -18,7 +18,7 @@ costs = [.3 .2 .2 .5 .3 .3 .3 .3 .5 .4 .3 .4 .4 .3 .2;
         .3 .5 .1 .3 .2 .2 .2 .3 .7 .6 .3 .3 .5 .4 .3;
         .2 .3 .1 .2 .4 .3 .2 .2 .7 .8 01 01 01 .3 .3;
         .3 .3 .2 .1 .1 .2 .3 .2 .4 .4 01 01 .4 .2 .2;
-        .3 .3 .5 .4 .2 .1 .1 .2 .5 .2 .8 01 .7 .3 .2;
+        .3 .3 .5 .4 .2 .1 .1 .2 .5 .2 .8 01 .3 .3 .2;
         .3 .5 .7 .7 .3 .2 .2 .1 .1 .2 .8 .2 .3 .2 .2;
         .3 .3 .5 .4 .3 .3 .2 .2 .1 .1 .2 .2 .3 .7 .3;
         .3 .3 .3 .3 .7 .7 .7 .2 .2 .1 .2 .2 .6 .2 .4;
@@ -31,7 +31,7 @@ costs = [.3 .2 .2 .5 .3 .3 .3 .3 .5 .4 .3 .4 .4 .3 .2;
         .2 .3 .3 .3 .3 .3 .3 .3 .3 .3 .3 .6 .6 .4 .3];
     
 costs = flipud(costs);
-% costs = costs.^2;
+costs = costs.^0.5;
     
 P_tr =([.90 .50 .50 .75 .99 .99 .99 .99 .99 .99 .99 .99 .99 .80 .99;
        .90 .50 .50 .99 .99 .99 .99 .99 .99 .80 .60 .75 .95 .90 .99;
@@ -78,29 +78,29 @@ for i = 1:V    %for each row in adjacency matrix
    if (i> s) %if vertex isn't on top of grid
     j_vals(end+1) = i ;   %add next node up
     i_vals(end+1) = i - s;
-%        if (mod(i,s) >0) %if it isn't on the right edge of grid 
-%         j_vals(end+1) = i; %add node to diagonal right
-%         i_vals(end+1) = i+1 - s;
-%        end
-% 
-%        if (mod(i, s) ~=1) %if node isn't on the left edge of grid
-%         j_vals(end+1) = i; %add node to diagonal left
-%         i_vals(end+1) = i-1 -s;
-%        end
+       if (mod(i,s) >0) %if it isn't on the right edge of grid 
+        j_vals(end+1) = i; %add node to diagonal right
+        i_vals(end+1) = i+1 - s;
+       end
+
+       if (mod(i, s) ~=1) %if node isn't on the left edge of grid
+        j_vals(end+1) = i; %add node to diagonal left
+        i_vals(end+1) = i-1 -s;
+       end
    end
    
    if (i<=(V- s))   %if vertex isn't on bottom of grid
     j_vals(end+1) = i ;  %add next node down
     i_vals(end+1) = i+s ;
-%        if (mod(i,s) >0) %if it isn't on the right edge of grid 
-%         j_vals(end+1) = i; %add node to diagonal right
-%         i_vals(end+1) = i+1+ s;
-%        end
-% 
-%        if (mod(i, s) ~=1) %if node isn't on the left edge of grid
-%         j_vals(end+1) = i; %add node to diagonal left
-%         i_vals(end+1) = i-1+s;
-%        end
+       if (mod(i,s) >0) %if it isn't on the right edge of grid 
+        j_vals(end+1) = i; %add node to diagonal right
+        i_vals(end+1) = i+1+ s;
+       end
+
+       if (mod(i, s) ~=1) %if node isn't on the left edge of grid
+        j_vals(end+1) = i; %add node to diagonal left
+        i_vals(end+1) = i-1+s;
+       end
    end   
 end
 
