@@ -51,9 +51,12 @@ P_tr=sqrt([.99 .50 .50 .99 .99 .99 .75 .75 .99 .99 .99 .99 .99 .99 .99;
 
 P_tr = flipud(P_tr);   
 
-s = 15;
-V = s^2;
-N = V^2;
+%build adjacency matrix
+n_rows = 15; % must be at least 2x2.
+n_cols = 15;
+% s = 15;
+V = n_rows*n_cols; %total number of nodes
+% N = V^2;
 i_vals = [];
 j_vals = [];
 P_tr_thresh = .0;
@@ -71,51 +74,51 @@ P_tr_thresh = .0;
 tic
 
 for i = 1:V    %for each row in adjacency matrix
-   if (mod(i,s) >0) %if it isn't on the right edge of grid 
+   if (mod(i,n_cols) >0) %if it isn't on the right edge of grid 
     j_vals(end+1) = i; %add node to right
     i_vals(end+1) = i+1;
    end
 
-   if (mod(i, s) ~=1) %if node isn't on the left edge of grid
+   if (mod(i, n_cols) ~=1) %if node isn't on the left edge of grid
     j_vals(end+1) = i; %add node to left
     i_vals(end+1) = i-1;
    end
    
-   if (i> s) %if vertex isn't on top of grid
+   if (i> n_cols) %if vertex isn't on top of grid
     j_vals(end+1) = i ;   %add next node up
-    i_vals(end+1) = i - s;
-       if (mod(i,s) >0) %if it isn't on the right edge of grid 
+    i_vals(end+1) = i - n_cols;
+       if (mod(i,n_cols) >0) %if it isn't on the right edge of grid 
         j_vals(end+1) = i; %add node to diagonal right
-        i_vals(end+1) = i+1 - s;
+        i_vals(end+1) = i+1 - n_cols;
        end
-
-       if (mod(i, s) ~=1) %if node isn't on the left edge of grid
+% 
+       if (mod(i, n_cols) ~=1) %if node isn't on the left edge of grid
         j_vals(end+1) = i; %add node to diagonal left
-        i_vals(end+1) = i-1 -s;
+        i_vals(end+1) = i-1 -n_cols;
        end
    end
    
-   if (i<=(V- s))   %if vertex isn't on bottom of grid
+   if (i<=(V- n_cols))   %if vertex isn't on bottom of grid
     j_vals(end+1) = i ;  %add next node down
-    i_vals(end+1) = i+s ;
-       if (mod(i,s) >0) %if it isn't on the right edge of grid 
+    i_vals(end+1) = i+n_cols ;
+       if (mod(i,n_cols) >0) %if it isn't on the right edge of grid 
         j_vals(end+1) = i; %add node to diagonal right
-        i_vals(end+1) = i+1+ s;
+        i_vals(end+1) = i+1+ n_cols;
        end
-
-       if (mod(i, s) ~=1) %if node isn't on the left edge of grid
+% 
+       if (mod(i, n_cols) ~=1) %if node isn't on the left edge of grid
         j_vals(end+1) = i; %add node to diagonal left
-        i_vals(end+1) = i-1+s;
+        i_vals(end+1) = i-1+n_cols;
        end
    end   
 end
 
-% %create coordinates
+% %populate coordinates for plotting
 coords = [];
 for i = 1:V
-    col = mod(i,s);
-    row = ceil(i/s);
-      if (col==0) col = s; end 
+   col = mod(i,n_cols);
+   row = ceil((i)/n_cols);
+      if (col==0) col = n_cols; end 
    coords(end+1,:) = [row, col]; 
 end
 
