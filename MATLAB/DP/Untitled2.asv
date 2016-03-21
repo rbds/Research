@@ -51,30 +51,28 @@ close all
 % 
 % P_tr = flipud(P_tr); 
 
-costs = [3 2 1 0;
-         3 2 1 1;
-         3 1 2 2;
-         3 3 3 3];
+costs = [2 1 0;
+         2 4 1;
+         2 1 1];
 costs = flipud(costs);
 
-P_tr = [1  .5  1  1;
-        1  .2 .5  1;
-        1   1 .5 .2;
-        1  .5  1  1];
-P_tr = flipud(P_tr);    
+P_tr = [1  .5   1;
+        1  .5   1;
+        1   1  .5];
+    
     
 
 
 %build adjacency matrix
-n_rows = 4; % must be at least 2x2.
-n_cols = 4;
+n_rows = 3; % must be at least 2x2.
+n_cols = 3;
 % s = 15;
 V = n_rows*n_cols; %total number of nodes
 % N = V^2;
 i_vals = [];
 j_vals = [];
 dist = [];
-P_tr_thresh = .7;
+P_tr_thresh = .6;
 
 
 % minimum = 0.9;
@@ -183,7 +181,7 @@ for i=V:-1:1 %counting back from last populated column in adjacency matrix,
         
         for k=1:size(new_options,1) %if option violates P_tr, set penalty cost
            if new_options(k,2) < P_tr_thresh %&& new_options(k,1) < 1000
-            new_options(k,1) = new_options(k,1) + 1e5*(P_tr_thresh -new_options(k,2));
+            new_options(k,1) = new_options(k,1) + 1000*(P_tr_thresh -new_options(k,2));
            end
         end
     options = [options; new_options];
@@ -203,7 +201,7 @@ end
 time = toc;
 
 % %extract best path
-best_path = extract_best_path(d, 1, V);
+best_path = extract_best_path(d, 1, );
 cost = d{1}(1)
 % Ptr = prod(P_tr(best_path));
 Ptr = d{1}(1,2)

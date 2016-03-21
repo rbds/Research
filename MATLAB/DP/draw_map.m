@@ -2,17 +2,17 @@
 clear
 close all
 
-ha = axes('units','normalized','position',[0 0 1.1 1]);
-
-uistack(ha,'bottom');
-
-I=imread('sample_map.png');
-hi = imagesc(I);
-colormap gray
-
-set(ha,'handlevisibility','off','visible','off')
-
-axes('position',[0 0 .99 .99])
+% ha = axes('units','normalized','position',[0 0 1.1 1]);
+% 
+% uistack(ha,'bottom');
+% 
+% I=imread('sample_map.png');
+% hi = imagesc(I);
+% colormap gray
+% 
+% set(ha,'handlevisibility','off','visible','off')
+% 
+% axes('position',[0 0 .99 .99])
 % plot(rand(10))
 costs = [.3 .2 .3 .5 .3 .3 .3 .3 .5 .4 .3 .4 .4 .3 .2;
         .3 .5 .5 .3 .2 .2 .2 .3 .7 .6 .3 .3 .5 01 .3;
@@ -125,7 +125,7 @@ for i=1:V-1 %assemble adjacency matrix from sections
    adj((i-1)*V+1:(i-1)*V+V, i*V+1:i*V+V) = a;
 end
 %  spy(adj)
-gplot(adj, coords, '*-') %plot graph
+% gplot(adj, coords, '*-') %plot graph
 
 axis off
 axis equal
@@ -135,7 +135,7 @@ axis equal
 figure
 for i = 1:V
     v = [ coords(i,2)-0.5 coords(i,1)-0.5; coords(i,2)-0.5 coords(i,1)+0.5; coords(i,2)+0.5 coords(i,1)+0.5; coords(i,2)+0.5  coords(i,1)-0.5 ];
-    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [0 0 1 ], 'FaceAlpha', costs(i))
+    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [0 0 1], 'FaceAlpha', costs(i).^.2)
     
 end
 
@@ -144,26 +144,27 @@ axis equal
 axis([0 16 0 15])
 title('Cost Map')
 
-blues = linspace(1, .5, 64);
+blues = linspace(1, 0, 64);
 newmap = [zeros(64,1) zeros(64,1) blues'];
+% alpha(0.5)
 colormap(newmap);   %activate it
 colorbar
 
-
-figure
-for i = 1:V
-    v = [ coords(i,2)-0.5 coords(i,1)-0.5; coords(i,2)-0.5 coords(i,1)+0.5; coords(i,2)+0.5 coords(i,1)+0.5; coords(i,2)+0.5  coords(i,1)-0.5 ];
-    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [1 0 0 ], 'FaceAlpha', 1 - P_tr(i))
-end
-
-
-axis off
-axis equal
-axis([0 16 0 15])
-title('Map of P_{tr}(x)')
-
-reds = linspace(1, .5, 64);
-newmap2 = [reds' zeros(64,1) zeros(64,1)];
-colormap(newmap2);   %activate it
-colorbar
+% 
+% figure
+% for i = 1:V
+%     v = [ coords(i,2)-0.5 coords(i,1)-0.5; coords(i,2)-0.5 coords(i,1)+0.5; coords(i,2)+0.5 coords(i,1)+0.5; coords(i,2)+0.5  coords(i,1)-0.5 ];
+%     patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [1 0 0 ], 'FaceAlpha', 1 - P_tr(i))
+% end
+% 
+% 
+% axis off
+% axis equal
+% axis([0 16 0 15])
+% title('Map of P_{tr}(x)')
+% 
+% reds = linspace(1, .5, 64);
+% newmap2 = [reds' zeros(64,1) zeros(64,1)];
+% colormap(newmap2);   %activate it
+% colorbar
 

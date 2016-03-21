@@ -204,38 +204,20 @@ axis off
 figure
 for i = 1:V
     v = [ coords(i,1)-0.5 coords(i,2)-0.5; coords(i,1)-0.5 coords(i,2)+0.5; coords(i,1)+0.5 coords(i,2)+0.5; coords(i,1)+0.5  coords(i,2)-0.5 ];
-%     patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [0 0 1], 'FaceAlpha', costs(i).^.5)
-    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [1-costs(i).^.5 1-costs(i)^.5 1-costs(i)^.5])
+    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [0 0 1], 'FaceAlpha', costs(i).^.5)
+    
 end
 
 axis off
 axis equal
-axis([0 16 0 16])
+axis([0 16 0 15])
 title('Cost Map')
 
-shades = linspace(1, 0, 64);
-newmap = [shades' shades' shades'];
+blues = linspace(0, 1, 64);
+newmap = [zeros(64,1) zeros(64,1) blues'];
+alpha(0.5)
 colormap(newmap);   %activate it
 colorbar
-
-
-figure
-for i = 1:V
-    v = [ coords(i,1)-0.5 coords(i,2)-0.5; coords(i,1)-0.5 coords(i,2)+0.5; coords(i,1)+0.5 coords(i,2)+0.5; coords(i,1)+0.5  coords(i,2)-0.5 ];
-%     patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [0 0 1], 'FaceAlpha', costs(i).^.5)
-    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [P_tr(i).^3 P_tr(i).^3 P_tr(i).^3])
-end
-
-axis off
-axis equal
-axis([0 16 0 16])
-title('P_{tr} Map')
-
-shades = linspace(0, 1, 64);
-newmap = [shades' shades' shades'];
-colormap(newmap);   %activate it
-colorbar
-
 % % axis equal
 % 
 % bp_90 = [1 17 32 47 62 77 92 107 123 139 155 171 172 158 159 160 176 192 208 224 225];
