@@ -1,5 +1,7 @@
 clear
 close all
+
+% subplot(1,3,1)
 ha = axes('units','normalized','position',[0 0 1.1 1.1]);
 
 uistack(ha,'bottom');
@@ -31,7 +33,7 @@ costs =[.2 .1 .1 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2;
         .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .4 .2];
     
 costs = flipud(costs);
-costs = costs.^4;
+% costs = costs.^4;
 
 % % road low P_tr (should avoid)
 P_tr=sqrt([.99 .50 .50 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99;
@@ -207,7 +209,7 @@ end
 
 
 time = toc;
-
+hold on
 best_path = extract_best_path(d, 1, V);
 cost = d{1}(1)
 Ptr = prod(P_tr(best_path))
@@ -220,11 +222,7 @@ for i=1:length(best_path)-1  %plot path
   h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-', 'LineWidth', 4);    
 end
 axis off
-
+[c, p] = plot_paths( d, best_path, cost, P_tr, coords );
 figure
-[c, p] = plot_paths( d, best_path, cost, P_tr );
-
-plot_maps(coords, costs, P_tr);
-figure
+plot_maps(V, coords, costs, P_tr);
 figure(1)
-

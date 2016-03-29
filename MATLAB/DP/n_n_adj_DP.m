@@ -1,5 +1,7 @@
 clear
 close all
+
+% subplot(1,3,1)
 ha = axes('units','normalized','position',[0 0 1.1 1.1]);
 
 uistack(ha,'bottom');
@@ -31,7 +33,7 @@ costs =[.2 .1 .1 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2;
         .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .4 .2];
     
 costs = flipud(costs);
-costs = costs.^4;
+% costs = costs.^4;
 
 % % road low P_tr (should avoid)
 P_tr=sqrt([.99 .50 .50 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99;
@@ -207,7 +209,7 @@ end
 
 
 time = toc;
-
+% hold on
 best_path = extract_best_path(d, 1, V);
 cost = d{1}(1)
 Ptr = prod(P_tr(best_path))
@@ -220,49 +222,7 @@ for i=1:length(best_path)-1  %plot path
   h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-', 'LineWidth', 4);    
 end
 axis off
-
+[c, p] = plot_paths( d, best_path, cost, P_tr, coords );
 figure
-[c, p] = plot_paths( d, best_path, cost, P_tr );
-plot_maps(coords, costs, P_tr);
-figure
-subplot(1,2,1)
-
-% figure
-for i = 1:V
-    v = [ coords(i,1)-0.5 coords(i,2)-0.5; coords(i,1)-0.5 coords(i,2)+0.5; coords(i,1)+0.5 coords(i,2)+0.5; coords(i,1)+0.5  coords(i,2)-0.5 ];
-%     patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [0 0 1], 'FaceAlpha', costs(i).^.5)
-    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [1-costs(i).^.5 1-costs(i)^.5 1-costs(i)^.5])
-end
-
-axis off
-axis equal
-axis([0 16 0 16])
-title('Cost Map')
-
-shades = linspace(1, 0, 64);
-newmap = [shades' shades' shades'];
-colormap(newmap);   %activate it
-colorbar
-colorbar('location', 'southoutside')
-
-subplot(1,2,2)
-
-% figure
-for i = 1:V
-    v = [ coords(i,1)-0.5 coords(i,2)-0.5; coords(i,1)-0.5 coords(i,2)+0.5; coords(i,1)+0.5 coords(i,2)+0.5; coords(i,1)+0.5  coords(i,2)-0.5 ];
-%     patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [0 0 1], 'FaceAlpha', costs(i).^.5)
-    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [P_tr(i).^2 P_tr(i).^2 P_tr(i).^2])
-end
-
-axis off
-axis equal
-axis([0 16 0 16])
-title('P_{tr} Map')
-
-shades = linspace(0, 1, 64);
-newmap = [shades' shades' shades'];
-colormap(newmap);   %activate it
-colorbar('location', 'southoutside')
-
+plot_maps(V, coords, costs, P_tr);
 figure(1)
-

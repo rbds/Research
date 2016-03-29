@@ -1,6 +1,8 @@
-function [ c,p  ] = plot_paths( d, best_path, cost, P_tr )
+function [ c,p  ] = plot_paths( d, best_path, cost, P_tr, coords )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
+
+
 
 x = 1:length(best_path)';
 c = zeros(size(best_path));
@@ -15,6 +17,8 @@ for i=x
 end
 
 % [ax, h1, h2] = plotyy(x, c,  x, p);
+
+figure
 subplot(1,2,1)
 plot(x, c, 'LineWidth', 3)
 title('Estimated Path Cost')
