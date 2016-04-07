@@ -38,5 +38,9 @@ end
 
 H = [h0; h25; h50;  h75];
 legend(H, '\epsilon = 0', '\epsilon = 0.25', '\epsilon = 0.50', '\epsilon = 0.75', 'Location', 'NorthWest')
-
-
+figure
+hold on
+[c, p] = plot_paths( d, bp_0, cost, P_tr, coords );
+[c, p] = plot_paths( d, bp_25, cost, P_tr, coords );
+[c, p] = plot_paths( d, bp_50, cost, P_tr, coords );
+[c, p] = plot_paths( d, bp_75, cost, P_tr, coords );

@@ -32,6 +32,23 @@ costs =[.2 .1 .1 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2;
         .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .3 .6 .6 .2;
         .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .4 .2];
     
+% costs =[.2 .1 .1 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2;
+%         .2 .1 .1 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2;
+%         .2 .1 .1 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2;
+%         .2 .2 .1 .1 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2;
+%         .2 .2 .2 .1 .1 .2 .2 .2 .2 .2 .2 .2 .2 .3 .2;
+%         .2 .2 .2 .2 .1 .1 .1 .2 .2 .2 .2 .2 .9 .5 .2;
+%         .2 .2 .2 .2 .2 .2 .1 .1 .2 .2 .2 .9 .9 .9 .5;
+%         .2 .2 .2 .2 .2 .2 .2 .1 .2 .2 .2 .7 .9 .9 .9;
+%         .2 .3 .3 .2 .4 .3 .3 .3 .1 .2 .2 .2 .8 .9 .9;
+%         .2 .3 .3 .2 .5 .6 .2 .2 .1 .2 .2 .2 .2 .5 .8;
+%         .2 .2 .2 .2 .2 .2 .2 .1 .1 .2 .2 .2 .2 .5 .7;
+%         .2 .2 .2 .2 .2 .2 .2 .1 .2 .2 .2 .2 .2 .2 .2;
+%         .1 .1 .1 .1 .1 .1 .1 .2 .2 .2 .2 .2 .2 .2 .2;
+%         .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2;
+%         .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .4 .2];
+    
+    
 costs = flipud(costs);
 % costs = costs.^4;
 
@@ -82,7 +99,7 @@ V = n_rows*n_cols; %total number of nodes
 i_vals = [];
 j_vals = [];
 dist = [];
-P_tr_thresh = .0;
+P_tr_thresh = 0.0;
 
 
 % minimum = 0.9;
@@ -189,11 +206,11 @@ for i=V:-1:1 %counting back from last populated column in adjacency matrix,
 
         new_options = [d{i,1}(:,1) + adj(row,col), d{i,1}(:,2)*P_tr(V_row), repmat(i, size(d{i,1}(:,1)))];   %list possible new paths
         
-        for k=1:size(new_options,1) %if option violates P_tr, set penalty cost
-           if new_options(k,2) < P_tr_thresh %&& new_options(k,1) < 1000
-            new_options(k,1) = new_options(k,1) + 1e6*(P_tr_thresh -new_options(k,2));
-           end
-        end
+%         for k=1:size(new_options,1) %if option violates P_tr, set penalty cost
+%            if new_options(k,2) < P_tr_thresh %&& new_options(k,1) < 1000
+%             new_options(k,1) = new_options(k,1) + 1e6*(P_tr_thresh -new_options(k,2));
+%            end
+%         end
     options = [options; new_options];
     [front, inds] = prto(options);
     
@@ -209,9 +226,14 @@ end
 
 
 time = toc;
-% hold on
+hold on
+bad_paths = 0;
+for i=1:length(d)
+    bad_paths = find(d{i}(:,2)<P_tr_thresh);
+    d{i}(bad_paths, 1) = d{i}(bad_paths,1) + 1e6;
+end
 best_path = extract_best_path(d, 1, V);
-cost = d{1}(1)
+cost = min(d{1}(:,1))
 Ptr = prod(P_tr(best_path))
 % Ptr = d{1}(1,2)
 time
@@ -222,6 +244,7 @@ for i=1:length(best_path)-1  %plot path
   h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-', 'LineWidth', 4);    
 end
 axis off
+figure
 [c, p] = plot_paths( d, best_path, cost, P_tr, coords );
 figure
 plot_maps(V, coords, costs, P_tr);

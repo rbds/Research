@@ -18,14 +18,16 @@ end
 
 % [ax, h1, h2] = plotyy(x, c,  x, p);
 
-figure
+% figure
 subplot(1,2,1)
+hold on
 plot(x, c, 'LineWidth', 3)
 title('Estimated Path Cost')
 xlabel('Path step number')
 ylabel('Path cost (J)')
 
 subplot(1,2,2)
+hold on
 plot(x, p, 'LineWidth', 3)
 xlabel('Path step number')
 title('Probability of Traverse')
