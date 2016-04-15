@@ -31,7 +31,7 @@ costs =[.2 .1 .1 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2;
         .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .2 .4 .2];
     
 costs = flipud(costs);
-costs = costs.^4;
+% costs = costs.^4;
 
 % % road low P_tr (should avoid)
 P_tr=sqrt([.99 .50 .50 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99;
@@ -80,7 +80,7 @@ V = n_rows*n_cols; %total number of nodes
 i_vals = [];
 j_vals = [];
 dist = [];
-P_tr_thresh = .0;
+P_tr_thresh = .850;
 
 
 % minimum = 0.9;
@@ -223,7 +223,7 @@ axis off
 
 figure
 [c, p] = plot_paths( d, best_path, cost, P_tr );
-plot_maps(coords, costs, P_tr);
+% plot_maps(coords, costs, P_tr);
 figure
 subplot(1,2,1)
 
@@ -231,7 +231,7 @@ subplot(1,2,1)
 for i = 1:V
     v = [ coords(i,1)-0.5 coords(i,2)-0.5; coords(i,1)-0.5 coords(i,2)+0.5; coords(i,1)+0.5 coords(i,2)+0.5; coords(i,1)+0.5  coords(i,2)-0.5 ];
 %     patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [0 0 1], 'FaceAlpha', costs(i).^.5)
-    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [1-costs(i).^.5 1-costs(i)^.5 1-costs(i)^.5])
+    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [costs(i).^.5 costs(i)^.5 costs(i)^.5])
 end
 
 axis off

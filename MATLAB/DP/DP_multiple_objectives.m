@@ -7,7 +7,7 @@ P_tr_thresh = 0.75;
 
 %build adjacency matrix
 %square grid, connected right and down
-s =12; % s is number of grid sections +1 (nodes will represent centers of grid sections).
+s =3; % s is number of grid sections +1 (nodes will represent centers of grid sections).
 V = s^2;
 i_vals = [];
 j_vals = [];
@@ -17,18 +17,19 @@ for i = 1:V
     i_vals(end+1) = i; %add node to right
     j_vals(end+1) = i+1;
    end
-%    if (mod(i, s) ~=1) %if node isn't on the left edge of grid
-%     i_vals(end+1) = i; %add node to left
-%     j_vals(end+1) = i-1;
-%    end
+   if (mod(i, s) ~=1) %if node isn't on the left edge of grid
+    i_vals(end+1) = i; %add node to left
+    j_vals(end+1) = i-1;
+   end
    if (i<=(V- s))   %if vertex isn't on bottom of grid
     i_vals(end+1) = i;  %add next node down
     j_vals(end+1) = i+s;
    end
-%    if (i> s) %if vertex isn't on top of grid
-%     i_vals(end+1) = i;   %add next node up
-%     j_vals(end+1) = i - s;
-%    end
+   if (i> s) %if vertex isn't on top of grid
+    i_vals(end+1) = i;   %add next node up
+    j_vals(end+1) = i - s;
+   end
+
 end
 
 vals = 10*abs(randn(length(i_vals), 1)); %generate random costs
@@ -43,7 +44,8 @@ for i = 1:V-1
    coords(i+1,:) = [floor(i/s)+1, s - mod(i,s)];
 end
 gplot(adj, coords, '*-')
-
+figure
+spy(adj)
 P_tr(V) = 1;
 d{V}(2) = 1; %P_tr for last node is 1.
 d{V}(1) = 0;
