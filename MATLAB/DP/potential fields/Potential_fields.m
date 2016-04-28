@@ -34,29 +34,33 @@ robot.r = 0.75;
 robot.t = 0;
 
 robot.p = p_start;               %set robot position to x_start
+robot.v = [0 0]';
+robot.x = [robot.p; robot.v];
 
 circle(p_start(1,1),p_start(2,1),goal.r,'g');               %draw the location of x_start and x_goal
 circle(p_goal(1,1),p_goal(2,1),goal.r,'g');
 
 ka = .2;
 kr = .4;
+kv = 1;
 q_thresh = 10;
 
 dt = .2;
 c = 1;
 
-
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
 while norm(robot.p - p_goal) > robot.r+goal.r
     %%%%%%%%%Define robot position
+%     robot.x = [robot.p; robot.v];
     map = [];
     %%%%%%%%%%%do a sensor sweep
     [ map, s ] = sensor( robot, obst, map, s, param.sensor_range);
 
     %%%%%%%%%%%Find potential function
         %attractive potential
-        dU_a = ka*(robot.p - p_goal);
+%         dU_a = ka*(robot.p - p_goal)*sqrt(norm(robot.p - p_goal))/norm(robot.p - p_goal);
+            dU_a = (robot.p - p_goal)/norm(robot.p - p_goal)*4;
 %         plot([robot.p(1), robot.p(1)-dU_a(1)], [robot.p(2), robot.p(2)-dU_a(2)], 'g' )
    
         %repulsive potential
@@ -69,12 +73,18 @@ while norm(robot.p - p_goal) > robot.r+goal.r
         end
         
     %%%%%%%%%%%Find gradient
-        F = sum([-dU_a';-dU_r],1);
-
+        F = sum([-dU_a'; -dU_r],1);
+        
+    %%%%%%%%%%%% Calculate new control input    
+%         v_d = F'/c;
+%         e_v = -robot.x(3:4) + v_d;
+%         robot.v = kv*e_v;
+            robot.v = F'/c; %comment this out
     %%%%%%%%%%%% Move robot for one timestep
         old_p = robot.p;
         plot(robot.p(1), robot.p(2), 'bx')
-        robot.p = robot.p + dt*F'/c;
+        
+        robot.p = robot.p + dt*robot.v;
         plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
         set(h, 'Visible', 'off')
         h = draw_robot(robot);
