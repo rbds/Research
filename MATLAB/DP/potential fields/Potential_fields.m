@@ -38,12 +38,11 @@ robot.p = p_start;               %set robot position to x_start
 circle(p_start(1,1),p_start(2,1),goal.r,'g');               %draw the location of x_start and x_goal
 circle(p_goal(1,1),p_goal(2,1),goal.r,'g');
 
-ka = .2;
-kr = .4;
-q_thresh = 10;
+ka = .2;        %attractive gain
+kr = .5;        %repulsive gain
+q_thresh = 10;  %max distance for obstacle to produce a virtual force
 
-dt = .2;
-c = 1;
+dt = .2;        %time step size (seconds)
 
 
 %%%%%%%%%%%%%%while robot position != goal:
@@ -52,7 +51,7 @@ while norm(robot.p - p_goal) > robot.r+goal.r
     %%%%%%%%%Define robot position
     map = [];
     %%%%%%%%%%%do a sensor sweep
-    [ map, s ] = sensor( robot, obst, map, s, param.sensor_range);
+    [ map, s ] = sensor( robot, obst, map, s, param.sensor_range, course);
 
     %%%%%%%%%%%Find potential function
         %attractive potential
@@ -72,9 +71,10 @@ while norm(robot.p - p_goal) > robot.r+goal.r
         F = sum([-dU_a';-dU_r],1);
 
     %%%%%%%%%%%% Move robot for one timestep
-        old_p = robot.p;
         plot(robot.p(1), robot.p(2), 'bx')
-        robot.p = robot.p + dt*F'/c;
+        old_p = robot.p;
+        robot = state_int(robot, F, dt);
+    
         plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
         set(h, 'Visible', 'off')
         h = draw_robot(robot);

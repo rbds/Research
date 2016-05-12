@@ -8,8 +8,8 @@ cy = 3;
 kx = 0;
 ky = 0;
 
-Q = .002*eye(4);
-R = .001*eye(2);
+Q = .02*eye(4);
+R = .01*eye(2);
 
 N = 5000;
 tf = 15;
@@ -49,8 +49,8 @@ R_lqr = 0.1*eye(2);
 [K_ss, ~, ~] = dlqr(A, B, Q_lqr, R_lqr); %K is lqr gain, P is solution to Riccatti eqn, E is eig(A-BK) of system
 [L_ss, ~, ~] = dlqr(A', C', Q, R);
 
-w = .001*randn(2, N);
-v = .002*randn(2, N);
+w = .01*randn(2, N);
+v = .02*randn(2, N);
 G = eye(2);
 H = eye(2);
 
@@ -132,9 +132,8 @@ title('Position of robot')
 
 hold on
 for i = 1:100:N
-% for i = 1:N
 %     plot(x(1,i), x(2,i), 'k:', x_hat(1,i), x_hat(2,i), 'rx')
-    plot_gaussian_ellipsoid([x(1, i), x(2,i)], sigma_update(1:2,1:2,i) + lambda(1:2,1:2,i), 1, 25); % mean, std dev, stdwidth (2~= .86), n points. 
+    plot_gaussian_ellipsoid([x(1, i), x(2,i)], sigma_update(1:2,1:2,i) + lambda(1:2,1:2,i), 2, 25); % mean, std dev, stdwidth (2~= .86), n points. 
 end
 legend('estimated position', 'error ellipse', 'Location', 'NorthWest')
 % figure(2)
