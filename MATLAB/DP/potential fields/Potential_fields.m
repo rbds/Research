@@ -34,6 +34,7 @@ robot.r = 0.75;
 robot.t = 0;
 
 robot.p = p_start;               %set robot position to x_start
+robot.v = [0; 0; 0];
 
 circle(p_start(1,1),p_start(2,1),goal.r,'g');               %draw the location of x_start and x_goal
 circle(p_goal(1,1),p_goal(2,1),goal.r,'g');

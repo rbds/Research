@@ -1,12 +1,8 @@
 function [ robot ] = state_int( robot, F, dt )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-% robot.p = robot.p + dt*F';
-x2_d = [F, 0]';
-x1_d = [robot.p; robot.t] + x2_d*dt;
-
-x1 = x1_d - [robot.p(1); robot.p(2); robot.t];
-x2 = x2_d - robot.v;
+x1 = [robot.p(1); robot.p(2); robot.t;];
+x2 = robot.v;
 
 
 x1_dot = x2;
@@ -47,10 +43,10 @@ rho = abs(x2) + inv(M)*c;
 beta = 2;
 eps = .01;
 
-s = x1(1:2) + x2(1:2);
-u = -inv_E*M*(rho + beta).*sat(s/eps);
+s = x1 + x2;
+u = -inv_E*M*(rho + beta)*sat(s/eps);
 
-x_ddot =  M\(E*u - c);
+x_ddot =  inv(M)*(E*u - c);
 end
 
 function y=sat(x)
