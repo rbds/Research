@@ -2,23 +2,23 @@ function [ robot ] = state_int( robot, F, dt )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 % robot.p = robot.p + dt*F';
-x2_d = [F, 0]';
-x1_d = [robot.p; robot.t] + x2_d*dt;
+x2_d = [F, 0]'; %pull desired velocity
+x1_d = [robot.p; robot.t] + x2_d*dt; %integrate velocity to find 'desired position'
 
-x1 = x1_d - [robot.p(1); robot.p(2); robot.t];
-x2 = x2_d - robot.v;
+x1 = x1_d - [robot.p(1); robot.p(2); robot.t]; %actual state for controller is the error in desired position
+x2 = x2_d - robot.v;    %error in desired velocity.
 
 
-x1_dot = x2;
+x1_dot = x2;    %run this through ode45 substitute
 x2_dot = x_diff(x1, x2);
 
-x1_new = x1 + dt*x1_dot;
-x2_new = x2 + dt*x2_dot;
+x1_new = x1 + dt*x1_dot; %this is the output position error
+x2_new = x2 + dt*x2_dot; %this is the output velocity error
 
-robot.p = x1_new(1:2);
+robot.p = x1_d(1:2) - x1_new(1:2); %actual position is (desired - error)
 robot.t = x1_new(3);
 
-robot.v = x2_new;
+robot.v = x2_d - x2_new;
 end
 
 function [x_ddot] = x_diff(x1, x2)
@@ -44,8 +44,8 @@ inv_E = inv(E'*E)*E';
 
 
 rho = abs(x2) + inv(M)*c;
-beta = 2;
-eps = .01;
+beta = 5;
+eps = .1;
 
 s = x1(1:2) + x2(1:2);
 u = -inv_E*M*(rho + beta).*sat(s/eps);
