@@ -5,7 +5,7 @@
 clf
 figure(1)
 hold on
-clear
+clear 
 
 
 %create obstacles by code         
@@ -39,11 +39,11 @@ robot.v = [0; 0; 0];
 circle(p_start(1,1),p_start(2,1),goal.r,'g');               %draw the location of x_start and x_goal
 circle(p_goal(1,1),p_goal(2,1),goal.r,'g');
 
-ka = .2;        %attractive gain
-kr = .5;        %repulsive gain
+ka = 1.2;        %attractive gain
+kr = .7;        %repulsive gain
 q_thresh = 10;  %max distance for obstacle to produce a virtual force
 
-dt = .2;        %time step size (seconds)
+dt = .02;        %time step size (seconds)
 
 
 %%%%%%%%%%%%%%while robot position != goal:
@@ -74,9 +74,11 @@ while norm(robot.p - p_goal) > robot.r+goal.r
     %%%%%%%%%%%% Move robot for one timestep
         plot(robot.p(1), robot.p(2), 'bx')
         old_p = robot.p;
-        robot = state_int(robot, F, dt);
-    
         plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
+        
+        robot = state_int(robot, -F, dt);
+%         robot.p = robot.p + dt*F';
+            
         set(h, 'Visible', 'off')
         h = draw_robot(robot);
         set(h, 'Visible', 'on')
