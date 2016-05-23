@@ -8,7 +8,7 @@ x1_d = [robot.p; robot.t] + x2_d*dt; %integrate velocity to find 'desired positi
 
 x1 = x1_d - [robot.p(1); robot.p(2); robot.t]; %actual state for controller is the error in desired position
 x2 = x2_d - robot.v;    %error in desired velocity.
-
+x2(3) = robot.v(3);
 
 x1_dot = x2;    %run this through ode45 substitute
 x2_dot = x_diff(x1, x2);
@@ -52,12 +52,12 @@ end
 function u = control(x1, x2)
 s = x1(1:2) + x2(1:2);
 
-m = 0.7*116;
-I = 0.7*20;
-r = 0.85*.2;
-t = 0.92*.63/2;
-a = 01.23*.37;
-b = 1.15*.55;
+m = 116;
+I = 20;
+r = .2;
+t = .63/2;
+a = .37;
+b = .55;
 g = 9.81;
 
 fr = .1;

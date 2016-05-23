@@ -15,11 +15,8 @@ lines(:,4) = y2;
 
 for i = 1:length(x1)
  set(s, 'visible','off')
-<<<<<<< HEAD
- s = plot([x1(i); min(x2(i), 45)],[y1(i); min(y2(i), 33)], 'k'); %returns x2, y2 or the map boundary
-=======
  s = plot([max(x1(i), course(1)); max(course(1),min(x2(i), course(3)))],[max(y1(i), course(2)); min(y2(i), course(4))], 'k');
->>>>>>> cfbd4b8d474dc650d3d7e4bd425254fa2e9b3739
+
  set(s, 'visible', 'on')
  pause(.001);
 %  M(end+1) = getframe;

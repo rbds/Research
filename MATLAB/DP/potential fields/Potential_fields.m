@@ -34,28 +34,16 @@ robot.r = 0.75;
 robot.t = 0;
 
 robot.p = p_start;               %set robot position to x_start
-<<<<<<< HEAD
-robot.v = [0 0]';
-robot.x = [robot.p; robot.v];
-=======
 robot.v = [0; 0; 0];
->>>>>>> cfbd4b8d474dc650d3d7e4bd425254fa2e9b3739
+
 
 circle(p_start(1,1),p_start(2,1),goal.r,'g');               %draw the location of x_start and x_goal
 circle(p_goal(1,1),p_goal(2,1),goal.r,'g');
 
-<<<<<<< HEAD
-ka = .2;
-kr = .4;
-kv = 1;
-q_thresh = 10;
-=======
 ka = 1.2;        %attractive gain
 kr = .7;        %repulsive gain
-q_thresh = 10;  %max distance for obstacle to produce a virtual force
->>>>>>> cfbd4b8d474dc650d3d7e4bd425254fa2e9b3739
 
-dt = .01;        %time step size (seconds)
+dt = .03;        %time step size (seconds)
 
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
@@ -68,13 +56,10 @@ while norm(robot.p - p_goal) > robot.r+goal.r
 
     %%%%%%%%%%%Find potential function
         %attractive potential
-<<<<<<< HEAD
 %         dU_a = ka*(robot.p - p_goal)*sqrt(norm(robot.p - p_goal))/norm(robot.p - p_goal);
-            dU_a = (robot.p - p_goal)/norm(robot.p - p_goal)*4;
-=======
-        dU_a = ka*(robot.p - p_goal);
-%             dU_a = 15*(robot.p - p_goal)./abs(robot.p - p_goal);
->>>>>>> cfbd4b8d474dc650d3d7e4bd425254fa2e9b3739
+%         dU_a = ka*(robot.p -p_goal);
+         dU_a = (robot.p - p_goal)/norm(robot.p - p_goal)*10
+
 %         plot([robot.p(1), robot.p(1)-dU_a(1)], [robot.p(2), robot.p(2)-dU_a(2)], 'g' )
    
         %repulsive potential
@@ -82,26 +67,25 @@ while norm(robot.p - p_goal) > robot.r+goal.r
         for i=1:length(map)
             d_to_obst = norm(-map(i).p + robot.p);
             del_r = (-map(i).p + robot.p)/norm(-map(i).p + robot.p);
-            dU_r(i,:) = kr*(1/q_thresh - 1/d_to_obst)*1/d_to_obst^2*del_r;
+            dU_r(i,:) = kr*(1/param.sensor_range - 1/d_to_obst)*1/d_to_obst^2*del_r;
 %             plot([robot.p(1), robot.p(1)+dU_r(i,1)], [robot.p(2), robot.p(2)+dU_r(i,2)], 'r' )
         end
         
     %%%%%%%%%%%Find gradient
+%         dv = sum([-dU_a'; -dU_r],1);
+%         dtheta = atan2(dv(2), dv(1));
+%         F = [dv'; dtheta];
         F = sum([-dU_a'; -dU_r],1);
         
     %%%%%%%%%%%% Calculate new control input    
 %         v_d = F'/c;
 %         e_v = -robot.x(3:4) + v_d;
 %         robot.v = kv*e_v;
-            robot.v = F'/c; %comment this out
+
     %%%%%%%%%%%% Move robot for one timestep
         plot(robot.p(1), robot.p(2), 'bx')
-<<<<<<< HEAD
-        
-        robot.p = robot.p + dt*robot.v;
-=======
         old_p = robot.p;
->>>>>>> cfbd4b8d474dc650d3d7e4bd425254fa2e9b3739
+
         plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
         
         robot = state_int(robot, -F, dt);
