@@ -2,6 +2,7 @@ function [ robot ] = state_int( robot, F, dt )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 % robot.p = robot.p + dt*F';
+
 x2_d = [F, 0]'; %pull desired velocity
 x1_d = [robot.p; robot.t] + x2_d*dt; %integrate velocity to find 'desired position'
 

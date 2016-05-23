@@ -18,7 +18,7 @@ obst = draw_obstacles(numberOfObstacles, course);
 
 % Set Start and Goal locations
 p_start = [5;28];
-p_goal = [41; 6];
+p_goal = [31; 6];
 
 % Parameters 
 param.res = 0.25;            %Resolution of intermediate points. Must be <0.25 for InCollision_Edge to run.
@@ -27,7 +27,7 @@ param.maxiters = 100;      %Cap on iterations to run RRT
 param.RRTstarrad = 15;      %Maximum length of lines redrawn by RRT*
 param.goalbias = .95;        %Probability of checking the goal as p_new
 param.maxpathlength = 20;    %Maximum length of any path segment.
-param.sensor_range = 6;
+param.sensor_range = 4;
 %param.smoothiters = 150;    %Number of iterations for smoothing algorithm
 goal.r = .5;            %radius of goal
 robot.r = 0.75;
@@ -43,7 +43,7 @@ ka = 1.2;        %attractive gain
 kr = .7;        %repulsive gain
 q_thresh = 10;  %max distance for obstacle to produce a virtual force
 
-dt = .02;        %time step size (seconds)
+dt = .01;        %time step size (seconds)
 
 
 %%%%%%%%%%%%%%while robot position != goal:
@@ -57,6 +57,7 @@ while norm(robot.p - p_goal) > robot.r+goal.r
     %%%%%%%%%%%Find potential function
         %attractive potential
         dU_a = ka*(robot.p - p_goal);
+%             dU_a = 15*(robot.p - p_goal)./abs(robot.p - p_goal);
 %         plot([robot.p(1), robot.p(1)-dU_a(1)], [robot.p(2), robot.p(2)-dU_a(2)], 'g' )
    
         %repulsive potential
