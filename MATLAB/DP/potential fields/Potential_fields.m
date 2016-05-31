@@ -28,7 +28,6 @@ param.RRTstarrad = 15;      %Maximum length of lines redrawn by RRT*
 param.goalbias = .95;        %Probability of checking the goal as p_new
 param.maxpathlength = 20;    %Maximum length of any path segment.
 param.sensor_range = 4;
-%param.smoothiters = 150;    %Number of iterations for smoothing algorithm
 goal.r = .5;            %radius of goal
 robot.r = 0.75;
 robot.t = 0;
@@ -43,7 +42,7 @@ circle(p_goal(1,1),p_goal(2,1),goal.r,'g');
 ka = 1.2;        %attractive gain
 kr = .7;        %repulsive gain
 
-dt = .03;        %time step size (seconds)
+dt = .02;        %time step size (seconds)
 
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
@@ -58,7 +57,7 @@ while norm(robot.p - p_goal) > robot.r+goal.r
         %attractive potential
 %         dU_a = ka*(robot.p - p_goal)*sqrt(norm(robot.p - p_goal))/norm(robot.p - p_goal);
 %         dU_a = ka*(robot.p -p_goal);
-         dU_a = (robot.p - p_goal)/norm(robot.p - p_goal)*10
+         dU_a = (robot.p - p_goal)/norm(robot.p - p_goal)*25;
 
 %         plot([robot.p(1), robot.p(1)-dU_a(1)], [robot.p(2), robot.p(2)-dU_a(2)], 'g' )
    

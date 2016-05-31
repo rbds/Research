@@ -3,11 +3,14 @@ function [ robot ] = state_int( robot, F, dt )
 %   Detailed explanation goes here
 % robot.p = robot.p + dt*F';
 
+% t_d = robot.t + atan2(F(2), F(1)) ;
+t_d = robot.t;
 x2_d = [F, 0]'; %pull desired velocity
 x1_d = [robot.p; robot.t] + x2_d*dt; %integrate velocity to find 'desired position'
 
 x1 = x1_d - [robot.p(1); robot.p(2); robot.t]; %actual state for controller is the error in desired position
 x2 = x2_d - robot.v;    %error in desired velocity.
+% x2(3) = t_d;
 x2(3) = robot.v(3);
 
 x1_dot = x2;    %run this through ode45 substitute
@@ -17,7 +20,8 @@ x1_new = x1 + dt*x1_dot; %this is the output position error
 x2_new = x2 + dt*x2_dot; %this is the output velocity error
 
 robot.p = x1_d(1:2) - x1_new(1:2); %actual position is (desired - error)
-robot.t = x1_new(3);
+robot.t = x1_d(3) - x1_new(3);
+
 
 robot.v = x2_d - x2_new;
 end
