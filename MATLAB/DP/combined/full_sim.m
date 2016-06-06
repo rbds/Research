@@ -2,7 +2,7 @@ clear
 close all
 
 % subplot(1,3,1)
-ha = axes('units','normalized','position',[0 0 1.2 1.2]);
+ha = axes('units','normalized','position',[0 0 1.1 1.1]);
 
 uistack(ha,'bottom');
 
@@ -12,8 +12,8 @@ colormap gray
 
 set(ha,'handlevisibility','off','visible','off')
 
-% axes('position',[0 0 .99 .99])
-axes('position',[0 0 .95 .95])
+axes('position',[0 0 .99 .99])
+% axes('position',[0 0 .95 .95])
 axis off
 axis equal
 
@@ -227,7 +227,7 @@ robot.v = [0; 0; 0];
 circle(p_start(1,1),p_start(1,2),goal.r,'g');               %draw the location of x_start and x_goal
 
 ka = 2;        %attractive gain
-kr = 1.5;        %repulsive gain
+kr = 2;        %repulsive gain
 
 dt = .02;        %time step size (seconds)
 
