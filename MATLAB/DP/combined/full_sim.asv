@@ -13,7 +13,7 @@ colormap gray
 set(ha,'handlevisibility','off','visible','off')
 
 % axes('position',[0 0 .99 .99])
-axes('position',[0 0 .95 .95])
+axes('position',[0 0 .9 .9])
 axis off
 axis equal
 
@@ -136,7 +136,7 @@ end
 adj= sparse(i_vals, j_vals, vals); %one section of the adjacency matrix
 
 gplot(adj, coords, '*-') %plot graph
-axis([0 16 0 16])
+axis off
 
 [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
 
@@ -215,7 +215,7 @@ param.maxiters = 100;      %Cap on iterations to run RRT
 param.RRTstarrad = 15;      %Maximum length of lines redrawn by RRT*
 param.goalbias = .95;        %Probability of checking the goal as p_new
 param.maxpathlength = 20;    %Maximum length of any path segment.
-param.sensor_range = 3;
+param.sensor_range = 4;
 goal.r = .5;            %radius of goal
 robot.r = 0.4;
 robot.t = 0;
@@ -226,14 +226,14 @@ robot.v = [0; 0; 0];
 
 circle(p_start(1,1),p_start(1,2),goal.r,'g');               %draw the location of x_start and x_goal
 
-ka = 2;        %attractive gain
-kr = 1.5;        %repulsive gain
+ka = 1;        %attractive gain
+kr = 1.25;        %repulsive gain
 
 dt = .02;        %time step size (seconds)
 
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
-for ii = 1:(length(best_path)-1)
+for ii = 1:length(best_path)
     
     p_goal = coords(best_path(ii), :);
     while norm(robot.p - p_goal) > robot.r
@@ -247,7 +247,7 @@ for ii = 1:(length(best_path)-1)
             %attractive potential
     %         dU_a = ka*(robot.p - p_goal)*sqrt(norm(robot.p - p_goal))/norm(robot.p - p_goal);
     %         dU_a = ka*(robot.p -p_goal);
-             dU_a = (robot.p - p_goal)/norm(robot.p - p_goal)*ka;
+             dU_a = (robot.p - p_goal)/norm(robot.p - p_goal)*5;
 
 
             %repulsive potential

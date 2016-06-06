@@ -5,7 +5,8 @@ function [ obst ] = add_obstacles( )
 
 
 r = 0.25; %radius of trees
-points = [4, 6; 
+points = [2.2,2.5;
+          4, 6; 
           4 6.75;
           4, 7.25;
           4.25, 7.75;
