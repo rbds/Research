@@ -204,7 +204,8 @@ dt = .02;        %time step size (seconds)
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
 M(end+1) = getframe;
-for ii = 1:(length(best_path)-1)
+for ii = 1:(length(best_path))
+
     
     p_goal = coords(best_path(ii), :);
     while norm(robot.p - p_goal) > robot.r
@@ -251,10 +252,3 @@ for ii = 1:(length(best_path)-1)
     end
 
 end
-
-
-
-
-
-
-
