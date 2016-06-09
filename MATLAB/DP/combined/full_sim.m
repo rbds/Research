@@ -1,9 +1,12 @@
 clear
 close all
 
-% subplot(1,3,1)
-ha = axes('units','normalized','position',[0 0 1.1 1.1]);
+env = 'sample';
+% env = 'pipeline';
 
+% subplot(1,3,1)
+ha = axes('units','normalized','position',[0 0 1 1]);
+% ha = axes('units','normalized');
 uistack(ha,'bottom');
 
 I=imread('sample_map.png');
@@ -16,43 +19,10 @@ axes('position',[0 0 .99 .99])
 % axes('position',[0 0 .95 .95])
 axis off
 axis equal
+M(1) = getframe;
 
-costs =[01 .1 .1 01 01 01 .6 .6 01 01 01 01 01 01 01;
-        01 .1 .1 01 01 .3 .7 .6 01 01 01 01 .3 01 01;
-        01 .1 .1 01 01 .8 .8 .8 .9 01 01 .3 .6 .5 .4;
-        01 01 .1 .1 01 01 .9 .9 01 01 01 .3 .5 .5 .5;
-        01 01 01 .1 .1 01 01 01 01 01 01 01 01 .3 01;
-        01 01 01 01 .1 .1 .1 01 01 01 01 01 .9 .5 01;
-        01 .3 .3 .3 .3 01 .1 .1 01 01 01 .9 .9 .9 .5;
-        01 .3 .4 .6 .6 .3 .3 .1 01 01 01 .7 .9 .9 .9;
-        01 .3 .3 .7 .7 .3 .3 .3 .1 01 01 01 .8 .9 .9;
-        01 01 01 .6 .6 .5 01 01 .1 01 01 01 01 .5 .8;
-        01 01 01 01 01 01 01 .1 .1 01 01 01 01 .5 .7;
-        01 01 01 01 01 01 01 .1 01 01 01 01 01 01 01;
-        .1 .1 .1 .1 .1 .1 .1 01 01 01 01 01 .6 .4 01;
-        01 01 01 01 01 01 01 01 01 01 01 .3 .6 .6 01;
-        01 01 01 01 01 01 01 01 01 01 01 01 01 .4 01];
-
-costs = flipud(costs);
-
-% road low P_tr (should avoid)
-P_tr=sqrt([.99 .50 .50 .99 .99 .99 .75 .75 .99 .99 .99 .99 .99 .99 .99;
-           .99 .50 .50 .99 .99 .75 .75 .75 .85 .99 .99 .99 .85 .99 .99;
-           .99 .50 .50 .90 .99 .99 .75 .65 .75 .99 .99 .80 .75 .80 .95;
-           .99 .99 .65 .50 .50 .99 .99 .99 .99 .99 .99 .80 .75 .75 .75;
-           .99 .99 .99 .85 .50 .99 .99 .99 .75 .99 .99 .99 .90 .80 .99;
-           .99 .99 .99 .75 .50 .50 .75 .50 .99 .99 .99 .99 .99 .95 .99;
-           .99 .99 .99 .90 .99 .50 .50 .90 .99 .99 .99 .99 .99 .99 .99;
-           .99 .99 .99 .99 .99 .75 .75 .50 .75 .99 .99 .99 .99 .99 .99;
-           .99 .99 .99 .90 .99 .75 .99 .50 .50 .99 .99 .99 .99 .99 .99;
-           .99 .99 .75 .75 .75 .99 .99 .99 .50 .99 .99 .99 .99 .99 .99;
-           .99 .99 .99 .75 .75 .99 .99 .50 .50 .99 .99 .99 .99 .99 .99;
-           .99 .99 .99 .99 .99 .99 .50 .50 .99 .99 .99 .99 .99 .80 .99;
-           .50 .50 .50 .50 .50 .50 .50 .99 .99 .99 .99 .99 .75 .75 .99;
-           .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .75 .75;
-           .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .99 .75 .75]);
-      
-P_tr = flipud(P_tr);   
+%create obstacles
+[ costs, P_tr, obst ] = add_obstacles(env );
 
 %build adjacency matrix
 n_rows = 15; % must be at least 2x2.
@@ -67,10 +37,6 @@ dist = [];
 P_tr_thresh = .850;
 
 tic
-
-%create obstacles
-obst = add_obstacles();
-
 for i = 1:V    %for each row in adjacency matrix
    if (mod(i,n_cols) >0) %if it isn't on the right edge of grid 
     j_vals(end+1) = i; %add node to right
@@ -137,6 +103,7 @@ adj= sparse(i_vals, j_vals, vals); %one section of the adjacency matrix
 
 gplot(adj, coords, '*-') %plot graph
 axis([0 16 0 16])
+M(end+1) = getframe;
 
 [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
 
@@ -195,11 +162,13 @@ hold on
 for i=1:length(best_path)-1  %plot path
 %     plot(coords(best_path(i),1), coords(best_path(i),2), 'r*')
   h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-', 'LineWidth', 4);    
+M(end+1) = getframe;
 end
 axis off
 figure
 
-[c, p] = plot_paths( d, best_path, cost, P_tr, coords );
+[c, p] = plot_paths( d, best_path, cost, P_tr, coords);
+
 figure
 plot_maps(V, coords, costs, P_tr);
 
@@ -225,6 +194,7 @@ robot.v = [0; 0; 0];
 
 
 circle(p_start(1,1),p_start(1,2),goal.r,'g');               %draw the location of x_start and x_goal
+M(end+1) = getframe;
 
 ka = 2;        %attractive gain
 kr = 2;        %repulsive gain
@@ -233,6 +203,7 @@ dt = .02;        %time step size (seconds)
 
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
+M(end+1) = getframe;
 for ii = 1:(length(best_path)-1)
     
     p_goal = coords(best_path(ii), :);
@@ -241,7 +212,7 @@ for ii = 1:(length(best_path)-1)
     %     robot.x = [robot.p; robot.v];
         map = [];
         %%%%%%%%%%%do a sensor sweep
-        [ map, s ] = sensor( robot, obst, map, s, param.sensor_range, course);
+        [ map, s, M ] = sensor( robot, obst, map, s, param.sensor_range, course, M);
 
         %%%%%%%%%%%Find potential function
             %attractive potential
@@ -264,10 +235,11 @@ for ii = 1:(length(best_path)-1)
 
         %%%%%%%%%%%% Move robot for one timestep
             plot(robot.p(1), robot.p(2), 'gx')
+            M(end+1) = getframe;
             old_p = robot.p;
             robot = state_int(robot, F, dt);
             plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
-
+            M(end+1) = getframe;
             
     %         robot.p = robot.p + dt*F';
 
@@ -275,6 +247,7 @@ for ii = 1:(length(best_path)-1)
             h = draw_robot(robot);
             set(h, 'Visible', 'on')
             drawnow
+            M(end+1) = getframe;
     end
 
 end
