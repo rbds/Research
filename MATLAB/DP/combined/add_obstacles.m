@@ -1,13 +1,45 @@
-function [ costs, P_tr, obst ] = add_obstacles(env )
+function [ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 % close all
 
 if strcmp(env, 'pipeline')
     %use pipeline simulation. 
+    ha = axes('units','normalized','position',[0 0 1 1]);
+    uistack(ha,'bottom');
+
+    I=imread('pipeline_map.png');
+    hi = imagesc(I);
+    colormap gray
+
+    set(ha,'handlevisibility','off','visible','off')
     
+    axes('position',[0 0 .99 .99])
+    axis([0 500 0 200])
+    axis off
+%     axis equal
+    n_rows = 500; % must be at least 2x2.
+    n_cols = 200;
+    obst = zeros(10,3);    
+    costs = ones(n_rows, n_cols);
+    P_tr = 0.2*ones(n_rows, n_cols);
 else
     %sample environment
+    ha = axes('units','normalized','position',[0 0 1 1]);
+    uistack(ha,'bottom');
+
+    I=imread('sample_map.png');
+    hi = imagesc(I);
+    colormap gray
+
+    set(ha,'handlevisibility','off','visible','off')
+
+    axes('position',[0 0 .99 .99])
+    axis off
+    axis equal
+    n_rows = 15; % must be at least 2x2.
+    n_cols = 15;
+    
     costs =[01 .1 .1 01 01 01 .6 .6 01 01 01 01 01 01 01;
             01 .1 .1 01 01 .3 .7 .6 01 01 01 01 .3 01 01;
             01 .1 .1 01 01 .8 .8 .8 .9 01 01 .3 .6 .5 .4;

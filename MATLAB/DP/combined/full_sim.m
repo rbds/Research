@@ -1,33 +1,13 @@
 clear
 close all
 
-env = 'sample';
-% env = 'pipeline';
-
-% subplot(1,3,1)
-ha = axes('units','normalized','position',[0 0 1 1]);
-% ha = axes('units','normalized');
-uistack(ha,'bottom');
-
-I=imread('sample_map.png');
-hi = imagesc(I);
-colormap gray
-
-set(ha,'handlevisibility','off','visible','off')
-
-axes('position',[0 0 .99 .99])
-% axes('position',[0 0 .95 .95])
-axis off
-axis equal
-M(1) = getframe;
+% env = 'sample';
+env = 'pipeline';
 
 %create obstacles
-[ costs, P_tr, obst ] = add_obstacles(env );
-
+[ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env );
+M(1) = getframe;
 %build adjacency matrix
-n_rows = 15; % must be at least 2x2.
-n_cols = 15;
-% s = 15;
 V = n_rows*n_cols; %total number of nodes
 % N = V^2;
 i_vals = [];
@@ -101,8 +81,8 @@ for i=1:length(i_vals)
 end
 adj= sparse(i_vals, j_vals, vals); %one section of the adjacency matrix
 
-gplot(adj, coords, '*-') %plot graph
-axis([0 16 0 16])
+% gplot(adj, coords, '*-') %plot graph
+% axis([0 16 0 16])
 M(end+1) = getframe;
 
 [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
@@ -170,7 +150,7 @@ figure
 [c, p] = plot_paths( d, best_path, cost, P_tr, coords);
 
 figure
-plot_maps(V, coords, costs, P_tr);
+% plot_maps(V, coords, costs, P_tr);
 
 figure(1)
 
