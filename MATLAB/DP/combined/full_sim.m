@@ -150,7 +150,7 @@ figure
 [c, p] = plot_paths( d, best_path, cost, P_tr, coords);
 
 figure
-% plot_maps(V, coords, costs, P_tr);
+plot_maps(V, coords, costs, P_tr);
 
 figure(1)
 

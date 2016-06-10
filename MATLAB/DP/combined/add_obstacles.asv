@@ -24,8 +24,7 @@ if strcmp(env, 'pipeline')
     costs = 0.2*ones(n_rows, n_cols);
     P_tr = 0.95*ones(n_rows, n_cols);
     
-    costs(1:125,105:117) = .5;
-    
+    costs(1:125,105:117) = .5
     
 else
     %sample environment
