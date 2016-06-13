@@ -21,8 +21,10 @@ if strcmp(env, 'pipeline')
     n_rows = 500; % must be at least 2x2.
     n_cols = 200;
     obst = zeros(10,3);    
-    costs = 0.2*ones(n_rows, n_cols);
-    P_tr = 0.95*ones(n_rows, n_cols);
+    costs = abs(0.5 + randn(n_rows,n_cols).*0.2.*ones(n_rows, n_cols));
+%     costs = 0.2.*ones(n_rows, n_cols);
+%     P_tr = 0.95*ones(n_rows, n_cols);
+    P_tr = min(1,.9 + 0.5.*abs(randn(n_rows, n_cols)));   %*ones(n_rows, n_cols);
     
     costs(1:125,105:117) = .5;
     

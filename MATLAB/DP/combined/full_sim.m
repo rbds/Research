@@ -98,7 +98,12 @@ for i=V:-1:1 %counting back from last populated column in adjacency matrix,
         V_col = mod(col, V);
         if (V_col==0) V_col = V; end 
     conns = find(adj(:,col)~=0);    %find entries in column col
-
+    
+    if mod(i,1000)==0
+       disp('on column: ')
+       disp(i)
+    end
+    
     for j=1:length(conns)   %for each connection,
         if isempty(d{conns(j)})
             options = [];
@@ -113,7 +118,7 @@ for i=V:-1:1 %counting back from last populated column in adjacency matrix,
         
     options = [options; new_options];
     [front, inds] = prto(options);
-    
+       
     if isempty(front) 
         d{conns(j),1} = options;
 
