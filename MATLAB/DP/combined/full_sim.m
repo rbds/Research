@@ -1,8 +1,8 @@
 clear
 close all
 
-% env = 'sample';
-env = 'pipeline';
+env = 'sample';
+% env = 'pipeline';
 
 %create obstacles
 [ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env );
@@ -81,8 +81,10 @@ for i=1:length(i_vals)
 end
 adj= sparse(i_vals, j_vals, vals); %one section of the adjacency matrix
 
-% gplot(adj, coords, '*-') %plot graph
-% axis([0 16 0 16])
+if strcmp(env, 'sample')
+    gplot(adj, coords, '*-') %plot graph
+    axis([0 16 0 16])
+end
 M(end+1) = getframe;
 
 [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
