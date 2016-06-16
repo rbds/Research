@@ -161,7 +161,7 @@ plot_maps(V, coords, costs, P_tr);
 
 figure(1)
 
-p_start = [1,1]; 
+p_start = [1;1]; 
 course = [1 1 15 15];
 s = [];
 map = [];
@@ -171,7 +171,7 @@ param.maxiters = 100;      %Cap on iterations to run RRT
 param.RRTstarrad = 15;      %Maximum length of lines redrawn by RRT*
 param.goalbias = .95;        %Probability of checking the goal as p_new
 param.maxpathlength = 20;    %Maximum length of any path segment.
-param.sensor_range = 3;
+param.sensor_range = 4;
 goal.r = .5;            %radius of goal
 robot.r = 0.4;
 robot.t = 0;
@@ -180,21 +180,22 @@ robot.p = p_start;               %set robot position to x_start
 robot.v = [0; 0; 0];
 
 
-circle(p_start(1,1),p_start(1,2),goal.r,'g');               %draw the location of x_start and x_goal
+circle(p_start(1),p_start(1),goal.r,'g');               %draw the location of x_start and x_goal
 M(end+1) = getframe;
 
 ka = 2;        %attractive gain
-kr = 2;        %repulsive gain
+kr = 4;        %repulsive gain
 
-dt = .02;        %time step size (seconds)
+dt = .05;        %time step size (seconds)
 
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
 M(end+1) = getframe;
+F = [0 0];
 for ii = 1:(length(best_path))
 
     
-    p_goal = coords(best_path(ii), :);
+    p_goal = coords(best_path(ii), :)';
     while norm(robot.p - p_goal) > robot.r
         %%%%%%%%%Define robot position
     %     robot.x = [robot.p; robot.v];
@@ -211,21 +212,22 @@ for ii = 1:(length(best_path))
 
             %repulsive potential
             dU_r = zeros(size(map,1),2);
-            for i=1:size(map,1)
-                for jj = size(map(i).p,1)
-                    d_to_obst = norm(-map(i).p(jj,:) + robot.p);
-                    del_r = (-map(i).p(jj,:) + robot.p)/norm(-map(i).p(jj,:) + robot.p);
-                    dU_r(i,:) = kr*(1/param.sensor_range - 1/d_to_obst)*1/d_to_obst^2*del_r;
+            for ii=1:size(map,1)
+                for jj = size(map(ii).p,1)
+                    d_to_obst = norm(-map(ii).p(jj,:) + robot.p');
+                    del_r = (-map(ii).p(jj,:) + robot.p')/norm(-map(ii).p(jj,:) + robot.p');
+                    dU_r(ii,:) = kr*(1/param.sensor_range - 1/d_to_obst)*1/d_to_obst^2*del_r;
                 end
             end
-            
-            F = sum([-dU_a; -dU_r],1);
+            Fold = F;
+            F = sum([-dU_a'; -dU_r],1);
 
         %%%%%%%%%%%% Move robot for one timestep
             plot(robot.p(1), robot.p(2), 'gx')
             M(end+1) = getframe;
             old_p = robot.p;
-            robot = state_int(robot, F, dt);
+            xdd = F-Fold; %previous desired velocity.    
+            robot = state_int(robot, F, dt, xdd);
             plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
             M(end+1) = getframe;
             

@@ -28,7 +28,7 @@ param.maxiters = 100;      %Cap on iterations to run RRT
 param.RRTstarrad = 15;      %Maximum length of lines redrawn by RRT*
 param.goalbias = .95;        %Probability of checking the goal as p_new
 param.maxpathlength = 20;    %Maximum length of any path segment.
-param.sensor_range = 4;
+param.sensor_range = 6;
 goal.r = .5;            %radius of goal
 robot.r = 0.75;
 robot.t = 0;
@@ -37,16 +37,17 @@ robot.p = p_start;               %set robot position to x_start
 robot.v = [0; 0; 0];
 
 
-circle(p_start(1,1),p_start(2,1),goal.r,'g');               %draw the location of x_start and x_goal
-circle(p_goal(1,1),p_goal(2,1),goal.r,'g');
+circle(p_start(1),p_start(2),goal.r,'g');               %draw the location of x_start and x_goal
+circle(p_goal(1),p_goal(2),goal.r,'g');
 
 ka = 1;        %attractive gain
-kr = .7;        %repulsive gain
+kr = 1.7;        %repulsive gain
 
 dt = .02;        %time step size (seconds)
 
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
+F = [0 0];
 while norm(robot.p - p_goal) > robot.r+goal.r
     %%%%%%%%%Define robot position
 %     robot.x = [robot.p; robot.v];
@@ -75,9 +76,9 @@ while norm(robot.p - p_goal) > robot.r+goal.r
 %         dv = sum([-dU_a'; -dU_r],1);
 %         dtheta = atan2(dv(2), dv(1));
 %         F = [dv'; dtheta];
-
+        Fold = F;
         F = sum([-dU_a'; -dU_r],1);
-            
+        xdd = F-Fold; %previous desired velocity.    
 %             F = [2, 0];
         
     %%%%%%%%%%%% Calculate new control input    
@@ -91,7 +92,7 @@ while norm(robot.p - p_goal) > robot.r+goal.r
 
         plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
         
-        robot = state_int(robot, F, dt);
+        robot = state_int(robot, F, dt, xdd);
 %         robot.p = robot.p + dt*F';
             
         set(h, 'Visible', 'off')

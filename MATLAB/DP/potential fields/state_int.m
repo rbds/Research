@@ -1,4 +1,4 @@
-function [ robot ] = state_int( robot, F, dt )
+function [ robot ] = state_int( robot, F, dt, xdd )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 % robot.p = robot.p + dt*F';
@@ -15,7 +15,7 @@ x1(3) = atan2(F(2), F(1));
 % x2(3) = robot.v(3);
 
 x1_dot = x2;    %run this through ode45 substitute
-x2_dot = x_diff(x1, x2);
+x2_dot = x_diff(x1, x2,  dt, xdd);
 
 x1_new = x1 + dt*x1_dot; %this is the output position error
 x2_new = x2 + dt*x2_dot; %this is the output velocity error
@@ -27,7 +27,7 @@ robot.v = x2_d - x2_new;
 % robot.v(3) = x2_new(3);
 end
 
-function [x_ddot] = x_diff(x1, x2)
+function [x_ddot] = x_diff(x1, x2,  dt, xdd)
 %actual values
 m = 116;
 I = 20;
@@ -50,12 +50,12 @@ c = [Rx*cos(x1(3)) - Fy*sin(x1(3)); Rx*sin(x1(3)) + Fy*cos(x1(3)); Mr];
 E = [cos(x1(3))/r, cos(x1(3))/r; sin(x1(3))/r, sin(x1(3))/r; t/r, -t/r];
 inv_E = inv(E'*E)*E';
 
-u = control(x1, x2);
+u = control(x1, x2,  dt, xdd);
 
 x_ddot =  M\(E*u - c);
 end
 
-function u = control(x1, x2)
+function u = control(x1, x2,  dt, xdd)
 s = x1(1:2) + x2(1:2);
 
 m = 116;
@@ -78,8 +78,10 @@ c = [Rx*cos(x1(3)) - Fy*sin(x1(3)); Rx*sin(x1(3)) + Fy*cos(x1(3)); Mr];
 E = [cos(x1(3))/r, cos(x1(3))/r; sin(x1(3))/r, sin(x1(3))/r; t/r, -t/r];
 inv_E = inv(E'*E)*E';
 
-rho = abs(x2) + inv(M)*c;
-beta = [5; 5; 1];
+xdd2 = (x2 - [xdd'; 0]);
+rho = abs(x2) + abs(xdd2) + M\c;
+% rho = abs(x2) + inv(M)*c;
+beta = [2; 2; 1];
 eps = .1;
 
 u = -inv_E*M*(rho + beta).*sat(s/eps);
