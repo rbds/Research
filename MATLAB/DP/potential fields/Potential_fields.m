@@ -18,7 +18,7 @@ obst = draw_obstacles(numberOfObstacles, course);
 
 % Set Start and Goal locations
 p_start = [5;28];
-p_goal = [31; 6];
+p_goal = [22; 6];
 
 % Parameters 
 param.res = 0.25;            %Resolution of intermediate points. Must be <0.25 for InCollision_Edge to run.
@@ -39,9 +39,9 @@ robot.v = [0; 0; 0];
 circle(p_start(1,1),p_start(2,1),goal.r,'g');               %draw the location of x_start and x_goal
 circle(p_goal(1,1),p_goal(2,1),goal.r,'g');
 
-ka = 1.2;        %attractive gain
+ka = 2.5;        %attractive gain
 kr = .7;        %repulsive gain
-q_thresh = 10;  %max distance for obstacle to produce a virtual force
+q_thresh = 5;  %max distance for obstacle to produce a virtual force
 
 dt = .01;        %time step size (seconds)
 
