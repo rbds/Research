@@ -12,8 +12,8 @@ for i= 1:length(pts)-1
         h = pts(1,i);
         k = pts(2,i);
         theta = pts(3,i);
-        a = sqrt(v.sigma(1))+abs(1*randn(1));  %uncertainty in ellipse, plus some new uncertainty
-        b = sqrt(v.sigma(2))+abs(1*randn(1));
+        a = sqrt(v.sigma(1))+abs(0.1*randn(1));  %uncertainty in ellipse, plus some new uncertainty
+        b = sqrt(v.sigma(2))+abs(0.1*randn(1));
 
         collision(i) = ellipse(h,k,theta,a,b, constraint, obs); %#ok<AGROW>
     end

@@ -5,7 +5,7 @@ clf
 x_start = [3; 3];
 x_goal = [50; 50];        %define goal region as a function of x, y position.
 opt_dist = norm(x_start - x_goal);
-max_iters = 250;        %number of iterations to run
+max_iters = 500;        %number of iterations to run
 count=1;
 course = [0 0 50 50];     %course size - rectangular (x1 y1 x2 y2)
  chance_constraint = .05;   
@@ -75,7 +75,7 @@ while count <max_iters
     v_nearest = V{imin(1),imin(2)}.x;                           %chooses single closest point. Consider changing this to a k-nearest search
     [edge] = connect(v_nearest, x_new);
    %draw ellipses, propagate
-   [success, x_ret] = propagate(edge, V{imin(1), imin(2)}, x_new,  chance_constraint, obstacles);
+   [success, x_ret] = propogate(edge, V{imin(1), imin(2)}, x_new,  chance_constraint, obstacles);
    if success == 1 %if there is a connection
         %add x_new to v
         %calculate properties of x_new (like cost, SOC)
@@ -140,7 +140,7 @@ while count <max_iters
             for k=1:length(v_near) %for all vneighbor of v(n)
                 [e_near] = connect(V{v_near(k),1}.x, V{n(1),n(2)}.x);
                 %n = PROPAGATE(e_near, n)
-                [success, n_new] = propagate(e_near, V{v_near(k),1}, V{n(1),n(2)}.x, chance_constraint, obstacles);
+                [success, n_new] = propogate(e_near, V{v_near(k),1}, V{n(1),n(2)}.x, chance_constraint, obstacles);
                 if (success) %if node can successfully be propagated
                           least_cost = 1000;
                           for i = 1:(size(V,2)) %find the node in v_nearest with the lowest cost 

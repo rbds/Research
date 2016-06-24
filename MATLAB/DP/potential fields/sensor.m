@@ -16,6 +16,7 @@ lines(:,4) = y2;
 for i = 1:length(x1)
  set(s, 'visible','off')
  s = plot([max(x1(i), course(1)); max(course(1),min(x2(i), course(3)))],[max(y1(i), course(2)); min(y2(i), course(4))], 'k');
+
  set(s, 'visible', 'on')
  pause(.001);
 %  M(end+1) = getframe;
