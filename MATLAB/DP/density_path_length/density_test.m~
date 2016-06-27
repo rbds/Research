@@ -1,0 +1,24 @@
+clear
+
+
+env = 10000; % size of environment (total area).
+N = 100; %number of circles
+centers= (env*2-1).*rand(2,N) + 0;
+
+% put obstacles in environment
+course = [0 0 sqrt(env) sqrt(env)];
+
+% Draw Course    
+obst = draw_obstacles(N, centers, course);
+
+% define start and end points
+p_start = [1;2];
+p_goal = [41; 6];
+% run RRT 1000 iterations?
+
+%output path length.
+
+%
+
+%
+
