@@ -1,4 +1,4 @@
-%Belief Space Naviation
+%Belief Space Navigation
 clear
 close
 
