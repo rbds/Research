@@ -8,7 +8,7 @@ subplot(1,2,1)
 for ii = 1:V
     v = [ coords(ii,1)-0.5 coords(ii,2)-0.5; coords(ii,1)-0.5 coords(ii,2)+0.5; coords(ii,1)+0.5 coords(ii,2)+0.5; coords(ii,1)+0.5  coords(ii,2)-0.5 ];
 %     patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [0 0 1], 'FaceAlpha', costs(i).^.5)
-    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [1-min(costs(ii),1).^.5, 1-min(costs(ii),1)^.5, 1-min(costs(ii),1).^.5])
+    patch('Faces', [1 2 3 4], 'Vertices', v, 'FaceColor', [1-costs(ii).^.5, 1-costs(ii)^.5, 1-costs(ii)^.5])
 end
 
 axis off

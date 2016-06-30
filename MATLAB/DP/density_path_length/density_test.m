@@ -2,9 +2,8 @@ clear
 
 
 env = 10000; % size of environment (total area).
-N = [100, 250, 500, 1000, 1500, 2000, 2500, 3000, 4000, 5000];  
-% N = 250; %number of circles
-ni = 10;
+N = [100, 250, 500, 1000, 1500, 2000]; %, 2500, 3000, 4000, 5000];  
+ni = 25;
 
 path_lengths = zeros(length(N), ni);
 num_legs = zeros(length(N),ni);

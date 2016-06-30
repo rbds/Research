@@ -154,7 +154,7 @@ end
 axis off
 figure
 
-[c, p] = plot_paths( d, best_path, cost, P_tr, coords);
+[c, p] = plot_paths( d, best_path, costs, P_tr, coords);
 
 figure
 plot_maps(V, coords, costs, P_tr);
