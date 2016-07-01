@@ -76,7 +76,7 @@ end
 
 
 % % % energy sources for pipeline
-energy_sources = [2, 18.5; 17.25,18.25;24,2.75;34,2.75;42,16.5;49,1.5]; 
+energy_sources = [2, 18.5; 
 
 
 
@@ -100,20 +100,14 @@ P_tr(V) = 1;
 d{V,1} = []; %create d vector to store cost, P_tr, parents for each entry in adj.
   
 %put nodes in topological order.
-if strcmp(env, 'pipeline')
-    start_node = 11;
-    target_node = 988;
-    dists = zeros(V,1);
-    for jj = 1:V
-        dists(jj) = norm([coords(jj,1) coords(jj,2)] - [coords(target_node,1) coords(target_node,2)]);
-    end
-    [y, rows_to_do] = sort(dists, 'ascend');
-else
-    start_node = 1;
-    target_node = V;
-    rows_to_do = V:-1:1;
-    rows_to_do  = rows_to_do';
+start_node = 11;
+target_node = 988;
+dists = zeros(V,1);
+for jj = 1:V
+    dists(jj) = norm([coords(jj,1) coords(jj,2)] - [coords(target_node,1) coords(target_node,2)]);
 end
+[y, rows_to_do] = sort(dists, 'ascend');
+
 d{target_node} = [0 1 target_node];
 
 % for i=V:-1:1 %counting back from last populated column in adjacency matrix,
@@ -194,7 +188,7 @@ param.RRTstarrad = 15;      %Maximum length of lines redrawn by RRT*
 param.goalbias = .95;        %Probability of checking the goal as p_new
 param.maxpathlength = 20;    %Maximum length of any path segment.
 param.sensor_range = 4;
-param.gas_tank = 45;
+param.gas_tank = 100;
 goal.r = .5;            %radius of goal
 robot.r = 0.4;
 robot.t = 0;
@@ -217,8 +211,6 @@ M(end+1) = getframe;
 F = [0 0];
 dif = 0;
 t_dist = 0;
-
-% obst = [2,5];
 
 for ii = 1:(length(best_path))
     p_goal = coords(best_path(ii), :)';
@@ -263,16 +255,13 @@ for ii = 1:(length(best_path))
                 break
             end
             t_dist = t_dist + dif;
-            
             if ~need_energy
                 if strcmp(env, 'pipeline')
-                    d_e = d_to_e( robot.p(1:2), energy_sources);
-%                     d_e = norm(robot.p(1:2) - closest_energy);
+                    d_e = norm(robot.p(1:2) - closest_energy);
                     gas_left = param.gas_tank - t_dist;
                     if d_e*1.25 > gas_left
                         p_goal = closest_energy;
                         need_energy = 1;
-                        disp('need energy')
                     end
                 end
              end         

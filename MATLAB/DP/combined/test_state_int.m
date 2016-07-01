@@ -4,15 +4,15 @@ close all
 robot.r = 0.75; %robot parameters
 robot.t = 0;
 
-robot.p = [0; 0];               %initialize robot position to x_start
-% robot.p = [5;28];
+% robot.p = [0; 0];               %initialize robot position to x_start
+robot.p = [5;28]';
 robot.v = [0; 0; 0];
 
 dt = 0.01;          %timestep
 t = 0:dt:30;
 
 x_d = [2*cos(0.5*t); 2*sin(0.5*t)]';    %desired trajectory (x and y velocity).
-% x_d = 12*[ones(length(t),2)];
+% x_d = 12*[ones(3500,2)];
 
 
 x1 = [0 0 0]; %robot position
@@ -35,4 +35,4 @@ plot(t, x2)
 hold on
 plot(t, x_d(:,1), 'k--', t, x_d(:,2), 'k--')
 title('actual and desired velocities')
-legend('xdot', 'ydot', 'theta_{dot}')
+legend('xdot', 'ydot', 'theta_dot')

@@ -127,7 +127,11 @@ else
               14.25 13;
               14.25 12.25;
               15 12;
-              14.75 13]; %centers of trees
+              14.75 13;
+              9, 4;
+              9 4.5;
+              9.3 4.4;
+              8.9 3.8]; %centers of trees
 
     obst = zeros(length(points),3);       
     for ii = 1:length(points)

@@ -78,9 +78,10 @@ c = [Rx*cos(x1(3)) - Fy*sin(x1(3)); Rx*sin(x1(3)) + Fy*cos(x1(3)); Mr];
 E = [cos(x1(3))/r, cos(x1(3))/r; sin(x1(3))/r, sin(x1(3))/r; t/r, -t/r];
 inv_E = inv(E'*E)*E';
 
-xdd2 = (x2 - [xdd'; 0]);
-rho = abs(x2) + abs(xdd2) + M\c;
-% rho = abs(x2) + inv(M)*c;
+% xdd2 = (x2 - [xdd'; 0]);
+xdd2 = x2 - xdd';
+% rho = abs(x2) + abs(xdd2) + M\c;
+rho = abs(x2) + inv(M)*c;
 beta = [2; 2; 1];
 eps = .1;
 
