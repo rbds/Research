@@ -24,8 +24,8 @@ E = {};                 %list of edges between nodes. define by a list of interm
 Q = [];                 %priority queue
 %create obstacles - need to turn this into a function, create more complex
 %obstacles.
-obstacles(:,1) = linspace(12, 15, 25);
-obstacles(:,2) = linspace(10, 15, 25);
+obstacles(:,1) = linspace(12, 25, 25);
+obstacles(:,2) = linspace(10, 45, 25);
 
 %state space motion model
 A = 1;
