@@ -125,7 +125,7 @@ plot_maps(V, coords, costs, P_tr);
 
 figure(1)
 
-p_start =  coords(start_node,:)'; 
+p_start = [1;1]; 
 course = [1 1 15 15];
 s = [];
 map = [];
@@ -161,18 +161,12 @@ dif = 0;
 t_dist = 0;
 
 % obst = [2,5];
-% ii = 0;
-
-for ii = 1:(length(best_path))
-% while norm(robot.p - coords(target_node)) > 1
-%     ii = ii+1;
+ii = 0;
+% for ii = 1:(length(best_path))
+while norm(robot.p - coords(target_node)) > 1
+    ii = ii+1;
     p_goal = coords(best_path(ii), :)';
     need_energy = 0;
-    if need_energy
-       ii = ii-1; %push index back down
-       jj = jj+1;
-       p_goal = path2e(jj); %replace next target with path to energy source
-    end
     while norm(robot.p - p_goal) > robot.r
         %%%%%%%%%Define robot position
     %     robot.x = [robot.p; robot.v];
@@ -218,12 +212,11 @@ for ii = 1:(length(best_path))
                     gas_left = param.gas_tank - t_dist;
                     if d_e*1.25 > gas_left
 %                         p_goal = closest_energy';
-                        need_energy = 1;
+%                         need_energy = 1;
                         disp('need energy')
                         %replan path to closest energy source:
-                        [d, path2e] =  find_path(best_path(ii), 663, env, V, d, adj, coords, P_tr, P_tr_thresh);
+                        [d, path2e] =  find_path(best_path(ii), closest_energy', env, V, d, adj, coords, P_tr, P_tr_thresh);
                         p_goal = coords(path2e(1));
-                        jj = 1;
                     end
                 end
              end         

@@ -1,4 +1,4 @@
-v = VideoWriter('sample_env','MPEG-4' );
+v = VideoWriter('pipeline','MPEG-4' );
 v.FrameRate = 75;
 v.Quality = 50;
 open(v)

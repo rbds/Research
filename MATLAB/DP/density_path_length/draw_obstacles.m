@@ -8,7 +8,7 @@ function [ obst ] = draw_obstacles( num_obst, centers, course )
      % % Uncomment here for random obstacles, and  comment out below.
 obst = [];
 nsides = 4; %number of sides in each obstacle
-lsides = 5; %length of each side.
+lsides = 1; %length of each side.
 points = centers;%starting points
 % 
 % x = points(1, :) .*(course(3) - course(1)) + course(1);
