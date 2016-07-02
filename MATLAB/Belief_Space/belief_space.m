@@ -25,8 +25,8 @@ n_lowest = 1;
 Q = [1 1];
 %create obstacles - need to turn this into a function, create more complex
 %obstacles.
-obstacles(:,1) = linspace(20, 30, 250);
-obstacles(:,2) = linspace(20, 51, 250);
+obstacles(:,1) = linspace(20, 30, 500);
+obstacles(:,2) = linspace(20, 51, 500);
 
 %state space motion model
 % x = [x_pos, y_pos, theta]'
