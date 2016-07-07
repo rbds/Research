@@ -79,12 +79,12 @@ E = [cos(x1(3))/r, cos(x1(3))/r; sin(x1(3))/r, sin(x1(3))/r; t/r, -t/r];
 inv_E = inv(E'*E)*E';
 
 xdd2 = (x2 - [xdd'; 0]);
-% rho = abs(x2) + abs(xdd2) + M\c;
-rho = abs(x2) + inv(M)*c;
+rho = abs(x2) + abs(xdd2) + M\c;
+% rho = abs(x2) + inv(M)*c;
 beta = [3;3;3];
 eps = .1;
 
-u = -inv_E*M*(rho + beta).*sat(s/eps);
+u = inv_E*M*(rho + beta).*sat(s/eps);
 % u = -inv_E*(c+M*2*x2);
 end
 
