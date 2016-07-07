@@ -84,7 +84,7 @@
 
 figure
 plot(N./env, p/norm(p_goal-p_start), 'b*', 'LineWidth', 5)
-f = fit(N(1:end-1)'./env, p(1:end-1)/norm(p_goal-p_start),'exp2');
+% f = fit(N(1:end-1)'./env, p(1:end-1)/norm(p_goal-p_start),'exp2');
 hold on
 plot(f, 'r')
 title('Path Length vs. Obstacle Density')
@@ -92,3 +92,4 @@ xlabel('Obstacle Density (%)')
 ylabel('Ratio of path length to straight line')
 legend('numerical simulation', 'exponential curve fit')
 set(gca,'fontsize', 18)
+
