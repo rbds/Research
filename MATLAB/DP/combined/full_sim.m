@@ -1,8 +1,8 @@
 clear
 close all
 % 
-% env = 'sample';
-env = 'pipeline';
+env = 'sample';
+% env = 'pipeline';
 
 %create obstacles
 [ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env );
