@@ -43,6 +43,7 @@ E = [cos(x1(3))/r, cos(x1(3))/r; sin(x1(3))/r, sin(x1(3))/r; t/r, -t/r];
 inv_E = inv(E'*E)*E';
 
 
+
 % rho = abs(x2) + inv(M)*c;
 beta = 5;
 eps = .1;
@@ -56,6 +57,7 @@ rho = abs(x2) + abs(xdd2) + M\c;
 % u = inv_E*M*(rho + beta).*sat(s/eps);
 
 s = x1(1:2) + x2(1:2);
+
 u = inv_E*M*(-rho + beta).*sat(s/eps);
 
 x_ddot =  M\(E*u - c);

@@ -13,7 +13,7 @@ i_vals = [];
 j_vals = [];
 dist = [];
 
-targets = [1, 11; 3,12; 5,11; 10,11; 14,9; 20,9; 25,9; 30,9; 36,4];% 38,8; 40,8; 45, 7; 50,7];
+targets = [1, 11; 3,12; 5,11; 10,11; 14,9; 20,9; 25,9; 30,9; 36,4 ; 38,8; 40,8; 45, 7; 50,7];
 tar = 1;
 
 P_tr_thresh = .850;
@@ -149,6 +149,8 @@ F = [0 0];
 dif = 0;
 t_dist = 0;
 
+
+clear adj d dist i_vals j_vals vals
 for ii = 1:(length(bp))
     p_goal = coords(bp(ii), :)';
 %     need_energy = 0;

@@ -81,14 +81,16 @@ inv_E = inv(E'*E)*E';
 
 xdd2 = (x2 - [xdd'; 0]);
 
+rho = abs(x2) + abs(xdd2) + M\c;
+=======
 % xdd2 = (x2 - xdd');
 rho = abs(x2) + abs(xdd2)+ M\c;
-
+>>>>>>> 2b48597e1f45832717d405f2609d6c3ff302d23e
 % rho = abs(x2) + inv(M)*c;
 beta = [3;3;3];
 eps = .1;
 
-u = -inv_E*M*(-rho + beta).*sat(s/eps);
+u = inv_E*M*(-rho + beta).*sat(s/eps);
 % u = -inv_E*(c+M*2*x2);
 end
 
