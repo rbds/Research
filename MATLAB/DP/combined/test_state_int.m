@@ -11,8 +11,8 @@ robot.v = [0; 0; 0];
 dt = 0.01;          %timestep
 t = 0:dt:30;
 
-x_d = [2*cos(0.5*t); 2*sin(0.5*t)]';    %desired trajectory (x and y velocity).
-% x_d = 12*[ones(3500,2)];
+% x_d = [2*cos(0.5*t); 2*sin(0.5*t)]';    %desired trajectory (x and y velocity).
+x_d = 12*[ones(3500,2)];
 
 
 x1 = [0 0 0]; %robot position

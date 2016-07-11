@@ -13,7 +13,7 @@ i_vals = [];
 j_vals = [];
 dist = [];
 
-targets = [1, 11; 3,12; 5,11; 10,11; 14,9; 20,9; 25,9; 30,9; 36,4];% 38,8; 40,8; 45, 7; 50,7];
+targets = [1, 11; 3,12; 5,11; 10,11; 14,9; 20,9; 25,9; 30,9; 36,4; 38,8; 40,8; 45, 7; 50,7];
 tar = 1;
 
 P_tr_thresh = .850;
@@ -107,12 +107,14 @@ for jj= 1:length(targets)-1
     M(end+1) = getframe;
     end
     axis off
+
+    %go to energy source:
     
     bp = cat(2, bp, best_path);
 end
 
 
-p_start =  coords(bp(1),:)'; 
+p_start =  coords(start_node,:)'; 
 course = [1 1 15 15];
 s = [];
 map = [];
@@ -135,10 +137,10 @@ robot.v = [0; 0; 0];
 % circle(p_start(1),p_start(1),goal.r,'g');               %draw the location of x_start and x_goal
 M(end+1) = getframe;
 
-ka = 1.5;        %attractive gain
+ka = 2;        %attractive gain
 kr = 3;        %repulsive gain
 
-dt = .02;        %time step size (seconds)
+dt = .05;        %time step size (seconds)
 
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
@@ -147,15 +149,15 @@ F = [0 0];
 dif = 0;
 t_dist = 0;
 
-for ii = 1:(length(bp))
-    p_goal = coords(bp(ii), :)';
-%     need_energy = 0;
-%     if need_energy
-%        ii = ii-1; %push index back down
-%        jj = jj+1;
-%        p_goal = path2e(jj); %replace next target with path to energy source
-%     end
-    while norm(robot.p - p_goal) > robot.r + .2
+for ii = 1:(length(best_path))
+    p_goal = coords(best_path(ii), :)';
+    need_energy = 0;
+    if need_energy
+       ii = ii-1; %push index back down
+       jj = jj+1;
+       p_goal = path2e(jj); %replace next target with path to energy source
+    end
+    while norm(robot.p - p_goal) > robot.r
         %%%%%%%%%Define robot position
     %     robot.x = [robot.p; robot.v];
         map = [];
@@ -187,11 +189,11 @@ for ii = 1:(length(bp))
 %             robot = si(robot, F, dt);
             plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
             M(end+1) = getframe;
-%             dif = norm(old_p - robot.p(1:2));
-%             if dif < .05
-%                 disp('break')
-%                 break
-%             end   
+            dif = norm(old_p - robot.p(1:2));
+            if dif < .05
+                disp('break')
+                break
+            end   
 
             set(h, 'Visible', 'off')
             h = draw_robot(robot);
