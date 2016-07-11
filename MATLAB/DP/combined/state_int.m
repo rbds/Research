@@ -11,7 +11,8 @@ x1_d = [robot.p; robot.t] + x2_d*dt; %integrate velocity to find 'desired positi
 
 x1 = x1_d - [robot.p(1); robot.p(2); robot.t]; %actual state for controller is the error in desired position
 x2 = x2_d - robot.v;    %error in desired velocity.
-x1(3) = atan2(F(2), F(1));
+% x1(3) = atan2(F(2), F(1));
+x1(3) = 0;
 % x2(3) = robot.v(3);
 
 x1_dot = x2;    %run this through ode45 substitute
@@ -79,12 +80,13 @@ E = [cos(x1(3))/r, cos(x1(3))/r; sin(x1(3))/r, sin(x1(3))/r; t/r, -t/r];
 inv_E = inv(E'*E)*E';
 
 xdd2 = (x2 - [xdd'; 0]);
-rho = -abs(x2) - abs(xdd2) - M\c;
+% xdd2 = (x2 - xdd');
+rho = abs(x2) + abs(xdd2)+ M\c;
 % rho = abs(x2) + inv(M)*c;
 beta = [3;3;3];
 eps = .1;
 
-u = -inv_E*M*(rho + beta).*sat(s/eps);
+u = inv_E*M*(-rho + beta).*sat(s/eps);
 % u = -inv_E*(c+M*2*x2);
 end
 

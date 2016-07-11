@@ -13,7 +13,7 @@ i_vals = [];
 j_vals = [];
 dist = [];
 
-targets = [1, 11; 3,12; 5,11; 10,11; 14,9; 20,9; 25,9; 30,9; 36,4];% 38,8; 40,8; 45, 7; 50,7];
+targets = [1, 11; 3,12; 5,11; 10,11; 14,9; 20,9; 25,9; 30,9; 36,4 ; 38,8; 40,8; 45, 7; 50,7];
 tar = 1;
 
 P_tr_thresh = .850;
@@ -85,7 +85,7 @@ adj= sparse(i_vals, j_vals, vals); %one section of the adjacency matrix
 
 M(end+1) = getframe;
 
-[adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
+% [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
 
 P_tr(V) = 1;
 d{V,1} = []; %create d vector to store cost, P_tr, parents for each entry in adj.
@@ -138,7 +138,7 @@ M(end+1) = getframe;
 ka = 1.5;        %attractive gain
 kr = 3;        %repulsive gain
 
-dt = .02;        %time step size (seconds)
+dt = .01;        %time step size (seconds)
 
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
@@ -147,6 +147,8 @@ F = [0 0];
 dif = 0;
 t_dist = 0;
 
+
+clear adj d dist i_vals j_vals vals
 for ii = 1:(length(bp))
     p_goal = coords(bp(ii), :)';
 %     need_energy = 0;

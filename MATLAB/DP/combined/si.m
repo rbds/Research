@@ -44,11 +44,12 @@ inv_E = inv(E'*E)*E';
 
 
 rho = abs(x2) + inv(M)*c;
+% rho = abs(x2) + abs(xdd2)+ M\c;
 beta = 5;
 eps = .1;
 
 s = x1(1:2) + x2(1:2);
-u = -inv_E*M*(rho + beta).*sat(s/eps);
+u = inv_E*M*(rho + beta).*sat(s/eps);
 
 x_ddot =  M\(E*u - c);
 end
