@@ -1,4 +1,4 @@
-function [ robot ] = si( robot, F, dt )
+function [ robot ] = si( robot, F, dt, xdd )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 % robot.p = robot.p + dt*F';
@@ -10,7 +10,7 @@ x2 = x2_d - robot.v;    %error in desired velocity.
 
 
 x1_dot = x2;    %run this through ode45 substitute
-x2_dot = x_diff(x1, x2);
+x2_dot = x_diff(x1, x2, xdd);
 
 x1_new = x1 + dt*x1_dot; %this is the output position error
 x2_new = x2 + dt*x2_dot; %this is the output velocity error
@@ -21,7 +21,7 @@ robot.t = x1_new(3);
 robot.v = x2_d - x2_new;
 end
 
-function [x_ddot] = x_diff(x1, x2)
+function [x_ddot] = x_diff(x1, x2, xdd)
 m = 116;
 I = 20;
 r = .2;
@@ -43,12 +43,20 @@ E = [cos(x1(3))/r, cos(x1(3))/r; sin(x1(3))/r, sin(x1(3))/r; t/r, -t/r];
 inv_E = inv(E'*E)*E';
 
 
-rho = abs(x2) + inv(M)*c;
+% rho = abs(x2) + inv(M)*c;
 beta = 5;
 eps = .1;
 
+xdd2 = (x2 - [xdd'; 0]);
+rho = abs(x2) + abs(xdd2) + M\c;
+% rho = abs(x2) + inv(M)*c;
+% beta = [3;3;3];
+% eps = .1;
+
+% u = inv_E*M*(rho + beta).*sat(s/eps);
+
 s = x1(1:2) + x2(1:2);
-u = -inv_E*M*(rho + beta).*sat(s/eps);
+u = inv_E*M*(-rho + beta).*sat(s/eps);
 
 x_ddot =  M\(E*u - c);
 end

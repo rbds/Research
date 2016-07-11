@@ -11,8 +11,8 @@ robot.v = [0; 0; 0];
 dt = 0.01;          %timestep
 t = 0:dt:30;
 
-% x_d = [2*cos(0.5*t); 2*sin(0.5*t)]';    %desired trajectory (x and y velocity).
-x_d = 12*[ones(3500,2)];
+x_d = [2*cos(0.5*t); 2*sin(0.5*t)]';    %desired trajectory (x and y velocity).
+% x_d = 12*[ones(length(t),2)];
 
 
 x1 = [0 0 0]; %robot position
@@ -20,10 +20,11 @@ x2 = [0 0 0]; %robot velocity
 x1_d = 0;
 for i=1:length(t)-1
 %     F = -[robot.p]' + x_d(i);
-if (i<2) xdd = [0 0 0]; else  xdd = [x_d(i-1,:), 0]; end   %previous desired velocity.
+% if (i<2) xdd = [0 0 0]; else  xdd = [x_d(i-1,:), 0]; end   %previous desired velocity.
+if (i<2) xdd = [0 0]; else  xdd = [x_d(i-1,:)]; end   %previous desired velocity.
     F = x_d(i,:);   %desired velocity (virtual force from PFM).
-%     [robot] = state_int(robot, F, dt, xdd); %integrate robot state
-    [robot] = si(robot, F, dt);
+    [robot] = state_int(robot, F, dt, xdd); %integrate robot state
+%     [robot] = si(robot, F, dt, xdd);
     x1(end+1, :) = [robot.p(1), robot.p(2), robot.t]; 
     x2(end+1, :) = robot.v';
 end

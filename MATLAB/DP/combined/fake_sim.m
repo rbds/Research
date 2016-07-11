@@ -85,11 +85,12 @@ adj= sparse(i_vals, j_vals, vals); %one section of the adjacency matrix
 
 M(end+1) = getframe;
 
-[adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
+% [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
 
 P_tr(V) = 1;
 d{V,1} = []; %create d vector to store cost, P_tr, parents for each entry in adj.
 bp = [];
+
 for jj= 1:length(targets)-1
     
     clear d
@@ -111,6 +112,7 @@ for jj= 1:length(targets)-1
     bp = cat(2, bp, best_path);
 end
 
+clear dist i_vals j_vals vals
 
 p_start =  coords(bp(1),:)'; 
 course = [1 1 15 15];
