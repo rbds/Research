@@ -5,7 +5,7 @@ env = 'pipeline';
 
 %create obstacles
 [ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env );
-M(1) = getframe;
+% M(1) = getframe;
 %build adjacency matrix
 V = n_rows*n_cols; %total number of nodes
 % N = V^2;
@@ -83,7 +83,7 @@ for i=1:length(i_vals)
 end
 adj= sparse(i_vals, j_vals, vals); %one section of the adjacency matrix
 
-M(end+1) = getframe;
+% M(end+1) = getframe;
 
 % [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
 
@@ -105,7 +105,7 @@ for jj= 1:length(targets)-1
     for i=1:length(best_path)-1  %plot path
     %     plot(coords(best_path(i),1), coords(best_path(i),2), 'r*')
       h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-', 'LineWidth', 4);    
-    M(end+1) = getframe;
+%     M(end+1) = getframe;
     end
     axis off
     
@@ -135,7 +135,7 @@ robot.v = [0; 0; 0];
 
 
 % circle(p_start(1),p_start(1),goal.r,'g');               %draw the location of x_start and x_goal
-M(end+1) = getframe;
+% M(end+1) = getframe;
 
 ka = 1.5;        %attractive gain
 kr = 3;        %repulsive gain
@@ -144,7 +144,7 @@ dt = .02;        %time step size (seconds)
 
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
-M(end+1) = getframe;
+% M(end+1) = getframe;
 F = [0 0];
 dif = 0;
 t_dist = 0;
@@ -164,7 +164,8 @@ for ii = 1:(length(bp))
     %     robot.x = [robot.p; robot.v];
         map = [];
         %%%%%%%%%%%do a sensor sweep
-        [ map, s, M ] = sensor( robot, obst, map, s, param.sensor_range, course, M);
+       [ map, s ] = sensor( robot, obst, map, s, param.sensor_range, course);
+%         [ map, s, M ] = sensor( robot, obst, map, s, param.sensor_range, course, M);
 
         %%%%%%%%%%%Find potential function
             %attractive potential
@@ -184,13 +185,13 @@ for ii = 1:(length(bp))
             F = sum([-dU_a'; -dU_r],1);
         %%%%%%%%%%%% Move robot for one timestep
             plot(robot.p(1), robot.p(2), 'gx')
-            M(end+1) = getframe;
+%             M(end+1) = getframe;
             old_p = robot.p;
             xdd = F-F_old; %previous desired velocity.    
             robot = state_int(robot, F, dt, xdd);
 %             robot = si(robot, F, dt);
             plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
-            M(end+1) = getframe;
+%             M(end+1) = getframe;
 %             dif = norm(old_p - robot.p(1:2));
 %             if dif < .05
 %                 disp('break')
@@ -201,7 +202,7 @@ for ii = 1:(length(bp))
             h = draw_robot(robot);
             set(h, 'Visible', 'on')
             drawnow
-            M(end+1) = getframe;
+%             M(end+1) = getframe;
             
     end
 end

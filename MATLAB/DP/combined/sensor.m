@@ -1,5 +1,5 @@
-function [ map, s, M ] = sensor( robot, obst, map, s, rad, course, M)
-
+function [ map, s ] = sensor( robot, obst, map, s, rad, course)
+% function [ map, s, M ] = sensor( robot, obst, map, s, rad, course, M)
 %Sensor Sweep
 num_readings = 25;
 
@@ -37,7 +37,7 @@ for i = 1:length(map)
 plot(map.p(:,1), map(i).p(:,2), 'k*', 'LineWidth', 3);    %plot the coordinates of the full map.
 % M(end+1) = getframe;  
 end
-M(end+1) = getframe;
+% M(end+1) = getframe;
 
 % 
 if length(map) < 1
