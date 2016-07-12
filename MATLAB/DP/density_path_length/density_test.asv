@@ -84,14 +84,9 @@ end
 
 figure
 plot(100*N./env, p/norm(p_goal-p_start), 'b*', 'LineWidth', 5)
-% f = fit(N(1:end-1)'./env, p(1:end-1)/norm(p_goal-p_start),'exp2');
+f = fit(N(1:end-1)'./env, p(1:end-1)/norm(p_goal-p_start),'exp2');
 hold on
-dat  = [xdata, xdata.*ydata, ydata, ones(length(xdata),1)];
-[U,S,V] = svd(dat);
-fit = V(:,end);
-xfill = linspace(0,10,101);
-line = (-fit(1)*xfill - fit(4))./(fit(2)*xfill + fit(3));
-plot(f, 'r', 'LineWidth', 2)
+plot(f, 'r')
 title('Path Length vs. Obstacle Density')
 xlabel('Obstacle Density (%)')
 ylabel('Ratio of path length to straight line')
