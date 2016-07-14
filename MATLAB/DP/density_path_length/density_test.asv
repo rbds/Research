@@ -6,7 +6,7 @@ N = [50, 100,  150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000]
 D = linspace(5,25, 10);
 n_fills = length(N);
 % N = 100;
-ni = 25;
+ni = 2;
 
 path_lengths = zeros(n_fills, length(D), ni);
 num_legs = zeros(n_fills, length(D),ni);
@@ -17,8 +17,8 @@ for kk = 1:ni
     
     for ii = 1:n_fills
         for jj = 1:length(D)
-            x = (kk-1)*((ii-1)*length(D) + jj);
-            h = waitbar(x/(length(D)*n_fills*kk));
+            x = (ii-1)*length(D) + jj;
+            h = waitbar(x/(length(D)*n_fills));
             set(findobj(h,'type','patch'),'edgecolor','g','facecolor','g')
             
             clf
@@ -79,32 +79,27 @@ for kk = 1:ni
         end
     end
 end
-% % mean(path_lengths,1)
-% % use = path_lengths>0;
-% % p = zeros(n_fills,1);
-% % 
-% % for ii = 1:n_fills
-% %    p(ii) = mean(path_lengths(ii,use(ii,:)));
-% % end
+% mean(path_lengths,1)
+% use = path_lengths>0;
+% p = zeros(n_fills,1);
 % 
-% % figure
-% % plot(100*N./env, p/norm(p_goal-p_start), 'b*', 'LineWidth', 5)
-% % % f = fit(N(1:end-1)'./env, p(1:end-1)/norm(p_goal-p_start),'exp2');
-% % hold on
-% % dat  = [xdata, xdata.*ydata, ydata, ones(length(xdata),1)];
-% % [U,S,V] = svd(dat);
-% % fit = V(:,end);
-% % xfill = linspace(0,10,101);
-% % line = (-fit(1)*xfill - fit(4))./(fit(2)*xfill + fit(3));
-% % plot(f, 'r', 'LineWidth', 2)
-% % title('Path Length vs. Obstacle Density')
-% % xlabel('Obstacle Density (%)')
-% % ylabel('Ratio of path length to straight line')
-% % legend('numerical simulation', 'exponential curve fit')
-% % set(gca,'fontsize', 18)
-pl = mean(path_lengths,3);
-contourf(D, yd, pl/norm(p_goal - p_start), N)
-colorbar
-xlabel('std. of points')
-ylabel('Obstacle Density (%)')
-title('Ratio of path length to straight line')
+% for ii = 1:n_fills
+%    p(ii) = mean(path_lengths(ii,use(ii,:)));
+% end
+
+% figure
+% plot(100*N./env, p/norm(p_goal-p_start), 'b*', 'LineWidth', 5)
+% % f = fit(N(1:end-1)'./env, p(1:end-1)/norm(p_goal-p_start),'exp2');
+% hold on
+% dat  = [xdata, xdata.*ydata, ydata, ones(length(xdata),1)];
+% [U,S,V] = svd(dat);
+% fit = V(:,end);
+% xfill = linspace(0,10,101);
+% line = (-fit(1)*xfill - fit(4))./(fit(2)*xfill + fit(3));
+% plot(f, 'r', 'LineWidth', 2)
+% title('Path Length vs. Obstacle Density')
+% xlabel('Obstacle Density (%)')
+% ylabel('Ratio of path length to straight line')
+% legend('numerical simulation', 'exponential curve fit')
+% set(gca,'fontsize', 18)
+
