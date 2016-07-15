@@ -3,44 +3,15 @@ function [ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env )
 %   Detailed explanation goes here
 % close all
 
-if strcmp(env, 'pipeline')
-    %use pipeline simulation. 
-    ha = axes('units','normalized','position',[0 0 1 1]);
-    uistack(ha,'bottom');
-
-    I=imread('pipeline_map.png');
-    hi = imagesc(I);
-    colormap gray
-
-    set(ha,'handlevisibility','off','visible','off')
-   
-    ht= 20;
-    wd = 50;
-    axes('position',[0 0 .99 .99])
-    axis([0 wd 0 ht])
-    axis off
-%     axis equal
-    n_rows = 500; % must be at least 2x2.
-    n_cols = 200;
-    obst = zeros(10,3);    
-    costs = max(.1,abs(0.5 + randn(n_rows,n_cols).*0.2.*ones(n_rows, n_cols)));
-%     costs = 0.2.*ones(n_rows, n_cols);
-%     P_tr = 0.95*ones(n_rows, n_cols);
-    P_tr = min(1,.9 + 0.5.*abs(randn(n_rows, n_cols)));   %*ones(n_rows, n_cols);
-    
-    costs(1:125,105:117) = .5;
-    
-    
-else
     %sample environment
     ha = axes('units','normalized','position',[0 0 1 1]);
-    uistack(ha,'bottom');
-
-    I=imread('sample_map.png');
-    hi = imagesc(I);
-    colormap gray
-
-    set(ha,'handlevisibility','off','visible','off')
+%     uistack(ha,'bottom');
+% 
+%     I=imread('sample_map.png');
+%     hi = imagesc(I);
+%     colormap gray
+% 
+%     set(ha,'handlevisibility','off','visible','off')
 
     axes('position',[0 0 .99 .99])
     axis off
@@ -128,7 +99,11 @@ else
               14.25 13;
               14.25 12.25;
               15 12;
-              14.75 13]; %centers of trees
+              14.75 13;
+              9, 4;
+              9 4.5;
+              9.3 4.4;
+              8.9 3.8]; %centers of trees
 
     obst = zeros(length(points),3);       
     for ii = 1:length(points)
@@ -137,6 +112,4 @@ else
 
 end
 
-
-end
 

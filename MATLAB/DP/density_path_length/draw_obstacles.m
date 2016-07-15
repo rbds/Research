@@ -36,10 +36,10 @@ obst(end +1, :) = [course(3) course(4) course(1) course(4)];
 obst(end +1, :) = [course(1) course(4) course(1) course(2)];
 
 
- hold on %uncomment for testing purposes.
-    for z = 1:length(obst)
-    plot([obst(z,1); obst(z,3)],[obst(z,2);obst(z,4)], 'k', 'LineWidth', 3)
-    end
+%  hold on %uncomment for testing purposes.
+%     for z = 1:length(obst)
+%     plot([obst(z,1); obst(z,3)],[obst(z,2);obst(z,4)], 'k', 'LineWidth', 3)
+%     end
     
 end
 

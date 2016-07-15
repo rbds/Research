@@ -5,13 +5,16 @@ env = 'pipeline';
 
 %create obstacles
 [ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env );
-M(1) = getframe;
+% M(1) = getframe;
 %build adjacency matrix
 V = n_rows*n_cols; %total number of nodes
 % N = V^2;
 i_vals = [];
 j_vals = [];
 dist = [];
+
+targets = [1, 11; 3,12; 5,11; 10,11; 14,9; 20,9; 25,9; 30,9; 36,4 ; 38,8; 40,8; 45, 7; 50,7];
+tar = 1;
 
 P_tr_thresh = .850;
 
@@ -73,10 +76,6 @@ for i = 1:V
    coords(end+1,:) = [row, col]; 
 end
 
-
-% % % energy sources for pipeline
-energy_sources = [2, 18.5; 17.25,18.25;24,2.75;34,2.75;42,16.5;49,1.5]; 
-
 %create adjacency matrix
 vals = zeros(size(i_vals));
 for i=1:length(i_vals)
@@ -84,27 +83,38 @@ for i=1:length(i_vals)
 end
 adj= sparse(i_vals, j_vals, vals); %one section of the adjacency matrix
 
-M(end+1) = getframe;
+% M(end+1) = getframe;
 
-[adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
+% [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
 
 P_tr(V) = 1;
 d{V,1} = []; %create d vector to store cost, P_tr, parents for each entry in adj.
+bp = [];
 
-start_node = 11;
-target_node = 688;
+for jj= 1:length(targets)-1
+    
+    clear d
+    d{V,1} = [];
+    
+    start_node = (targets(tar,1)-1)*n_cols + targets(tar,2);
+    tar = tar+1;
+    target_node = (targets(tar,1)-1)*n_cols + targets(tar,2);  
+    [d, best_path] =  find_path(start_node, target_node, env, V, d, adj, coords, P_tr, P_tr_thresh);
 
-[d, best_path] =  find_path(start_node, target_node, env, V, d, adj, coords, P_tr, P_tr_thresh);
-
-hold on
-for i=1:length(best_path)-1  %plot path
-%     plot(coords(best_path(i),1), coords(best_path(i),2), 'r*')
-  h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-', 'LineWidth', 4);    
-M(end+1) = getframe;
+    hold on
+    for i=1:length(best_path)-1  %plot path
+    %     plot(coords(best_path(i),1), coords(best_path(i),2), 'r*')
+      h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-', 'LineWidth', 4);    
+%     M(end+1) = getframe;
+    end
+    axis off
+    
+    bp = cat(2, bp, best_path);
 end
-axis off
 
-p_start =  coords(start_node,:)'; 
+clear dist i_vals j_vals vals
+
+p_start =  coords(bp(1),:)'; 
 course = [1 1 15 15];
 s = [];
 map = [];
@@ -125,34 +135,37 @@ robot.v = [0; 0; 0];
 
 
 % circle(p_start(1),p_start(1),goal.r,'g');               %draw the location of x_start and x_goal
-M(end+1) = getframe;
+% M(end+1) = getframe;
 
-ka = 2;        %attractive gain
+ka = 1.5;        %attractive gain
 kr = 3;        %repulsive gain
 
-dt = .05;        %time step size (seconds)
+dt = .02;        %time step size (seconds)
 
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
-M(end+1) = getframe;
+% M(end+1) = getframe;
 F = [0 0];
 dif = 0;
 t_dist = 0;
 
-for ii = 1:(length(best_path))
-    p_goal = coords(best_path(ii), :)';
-    need_energy = 0;
-    if need_energy
-       ii = ii-1; %push index back down
-       jj = jj+1;
-       p_goal = path2e(jj); %replace next target with path to energy source
-    end
-    while norm(robot.p - p_goal) > robot.r
+
+clear adj d dist i_vals j_vals vals
+for ii = 1:(length(bp))
+    p_goal = coords(bp(ii), :)';
+%     need_energy = 0;
+%     if need_energy
+%        ii = ii-1; %push index back down
+%        jj = jj+1;
+%        p_goal = path2e(jj); %replace next target with path to energy source
+%     end
+    while norm(robot.p - p_goal) > robot.r + .2
         %%%%%%%%%Define robot position
     %     robot.x = [robot.p; robot.v];
         map = [];
         %%%%%%%%%%%do a sensor sweep
-        [ map, s, M ] = sensor( robot, obst, map, s, param.sensor_range, course, M);
+       [ map, s ] = sensor( robot, obst, map, s, param.sensor_range, course);
+%         [ map, s, M ] = sensor( robot, obst, map, s, param.sensor_range, course, M);
 
         %%%%%%%%%%%Find potential function
             %attractive potential
@@ -172,99 +185,24 @@ for ii = 1:(length(best_path))
             F = sum([-dU_a'; -dU_r],1);
         %%%%%%%%%%%% Move robot for one timestep
             plot(robot.p(1), robot.p(2), 'gx')
-            M(end+1) = getframe;
+%             M(end+1) = getframe;
             old_p = robot.p;
             xdd = F-F_old; %previous desired velocity.    
             robot = state_int(robot, F, dt, xdd);
 %             robot = si(robot, F, dt);
             plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
-            M(end+1) = getframe;
-            dif = norm(old_p - robot.p(1:2));
-            if dif < .05
-                disp('break')
-                break
-            end   
+%             M(end+1) = getframe;
+%             dif = norm(old_p - robot.p(1:2));
+%             if dif < .05
+%                 disp('break')
+%                 break
+%             end   
 
             set(h, 'Visible', 'off')
             h = draw_robot(robot);
             set(h, 'Visible', 'on')
             drawnow
-            M(end+1) = getframe;
-            
-    end
-end
-
-%go to energy source:
-clear d
-d{V,1} = [];
-start_node = 688;
-target_node = 663;
-[~, best_path] =  find_path(start_node, target_node, env, V, d, adj, coords, P_tr, P_tr_thresh);
-hold on
-for i=1:length(best_path)-1  %plot path
-%     plot(coords(best_path(i),1), coords(best_path(i),2), 'r*')
-  h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-', 'LineWidth', 4);    
-M(end+1) = getframe;
-end
-axis off
-
-h = draw_robot(robot);
-M(end+1) = getframe;
-F = [0 0];
-dif = 0;
-t_dist = 0;
-
-for ii = 1:(length(best_path))
-    p_goal = coords(best_path(ii), :)';
-    need_energy = 0;
-    if need_energy
-       ii = ii-1; %push index back down
-       jj = jj+1;
-       p_goal = path2e(jj); %replace next target with path to energy source
-    end
-    while norm(robot.p - p_goal) > robot.r
-        %%%%%%%%%Define robot position
-    %     robot.x = [robot.p; robot.v];
-        map = [];
-        %%%%%%%%%%%do a sensor sweep
-        [ map, s, M ] = sensor( robot, obst, map, s, param.sensor_range, course, M);
-
-        %%%%%%%%%%%Find potential function
-            %attractive potential
-             dU_a = (robot.p - p_goal)/norm(robot.p - p_goal)*ka;
-
-
-            %repulsive potential
-            dU_r = zeros(size(map,1),2);
-            for ii=1:size(map,1)
-                for jj = size(map(ii).p,1)
-                    d_to_obst = norm(-map(ii).p(jj,:) + robot.p');
-                    del_r = (-map(ii).p(jj,:) + robot.p')/norm(-map(ii).p(jj,:) + robot.p');
-                    dU_r(ii,:) = kr*(1/param.sensor_range - 1/d_to_obst)*1/d_to_obst^2*del_r;
-                end
-            end
-            F_old = F;
-            F = sum([-dU_a'; -dU_r],1);
-        %%%%%%%%%%%% Move robot for one timestep
-            plot(robot.p(1), robot.p(2), 'gx')
-            M(end+1) = getframe;
-            old_p = robot.p;
-            xdd = F-F_old; %previous desired velocity.    
-            robot = state_int(robot, F, dt, xdd);
-%             robot = si(robot, F, dt);
-            plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
-            M(end+1) = getframe;
-            dif = norm(old_p - robot.p(1:2));
-            if dif < .05
-                disp('break')
-                break
-            end   
-
-            set(h, 'Visible', 'off')
-            h = draw_robot(robot);
-            set(h, 'Visible', 'on')
-            drawnow
-            M(end+1) = getframe;
+%             M(end+1) = getframe;
             
     end
 end
@@ -272,80 +210,6 @@ end
 
 
 
-%go to end: 
-clear d
-d{V,1} = [];
-start_node = 663;
-target_node = 988;
-[~, best_path] =  find_path(start_node, target_node, env, V, d, adj, coords, P_tr, P_tr_thresh);
-hold on
-for i=1:length(best_path)-1  %plot path
-%     plot(coords(best_path(i),1), coords(best_path(i),2), 'r*')
-  h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-', 'LineWidth', 4);    
-M(end+1) = getframe;
-end
-axis off
-
-h = draw_robot(robot);
-M(end+1) = getframe;
-F = [0 0];
-dif = 0;
-t_dist = 0;
-
-for ii = 1:(length(best_path))
-    p_goal = coords(best_path(ii), :)';
-    need_energy = 0;
-    if need_energy
-       ii = ii-1; %push index back down
-       jj = jj+1;
-       p_goal = path2e(jj); %replace next target with path to energy source
-    end
-    while norm(robot.p - p_goal) > robot.r
-        %%%%%%%%%Define robot position
-    %     robot.x = [robot.p; robot.v];
-        map = [];
-        %%%%%%%%%%%do a sensor sweep
-        [ map, s, M ] = sensor( robot, obst, map, s, param.sensor_range, course, M);
-
-        %%%%%%%%%%%Find potential function
-            %attractive potential
-             dU_a = (robot.p - p_goal)/norm(robot.p - p_goal)*ka;
-
-
-            %repulsive potential
-            dU_r = zeros(size(map,1),2);
-            for ii=1:size(map,1)
-                for jj = size(map(ii).p,1)
-                    d_to_obst = norm(-map(ii).p(jj,:) + robot.p');
-                    del_r = (-map(ii).p(jj,:) + robot.p')/norm(-map(ii).p(jj,:) + robot.p');
-                    dU_r(ii,:) = kr*(1/param.sensor_range - 1/d_to_obst)*1/d_to_obst^2*del_r;
-                end
-            end
-            F_old = F;
-            F = sum([-dU_a'; -dU_r],1);
-        %%%%%%%%%%%% Move robot for one timestep
-            plot(robot.p(1), robot.p(2), 'gx')
-            M(end+1) = getframe;
-            old_p = robot.p;
-            xdd = F-F_old; %previous desired velocity.    
-            robot = state_int(robot, F, dt, xdd);
-%             robot = si(robot, F, dt);
-            plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
-            M(end+1) = getframe;
-            dif = norm(old_p - robot.p(1:2));
-            if dif < .05
-                disp('break')
-                break
-            end   
-
-            set(h, 'Visible', 'off')
-            h = draw_robot(robot);
-            set(h, 'Visible', 'on')
-            drawnow
-            M(end+1) = getframe;
-            
-    end
-end
 
 
 % 

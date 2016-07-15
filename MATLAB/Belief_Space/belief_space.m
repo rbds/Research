@@ -25,8 +25,8 @@ n_lowest = 1;
 Q = [1 1];
 %create obstacles - need to turn this into a function, create more complex
 %obstacles.
-obstacles(:,1) = linspace(20, 30, 250);
-obstacles(:,2) = linspace(20, 51, 250);
+obstacles(:,1) = linspace(20, 30, 500);
+obstacles(:,2) = linspace(20, 51, 500);
 
 %state space motion model
 % x = [x_pos, y_pos, theta]'
@@ -215,8 +215,16 @@ par = V{i_goal(1),i_goal(2)}.parent;
 path = par;
 i=i_goal;
 
+% %plot the tree
+for ii=1:size(V,1)
+%     for j=1:size(V,2)
+%     plot([V{i,1}.x(1), V{V{i,1}.parent(1),1}.x(1)], [ V{i,1}.x(2), V{V{i,1}.parent(2),1}.x(2)], 'k')
+plot([V{ii,1}.x(1) V{V{ii,1}.parent(1)}.x(1)],[V{ii,1}.x(2) V{V{ii,1}.parent(1)}.x(2)],'k')
+%     end
+end
+
 while par(1)>1      %plot path
-    plot([V{i(1), i(2)}.x(1);V{par(1),par(2)}.x(1)],[V{i(1), i(2)}.x(2);V{par(1),par(2)}.x(2)], 'g') %should be fixed to V{par(1),V{par(2)}
+    plot([V{i(1), i(2)}.x(1);V{par(1),par(2)}.x(1)],[V{i(1), i(2)}.x(2);V{par(1),par(2)}.x(2)], 'g', 'LineWidth', 3) %should be fixed to V{par(1),V{par(2)}
 
         x1 = V{i(1),i(2)}.x(1) + V{i(1),i(2)}.sigma(1);%*cos(V{i(1),i(2)}.x(3));
         x2 = V{i(1),i(2)}.x(1) - V{i(1),i(2)}.sigma(1);%*cos(V{i(1),i(2)}.x(3));
@@ -251,16 +259,8 @@ end
          x = (x1+x2)/2 + X*cos(w) - Y*sin(w);
          y = (y1+y2)/2 + X*sin(w) + Y*cos(w);
          plot(x,y,'r-')
-plot([V{i(1),1}.x(1); x_start(1)], [V{i(1),1}.x(2); x_start(2)], 'g');
+plot([V{i(1),1}.x(1); x_start(1)], [V{i(1),1}.x(2); x_start(2)],'g', 'LineWidth', 3);
 
 path %#ok<NOPTS> %print out path
 %draw ellipse around point closest to the goal.
 
-
-% %plot the tree
-% for i=1:size(V,1)
-%     for j=1:size(V,2)
-%     plot([V{i,1}.x(1), V{V{i,1}.parent(1),1}.x(1)], [V{i,1}.x(2), V{V{i,1}.parent(2),1}.x(2)], 'k:')
-% 
-%     end
-% end
