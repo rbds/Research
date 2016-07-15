@@ -102,8 +102,15 @@
 % % ylabel('Ratio of path length to straight line')
 % % legend('numerical simulation', 'exponential curve fit')
 % % set(gca,'fontsize', 18)
-pl = mean(path_lengths,3);
-yd = N'./env;
+use = path_lengths >0;
+
+for ii = 1:n_fills
+   for jj = 1:length(D)
+      pl(ii,jj) = mean(path_lengths(ii, jj, use(ii,jj,:)), 3) ;
+   end
+end
+
+yd = 100*N'./env;
 zd = pl/norm(p_goal - p_start);
 contourf(D, yd, zd, 25)
 colorbar
