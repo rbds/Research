@@ -3,7 +3,7 @@ close all
 % 
 env = 'sample';
 % env = 'pipeline';
-make_mov = false;
+make_mov = true;
 
 %create obstacles
 [ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env );
@@ -129,7 +129,7 @@ figure
 [c, p] = plot_paths( d, best_path, costs, P_tr, coords);
 
 figure
-plot_maps(V, coords, costs, P_tr);
+plot_maps(V, coords, costs, P_tr, env);
 
 figure(1)
 
@@ -234,7 +234,7 @@ while ~isempty(best_path);
             end
             
             %check for going close to another node:
-            if norm(robot.p - p_goal) > 1.5*robot.r %only enable if robot is far from target
+            if norm(robot.p - p_goal) > 2*robot.r %only enable if robot is far from target
                 ds = repmat(robot.p', length(coords), 1) - coords;
                 [dist,closest] = min(sum(abs(ds')));
                 if closest ~= rc && closest ~= old_c %if the closest node isn't the previous or the next node,
@@ -302,5 +302,5 @@ end
 
 
 if (make_mov) 
-    run('make_a_movie.m')
+%     run('make_a_movie.m')
 end
