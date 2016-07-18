@@ -6,13 +6,13 @@ function [ robot ] = state_int( robot, F, dt, xdd )
 % t_d = robot.t + atan2(F(2), F(1)) ;
 t_d = atan2(F(2), F(1));
 x2_d = [F, 0]'; %pull desired velocity
-x1_d = [robot.p; robot.t] + x2_d*dt; %integrate velocity to find 'desired position'
-% x1_d = [robot.p; t_d] + x2_d*dt;
+% x1_d = [robot.p; robot.t] + x2_d*dt; %integrate velocity to find 'desired position'
+x1_d = [robot.p; t_d] + x2_d*dt;
 
 x1 = x1_d - [robot.p(1); robot.p(2); robot.t]; %actual state for controller is the error in desired position
 x2 = x2_d - robot.v;    %error in desired velocity.
 % x1(3) = atan2(F(2), F(1));
-x1(3) = 0;
+% x1(3) = 0;
 
 % x2(3) = robot.v(3);
 
