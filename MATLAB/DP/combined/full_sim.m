@@ -1,9 +1,9 @@
 clear
 close all
 % 
-env = 'sample';
-% env = 'pipeline';
-make_mov = true;
+% env = 'sample';
+env = 'pipeline';
+make_mov = false;
 
 %create obstacles
 [ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env );

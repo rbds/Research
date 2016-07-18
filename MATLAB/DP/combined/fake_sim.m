@@ -185,14 +185,14 @@ for ii = 1:(length(bp))
             end
             F_old = F;
             F = sum([-dU_a'; -dU_r],1);
-        %%%%%%%%%%%% Move robot for one timestep
-            plot(robot.p(1), robot.p(2), 'gx')
+%         %%%%%%%%%%%% Move robot for one timestep
+%             plot(robot.p(1), robot.p(2), 'gx')
 %             M(end+1) = getframe;
             old_p = robot.p;
             xdd = F-F_old; %previous desired velocity.    
             robot = state_int(robot, F, dt, xdd);
 %             robot = si(robot, F, dt);
-            plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
+            plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 2)
 %             M(end+1) = getframe;
 %             dif = norm(old_p - robot.p(1:2));
 %             if dif < .05

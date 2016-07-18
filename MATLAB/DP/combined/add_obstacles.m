@@ -21,7 +21,23 @@ if strcmp(env, 'pipeline')
     axis off
 %     axis equal
     
-    obst = zeros(10,3);    
+%     obst = zeros(10,3);
+r = 0.25; %radius of trees
+    points = [30.25,32.75;
+              31.4, 33.1; 
+              25 25;
+              27 26;
+              26 25.5;
+              32 28;
+              32, 28.5;
+              31.5, 29.5;
+              18, 35]; %centers of trees
+
+    obst = zeros(length(points),3);       
+    for ii = 1:length(points)
+        obst(ii,:) = [points(ii,:), r];
+    end
+    
     costs = max(.1,abs(0.5 + randn(n_rows,n_cols).*0.2.*ones(n_rows, n_cols)));
 %     costs = 0.2.*ones(n_rows, n_cols);
 %     P_tr = 0.95*ones(n_rows, n_cols);
@@ -35,7 +51,7 @@ elseif strcmp(env, 'field')
     ha = axes('units','normalized','position',[0 0 1 1]);
     uistack(ha,'bottom');
 
-    I=imread('pipeline_map.png');
+    I=imread('field.png');
     hi = imagesc(I);
     colormap gray
 
@@ -55,6 +71,10 @@ elseif strcmp(env, 'field')
     costs(27:38, 14:25) = .6;
     costs(6:32, 25:32) = .4;
     costs(10:24, 32:45) = .6;
+    P_tr(17:40,8:14) = .9;
+    P_tr(27:38, 14:25) = .8;
+    P_tr(6:32, 25:32) = .9;
+    P_tr(10:24, 32:45) = .8;
 
 else
     %sample environment
