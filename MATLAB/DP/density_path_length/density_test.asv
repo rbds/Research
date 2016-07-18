@@ -112,9 +112,9 @@ end
 
 yd = 100*N'./env;
 zd = pl/norm(p_goal - p_start);
-contourf(D, yd, zd, 25)
+contourf(.55*D, yd, zd, 25)
 colorbar
-xlabel('std. of points')
+xlabel('Average distance between points')
 ylabel('Obstacle Density (%)')
 title('Ratio of path length to straight line')
 
@@ -122,8 +122,8 @@ figure
 dnuse = path_lengths <=0;
 fails = sum(dnuse,3);
 ptr = 1 - fails/ni;
-contourf(D, yd, ptr, 20)
+contourf(.55*D, yd, ptr, 20)
 colorbar
-xlabel('std. of points')
+xlabel('Average distance between points')
 ylabel('Obstacle Density (%)')
 title('Probability of Traverse')
