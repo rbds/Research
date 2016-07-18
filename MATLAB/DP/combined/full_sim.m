@@ -3,7 +3,7 @@ close all
 % 
 env = 'sample';
 % env = 'pipeline';
-make_mov = true;
+make_mov = false;
 
 %create obstacles
 [ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env );
@@ -234,19 +234,20 @@ while ~isempty(best_path);
             end
             
             %check for going close to another node:
-            ds = repmat(robot.p', length(coords), 1) - coords;
-            [dist,closest] = min(sum(abs(ds')));
-            if closest ~= rc && closest ~= old_c %if the closest node isn't the previous or the next node,
-                best_path = extract_best_path(d, closest, target_node);
-                 %plot new best path
-                hold on
-                    for i=1:length(best_path)-1  %plot path
-                      h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'b-', 'LineWidth', 4);    
-                    end
-                disp('break')
-                break
+            if norm(robot.p - p_goal) > 1.5*robot.r %only enable if robot is far from target
+                ds = repmat(robot.p', length(coords), 1) - coords;
+                [dist,closest] = min(sum(abs(ds')));
+                if closest ~= rc && closest ~= old_c %if the closest node isn't the previous or the next node,
+                    best_path = extract_best_path(d, closest, target_node, P_tr_thresh);
+                     %plot new best path
+                    hold on
+                        for i=1:length(best_path)-1  %plot path
+                          h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'b-', 'LineWidth', 4);    
+                        end
+                    disp('break')
+                    break
+                end
             end
-            
             %check for getting stuck
             dif = norm(old_p - robot.p(1:2));
             if dif < .02
@@ -257,7 +258,7 @@ while ~isempty(best_path);
                 [dist,closest] = min(sum(abs(ds')));
                 %find it's best path
                 coords = [coords(1:rc,:); nc'; coords(rc+1:end,:)]; %replace row in list
-                best_path = extract_best_path(d, closest, target_node);
+                best_path = extract_best_path(d, closest, target_node, P_tr_thresh);
                 if (closest >= rc) 
                     closest = closest +1; 
                 end
