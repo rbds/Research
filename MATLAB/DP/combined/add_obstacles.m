@@ -30,6 +30,32 @@ if strcmp(env, 'pipeline')
 %     costs(1:125,105:117) = .5;
     
     
+elseif strcmp(env, 'field')
+        %use pipeline simulation. 
+    ha = axes('units','normalized','position',[0 0 1 1]);
+    uistack(ha,'bottom');
+
+    I=imread('pipeline_map.png');
+    hi = imagesc(I);
+    colormap gray
+
+    set(ha,'handlevisibility','off','visible','off')
+   
+    n_rows = 50; % must be at least 2x2.
+    n_cols = 50;
+    axes('position',[0 0 .99 .99])
+    axis([0 n_rows 0 n_cols])
+    axis off
+    
+    obst = zeros(10,3);    
+    costs = 0.2*ones(n_rows, n_cols);
+    P_tr = 0.99*ones(n_rows, n_cols);
+        
+    costs(17:40,8:14) = .5;
+    costs(27:38, 14:25) = .6;
+    costs(6:32, 25:32) = .4;
+    costs(10:24, 32:45) = .6;
+
 else
     %sample environment
     ha = axes('units','normalized','position',[0 0 1 1]);

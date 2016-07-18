@@ -1,5 +1,5 @@
-function [ map, s ] = sensor( robot, obst, map, s, rad, course)
-% function [ map, s, M ] = sensor( robot, obst, map, s, rad, course, M)
+% function [ map, s ] = sensor( robot, obst, map, s, rad, course)
+function [ map, s, M ] = sensor( robot, obst, map, s, rad, course, M)
 %Sensor Sweep
 num_readings = 25;
 
@@ -13,15 +13,16 @@ lines(:,2) = y1;
 lines(:, 3) = x2;
 lines(:,4) = y2;
 
-%comment out to remove sensor line in plot
-% for i = 1:length(x1)
-%  set(s, 'visible','off')
-%  s = plot([max(x1(i), course(1)); min(max(0,x2(i)), course(3))],[min(course(4),max(y1(i), course(2))); min(15,max(0,min(y2(i), course(4))))], 'k');
-% 
-%  set(s, 'visible', 'on')
+% %comment out to remove sensor line in plot
+for i = 1:length(x1)
+ set(s, 'visible','off')
+ s = plot([max(x1(i), course(1)); min(max(0,x2(i)), course(3))],[min(course(4),max(y1(i), course(2))); min(15,max(0,min(y2(i), course(4))))], 'k');
+
+ set(s, 'visible', 'on')
 %  pause(.001);
-%  M(end+1) = getframe;
-% end
+ M(end+1) = getframe;
+end
+
 [xlocations, ylocations, rs] = sensorSweep(lines,obst, robot, rad);
 
 for i = 1:size(xlocations,1)
@@ -35,9 +36,9 @@ end
 for i = 1:length(map)
     
 plot(map.p(:,1), map(i).p(:,2), 'k*', 'LineWidth', 3);    %plot the coordinates of the full map.
-% M(end+1) = getframe;  
+M(end+1) = getframe;  
 end
-% M(end+1) = getframe;
+M(end+1) = getframe;
 
 % 
 if length(map) < 1

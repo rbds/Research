@@ -1,7 +1,8 @@
 clear
 close all
 
-env = 'pipeline';
+% env = 'pipeline';
+env = 'field';
 
 %create obstacles
 [ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env );
@@ -12,8 +13,11 @@ V = n_rows*n_cols; %total number of nodes
 i_vals = [];
 j_vals = [];
 dist = [];
-
-targets = [1, 11; 3,12; 5,11; 10,11; 14,9; 20,9; 25,9; 30,9; 36,4 ; 38,8; 40,8; 45, 7; 50,7];
+if strcmp(env, 'pipeline')
+    targets = [1, 11; 3,12; 5,11; 10,11; 14,9; 20,9; 25,9; 30,9; 36,4 ; 38,8; 40,8; 45, 7; 50,7];
+else %field
+    targets = [2,2; 48, 4; 45, 45; 20, 32; 2, 48; 2,2];
+end
 tar = 1;
 
 P_tr_thresh = .850;
@@ -111,6 +115,10 @@ for jj= 1:length(targets)-1
     
     bp = cat(2, bp, best_path);
 end
+figure
+plot_maps(V, coords, costs, P_tr, env);
+
+figure(1)
 
 clear dist i_vals j_vals vals
 
@@ -153,12 +161,6 @@ t_dist = 0;
 clear adj d dist i_vals j_vals vals
 for ii = 1:(length(bp))
     p_goal = coords(bp(ii), :)';
-%     need_energy = 0;
-%     if need_energy
-%        ii = ii-1; %push index back down
-%        jj = jj+1;
-%        p_goal = path2e(jj); %replace next target with path to energy source
-%     end
     while norm(robot.p - p_goal) > robot.r + .2
         %%%%%%%%%Define robot position
     %     robot.x = [robot.p; robot.v];

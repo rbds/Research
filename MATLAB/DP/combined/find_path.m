@@ -10,6 +10,13 @@ if strcmp(env, 'pipeline')
         dists(jj) = norm([coords(jj,1) coords(jj,2)] - [coords(target_node,1) coords(target_node,2)]);
     end
     [y, rows_to_do] = sort(dists, 'ascend');
+elseif strcmp(env, 'field')
+    dists = zeros(V,1);
+    for jj = 1:V
+        dists(jj) = norm([coords(jj,1) coords(jj,2)] - [coords(target_node,1) coords(target_node,2)]);
+    end
+    [y, rows_to_do] = sort(dists, 'ascend');
+
 else
 %     start_node = 1;
 %     target_node = V;
@@ -62,7 +69,7 @@ for i=1:length(d)
     bad_paths = find(d{i}(:,2)<P_tr_thresh);
     d{i}(bad_paths, 1) = d{i}(bad_paths,1) + 1e6;
 end
-best_path = extract_best_path(d, start_node, target_node);
+best_path = extract_best_path(d, start_node, target_node, P_tr_thresh);
 cost = min(d{1}(:,1))
 Ptr = prod(P_tr(best_path))
 % Ptr = d{1}(1,2)

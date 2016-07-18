@@ -3,10 +3,14 @@ close all
 % 
 env = 'sample';
 % env = 'pipeline';
+make_mov = true;
 
 %create obstacles
 [ costs, P_tr, obst, n_rows, n_cols ] = add_obstacles(env );
-M(1) = getframe;
+if (make_mov) 
+    M(1) = getframe; %#ok<*UNRCH>
+end
+
 %build adjacency matrix
 V = n_rows*n_cols; %total number of nodes
 % N = V^2;
@@ -92,7 +96,9 @@ if strcmp(env, 'sample')
     gplot(adj, coords, '*-') %plot graph
     axis([0 16 0 16])
 end
-M(end+1) = getframe;
+if (make_mov) 
+    M(1) = getframe;
+end
 
 [adj_i, adj_j, adj_v] = find(adj); %access rows and columns of adjacency matrix.
 
@@ -113,7 +119,9 @@ hold on
 for i=1:length(best_path)-1  %plot path
 %     plot(coords(best_path(i),1), coords(best_path(i),2), 'r*')
   h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'r-', 'LineWidth', 4);    
-M(end+1) = getframe;
+    if (make_mov) 
+        M(1) = getframe;
+    end
 end
 axis off
 figure
@@ -121,7 +129,7 @@ figure
 [c, p] = plot_paths( d, best_path, costs, P_tr, coords);
 
 figure
-plot_maps(V, coords, costs, P_tr);
+plot_maps(V, coords, costs, P_tr, env);
 
 figure(1)
 
@@ -135,7 +143,7 @@ param.maxiters = 100;      %Cap on iterations to run RRT
 param.RRTstarrad = 15;      %Maximum length of lines redrawn by RRT*
 param.goalbias = .95;        %Probability of checking the goal as p_new
 param.maxpathlength = 20;    %Maximum length of any path segment.
-param.sensor_range = 4;
+param.sensor_range = 3;
 param.gas_tank = 45;
 goal.r = .5;            %radius of goal
 robot.r = 0.4;
@@ -146,16 +154,20 @@ robot.v = [0; 0; 0];
 
 
 circle(p_start(1),p_start(1),goal.r,'g');               %draw the location of x_start and x_goal
-M(end+1) = getframe;
+if (make_mov) 
+    M(1) = getframe;
+end
 
 ka = 2;        %attractive gain
 kr = 3;        %repulsive gain
 
-dt = .05;        %time step size (seconds)
+dt = .02;        %time step size (seconds)
 
 %%%%%%%%%%%%%%while robot position != goal:
 h = draw_robot(robot);
-M(end+1) = getframe;
+if (make_mov) 
+    M(1) = getframe;
+end
 F = [0 0];
 dif = 0;
 t_dist = 0;
@@ -163,23 +175,34 @@ t_dist = 0;
 % obst = [2,5];
 % ii = 0;
 
-for ii = 1:(length(best_path))
-% while norm(robot.p - coords(target_node)) > 1
-%     ii = ii+1;
-    p_goal = coords(best_path(ii), :)';
-    need_energy = 0;
-    if need_energy
-       ii = ii-1; %push index back down
-       jj = jj+1;
-       p_goal = path2e(jj); %replace next target with path to energy source
-    end
+rc = best_path(1);
+
+% for ii = 1:(length(best_path))
+while ~isempty(best_path);
+    p_goal = coords(best_path(1), :)'; %set coordinates of new target
+    old_c = rc;
+    rc = best_path(1);
+    best_path(1) = []; %remove from list
+    
+%     need_energy = 0;
+%     if need_energy
+%        ii = ii-1; %push index back down
+%        jj = jj+1;
+%        p_goal = path2e(jj); %replace next target with path to energy source
+%     end
+
     while norm(robot.p - p_goal) > robot.r
-        %%%%%%%%%Define robot position
-    %     robot.x = [robot.p; robot.v];
         map = [];
         %%%%%%%%%%%do a sensor sweep
-        [ map, s, M ] = sensor( robot, obst, map, s, param.sensor_range, course, M);
+        %with and without movie
+        if (make_mov) 
+            [ map, s, M ] = sensor( robot, obst, map, s, param.sensor_range, course, M);
+        else
+            [ map, s] = sensor( robot, obst, map, s, param.sensor_range, course);
 
+        end
+%         
+            
         %%%%%%%%%%%Find potential function
             %attractive potential
              dU_a = (robot.p - p_goal)/norm(robot.p - p_goal)*ka;
@@ -198,44 +221,86 @@ for ii = 1:(length(best_path))
             F = sum([-dU_a'; -dU_r],1);
         %%%%%%%%%%%% Move robot for one timestep
             plot(robot.p(1), robot.p(2), 'gx')
-            M(end+1) = getframe;
+            if (make_mov) 
+                M(1) = getframe;
+            end
             old_p = robot.p;
             xdd = F-F_old; %previous desired velocity.    
             robot = state_int(robot, F, dt, xdd);
 %             robot = si(robot, F, dt);
             plot([old_p(1), robot.p(1)],[old_p(2), robot.p(2)],'g', 'LineWidth', 3)
-            M(end+1) = getframe;
+            if (make_mov) 
+                M(1) = getframe;
+            end
+            
+            %check for going close to another node:
+            if norm(robot.p - p_goal) > 2*robot.r %only enable if robot is far from target
+                ds = repmat(robot.p', length(coords), 1) - coords;
+                [dist,closest] = min(sum(abs(ds')));
+                if closest ~= rc && closest ~= old_c %if the closest node isn't the previous or the next node,
+                    best_path = extract_best_path(d, closest, target_node, P_tr_thresh);
+                     %plot new best path
+                    hold on
+                        for i=1:length(best_path)-1  %plot path
+                          h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'b-', 'LineWidth', 4);    
+                        end
+                    disp('break')
+                    break
+                end
+            end
+            %check for getting stuck
             dif = norm(old_p - robot.p(1:2));
-            if dif < .05
+            if dif < .02
+                %find nearest node
+                nc = p_goal; %remove current node from list
+                coords(rc,:) = [];
+                ds = repmat(robot.p', length(coords), 1) - coords;
+                [dist,closest] = min(sum(abs(ds')));
+                %find it's best path
+                coords = [coords(1:rc,:); nc'; coords(rc+1:end,:)]; %replace row in list
+                best_path = extract_best_path(d, closest, target_node, P_tr_thresh);
+                if (closest >= rc) 
+                    closest = closest +1; 
+                end
+                %plot new best path
+                hold on
+                    for i=1:length(best_path)-1  %plot path
+                      h0 =   plot([coords(best_path(i),1), coords(best_path(i+1),1)],[coords(best_path(i),2), coords(best_path(i+1),2)], 'b-', 'LineWidth', 4);    
+                    end
                 disp('break')
                 break
             end
-            t_dist = t_dist + dif;
-            
-            if ~need_energy
-                if strcmp(env, 'pipeline')
-                    [d_e, closest_energy] = d_to_e( robot.p(1:2), energy_sources);
-                    gas_left = param.gas_tank - t_dist;
-                    if d_e*1.25 > gas_left
-%                         p_goal = closest_energy';
-                        need_energy = 1;
-                        disp('need energy')
-                        %replan path to closest energy source:
-                        [d, path2e] =  find_path(best_path(ii), 663, env, V, d, adj, coords, P_tr, P_tr_thresh);
-                        p_goal = coords(path2e(1));
-                        jj = 1;
-                    end
-                end
-             end         
+%             t_dist = t_dist + dif;
+%             
+%             if ~need_energy
+%                 if strcmp(env, 'pipeline')
+%                     [d_e, closest_energy] = d_to_e( robot.p(1:2), energy_sources);
+%                     gas_left = param.gas_tank - t_dist;
+%                     if d_e*1.25 > gas_left
+% %                         p_goal = closest_energy';
+%                         need_energy = 1;
+%                         disp('need energy')
+%                         %replan path to closest energy source:
+%                         [d, path2e] =  find_path(best_path(ii), 663, env, V, d, adj, coords, P_tr, P_tr_thresh);
+%                         p_goal = coords(path2e(1));
+%                         jj = 1;
+%                     end
+%                 end
+%              end         
 
             set(h, 'Visible', 'off')
             h = draw_robot(robot);
             set(h, 'Visible', 'on')
             drawnow
-            M(end+1) = getframe;
+            if (make_mov) 
+                M(1) = getframe;
+            end
             
     end
 
 end
 
-run('make_a_movie.m')
+
+if (make_mov) 
+%     run('make_a_movie.m')
+end
