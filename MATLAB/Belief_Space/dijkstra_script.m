@@ -5,11 +5,11 @@ close all
 hold on
 grid on
 
-sides = 10; %make this a multiple of 5
+sides = 100; %make this a multiple of 5
 axis([0 sides 0 sides])
 n = sides^2;
 G = zeros(n,n);
-map = round(0.7*rand(sides,sides));
+map = round(0.6*rand(sides,sides));
 map(1,1) = 0;
 map(end,end) = 0;
 map_to_show = (flipud(map'));
@@ -43,12 +43,12 @@ for i=1:sides
                 G((j-1)*sides+i+sides,(j-1)*sides+i)=1;
             end
         end
-        if i+1<=sides && j+1<=sides
-            if map(i+1,j+1)==0
-                G((j-1)*sides+i, (j-1)*sides+i+sides+1)=sqrt(2);
-                G((j-1)*sides+i+sides+1, (j-1)*sides+i)=sqrt(2);
-            end
-        end
+%         if i+1<=sides && j+1<=sides
+%             if map(i+1,j+1)==0
+%                 G((j-1)*sides+i, (j-1)*sides+i+sides+1)=sqrt(2);
+%                 G((j-1)*sides+i+sides+1, (j-1)*sides+i)=sqrt(2);
+%             end
+%         end
     end
 end
 % % %Generate gray map

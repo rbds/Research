@@ -5,26 +5,31 @@ close all
 % hold on
 % grid on
 
-sides = 100; %make this a multiple of 5
-axis([0 sides 0 sides])
-N = [50, 100,  150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 2500, 3000, 4000, 5000];
+sides = 50; %make this a multiple of 5
+% axis([0 sides 0 sides])
+N = [50, 100,  150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 2500];%, 3000, 4000, 5000];
 % N = [500, 750, 1000];
-D = linspace(5,35, 12);
+D = linspace(5,25, 10);
 % N = 750;
 % D = 25;
-% G = zeros(sides^2,sides^2);
+G = zeros(sides^2,sides^2);
 n_fills = length(N);
-ni = 1;
+ni = 10;
 
 path_lengths = zeros(n_fills, length(D), ni);
 num_legs = zeros(n_fills, length(D),ni);
 
 % course = [0 0 sqrt(env) sqrt(env)];
-
+h = waitbar(0);
 for kk = 1:ni
     for ii = 1:n_fills
         for jj = 1:length(D)
-            
+        
+        x = jj + length(D)*(ii-1) + (kk-1)*n_fills*length(D);
+%         x = kk*ii*jj;
+        h = waitbar(x/(length(D)*n_fills*ni), h, sprintf('%f percent finished', 100*x/(length(D)*n_fills*ni)));
+        set(findobj(h,'type','patch'),'edgecolor','g','facecolor','g')     
+        
         pts= [sides/2 + D(jj)*randn(1,N(ii)); sides/2 + D(jj)*randn(1,N(ii))];
         n = hist3(pts', [sides, sides]);
         map = n>0;
@@ -76,7 +81,7 @@ for kk = 1:ni
 
 
         [path, ~] = dijkstra2(sides^2, G, 1, sides^2);  % number of sides, adjacency, start, end
-        % figure
+        
         % convert path back to x,y
         path_xy = [0 0];
         for i=1:length(path)
@@ -103,10 +108,36 @@ for kk = 1:ni
             cost = cost + norm(path_xy(zz,:) - path_xy(zz+1,:));
         end
         
-        path_lengths(ii, jj, kk) = cost/norm(path_xy(1,:) - path_xy(end,:));
+        path_lengths(ii, jj, kk) = cost;%/norm(path_xy(1,:) - path_xy(end,:));
         num_legs(ii, jj, kk) = length(path);
         cost
 %         drawnow
         end
     end
 end
+
+use = path_lengths >0;
+
+for ii = 1:n_fills
+   for jj = 1:length(D)
+      pl(ii,jj) = mean(path_lengths(ii, jj, use(ii,jj,:)), 3) ;
+   end
+end
+
+yd = 100*N'./sides^2;
+zd = pl/norm(path_xy(1,:) - path_xy(end,:));
+contourf(D, yd, zd, 25)
+colorbar
+xlabel('std. of points')
+ylabel('Obstacle Density (%)')
+title('Ratio of path length to straight line')
+
+figure
+dnuse = path_lengths <=0;
+fails = sum(dnuse,3);
+ptr = 1 - fails/ni;
+contourf(D, yd, ptr, 20)
+colorbar
+xlabel('std. of points')
+ylabel('Obstacle Density (%)')
+title('Probability of Traverse')
