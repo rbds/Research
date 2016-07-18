@@ -1,4 +1,4 @@
-function [ output_args ] =plot_maps(V, coords, costs, P_tr)
+function [ output_args ] =plot_maps(V, coords, costs, P_tr, env)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -13,7 +13,12 @@ end
 
 axis off
 axis equal
-axis([0 16 0 16])
+if strcmp(env, 'sample')
+   axis([0 16 0 16])
+else %field
+   axis([0 51 0 51])
+end
+
 title('Cost Map')
 
 shades = linspace(0, 1, 64);
@@ -33,7 +38,11 @@ end
 
 axis off
 axis equal
-axis([0 16 0 16])
+if strcmp(env, 'sample')
+   axis([0 16 0 16])
+else %field
+   axis([0 51 0 51])
+end
 title('P_{tr} Map')
 
 shades = linspace(0, 1, 64);

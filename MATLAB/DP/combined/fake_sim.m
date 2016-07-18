@@ -115,6 +115,10 @@ for jj= 1:length(targets)-1
     
     bp = cat(2, bp, best_path);
 end
+figure
+plot_maps(V, coords, costs, P_tr, env);
+
+figure(1)
 
 clear dist i_vals j_vals vals
 
