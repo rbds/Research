@@ -1,8 +1,8 @@
 clear
 close all
 % 
-% env = 'sample';
-env = 'pipeline';
+env = 'sample';
+% env = 'pipeline';
 make_mov = false;
 
 %create obstacles

@@ -1,4 +1,6 @@
 %Belief Space Navigation
+% % Plots RRT* tree in belief space
+
 clear
 % close
 clf
